@@ -11,8 +11,12 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `ng build --prod` to build the project.
+Run `aws s3 sync --delete dist/KnifeCatcher3000 s3://smart-signal` to update the files in S3.
+Run `ssh -i ./smart-signal-ec2.pem ec2-user@54.196.101.72` to SSH into the EC2 instance.
+Run `sudo su` to take root permissions.
+Run `cd /var/www/html/` to go to the file folder.
+Run `aws s3 sync --delete s3://smart-signal/ ./` to update the files in EC2.
 
 ## Running unit tests
 
