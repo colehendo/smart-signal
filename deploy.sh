@@ -1,19 +1,20 @@
 #!/bin/bash
 set -e
 
+echo ""
 echo "Compressing files..."
+echo ""
 ng build --prod
 
+echo ""
 echo "Updating S3 bucket..."
+echo ""
 aws s3 sync --delete dist/smart-signal s3://smart-signal --profile smart-signal
 
-echo "Logging onto EC2 instance..."
-ssh -i ./smart-signal-ec2.pem ec2-user@54.196.101.72
+echo ""
+echo "Updating files on EC2..."
+echo ""
+ssh -i ./smart-signal-ec2.pem -tt ec2-user@54.196.101.72 "sudo aws s3 sync --delete s3://smart-signal/ /var/www/html/"
 
-# echo "Updating EC2 files..."
-# sudo aws s3 sync --delete s3://smart-signal/ /var/www/html/
-
-# echo "Logging out of EC2 instance..."
-# logout
-
-# echo "Site has been updated."
+echo ""
+echo "Site has been updated."
