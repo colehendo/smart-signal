@@ -1,0 +1,38 @@
+body {
+    background-color: #00D080;
+    padding: 1% 1% 1% 1.5%;
+}
+
+h1, button {
+    color: white;
+    font-family: 'Lato', sans-serif;
+}
+
+#navButtonContainer, h1, #navButtonContainer > * {
+    display: inline;
+}
+
+button {
+    border: none;
+    border-radius: 6px;
+    padding: .7% 1%;
+    font-size: 100%;
+    background-color: #2EE8A0;
+    &:hover {
+        background-color: #54ECB1;
+        cursor: pointer;
+    }
+}
+
+#navButtonContainer > * {
+    float: right;
+    margin-right: 1%;
+}
+
+#logOutButton {
+    background-color: #00AB69;
+    margin-left: 2%;
+    &:hover {
+        background-color: #00985E;
+    }
+}
