@@ -25,10 +25,15 @@ provider:
   runtime: java8
 
 # you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
+stage: prod
+region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
+iamRoleStatements:
+   - Effect: "Allow"
+     Action:
+       - "dynamodb:*"
+     Resource: "*"
 #  iamRoleStatements:
 #    - Effect: "Allow"
 #      Action:
@@ -50,7 +55,7 @@ provider:
 
 # you can add packaging information here
 package:
-  artifact: target/hello-dev.jar
+  artifact: target/smart-signal-prod.jar
 
 functions:
   hello:

@@ -16,7 +16,20 @@ public class Handler implements RequestHandler<Map<String, Object>, ApiGatewayRe
 	@Override
 	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 		LOG.info("received: {}", input);
-		Response responseBody = new Response("Go Serverless v1.x! Your function executed successfully!", input);
+		try{
+
+			// do something here
+
+		} catch(Exception e){
+			LOG.error(e,e);
+			Response responseBody = new Response("Failed!", input);
+			return ApiGatewayResponse.builder()
+				.setStatusCode(500)
+				.setObjectBody(responseBody)
+				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
+				.build();
+		}
+		Response responseBody = new Response("Succeeded!", input);
 		return ApiGatewayResponse.builder()
 				.setStatusCode(200)
 				.setObjectBody(responseBody)
