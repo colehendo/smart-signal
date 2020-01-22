@@ -2,3 +2,20 @@
 body {
     margin: 0;
 }
+
+button {
+    border: none;
+    border-radius: 6px;
+    padding: .7% 1%;
+    font-size: 100%;
+    background-color: #2EE8A0;
+    &:hover {
+        background-color: #54ECB1;
+        cursor: pointer;
+    }
+}
+
+h1, button {
+    color: white;
+    font-family: 'Lato', sans-serif;
+}

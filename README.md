@@ -19,6 +19,13 @@ Run `cd /var/www/html` to go to the file folder.
 Run `aws s3 sync --delete s3://smart-signal/ ./` to update the files in EC2.
 Run `exit` then `logout` to return to terminal.
 
+## File Organization
+
+`components` is for all pages--things like the homepage, account page, anything you can visit through a url
+`core` contains singleton services, universal components and other features where there’s only once instance per application
+`modules` is for modules like payloads, interfaces, and enums
+`shared` is where any shared components, pipes/filters and services should go along with components used across the site like a button or drop down
+
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
