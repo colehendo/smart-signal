@@ -6,12 +6,14 @@ import { AppComponent } from './app/components/app.component';
 import { HeaderComponent } from './app/core/header/header.component';
 import { AssetExpansionPanelComponent } from './app/shared/components/asset-expansion-panel/asset-expansion-panel.component';
 import { MaterialModule } from './app/shared/modules/material.module';
+import { HomeComponent } from './app/components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    AssetExpansionPanelComponent
+    AssetExpansionPanelComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

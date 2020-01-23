@@ -1,21 +1,15 @@
-<mat-accordion>
-    <ng-container *ngFor="let coin of cryptocurrencies">
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                {{ coin.id }}
-                </mat-panel-title>
-                <mat-chip-list>
-                    <h6>Price:</h6>
-                    <mat-chip>{{ coin.price }}</mat-chip>
-                    <h6>24H Change:</h6>
-                    <mat-chip>{{ coin.change }}</mat-chip>
-                    <h6>24H Volume:</h6>
-                    <mat-chip>{{ coin.volume }}</mat-chip>
-                </mat-chip-list>
-            </mat-expansion-panel-header>
-        
-            <mat-card>Simple card</mat-card>
-        </mat-expansion-panel>
-    </ng-container>
-</mat-accordion>
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>{{ id }}</mat-panel-title>
+        <mat-chip-list>
+            <h6>Price:</h6>
+            <mat-chip color="primary">{{ price }}</mat-chip>
+            <h6>24H Change:</h6>
+            <mat-chip color="primary">{{ change }}</mat-chip>
+            <h6>24H Volume:</h6>
+            <mat-chip color="primary">{{ volume }}</mat-chip>
+        </mat-chip-list>
+    </mat-expansion-panel-header>
+
+    <mat-card>Simple card</mat-card>
+</mat-expansion-panel>
