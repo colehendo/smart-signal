@@ -23,8 +23,8 @@ Run `exit` then `logout` to return to terminal.
 
 `components` is for all pages--things like the homepage, account page, anything you can visit through a url
 `core` contains singleton services, universal components and other features where there’s only once instance per application
-`modules` is for modules like payloads, interfaces, and enums
 `shared` is where any shared components, pipes/filters and services should go along with components used across the site like a button or drop down
+`modules` is for modules like payloads, interfaces, and enums
 
 ## Running unit tests
 

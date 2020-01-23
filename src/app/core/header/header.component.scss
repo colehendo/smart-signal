@@ -8,8 +8,10 @@ body {
 }
 
 #navButtonContainer > * {
-    float: right;
     margin-right: 1%;
+    &:first-child {
+        margin-left: 53%;
+    }
 }
 
 #logOutButton {
