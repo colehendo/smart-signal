@@ -17,11 +17,12 @@ export class GraphComponent implements OnInit {
   public btc_week = btc_week;
   public btc_month = btc_month;
 
+  public graph_data = btc_week;
+
   ngOnInit() {
 
     console.log('single btc month:');
     console.log(this.btc_month[0])
-    // console.log(JSON.stringify(this.btc_month[0]))
 
     console.log('bitcoin month:');
     for (let i = 0; i < 10; i++){
@@ -37,6 +38,14 @@ export class GraphComponent implements OnInit {
     console.log(this.btc_month[0].Low)
     console.log(this.btc_month[0]["Vol."])
     console.log(this.btc_month[0]["Change %"])
+    
+    console.log(this.graph_data[0])
+  }
+
+
+  testFunction() {
+    this.graph_data = this.btc_month;
+    console.log(this.graph_data[0])
   }
 
 }
