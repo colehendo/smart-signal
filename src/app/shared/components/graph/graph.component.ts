@@ -19,6 +19,19 @@ export class GraphComponent implements OnInit {
 
   public graph_data = btc_week;
 
+  public dataSource = {
+    chart: {
+      caption: "Countries With Most Oil Reserves [2017-18]",  //Set the chart caption
+      subCaption: "In MMbbl = One Million barrels",  //Set the chart subcaption
+      xAxisName: "Country",  //Set the x-axis name
+      yAxisName: "Reserves (MMbbl)",  //Set the y-axis name
+      numberSuffix: "K",
+      theme: "fusion"  //Set the theme for your chart
+    },
+    // Chart Data - from step 2
+    "data": this.graph_data
+  };
+
   ngOnInit() {
 
     console.log('single btc month:');
