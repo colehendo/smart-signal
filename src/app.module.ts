@@ -9,10 +9,10 @@ import { MaterialModule } from './app/shared/modules/material.module';
 import { HomeComponent } from './app/components/home/home.component';
 
 import { GraphComponent } from './app/shared/components/graph/graph.component'; //Added from here down
-import { AssetsComponent } from './app/core/assets/assets.component';
-import { AccountComponent } from './app/core/account/account.component';
-import { AboutComponent } from './app/core/about/about.component';
-import { NewsComponent } from './app/core/news/news.component'; //Added this line from original branch
+import { AssetsComponent } from './app/components/assets/assets.component';
+import { AccountComponent } from './app/components/account/account.component';
+import { AboutComponent } from './app/components/about/about.component';
+import { NewsComponent } from './app/components/news/news.component'; //Added this line from original branch
 
 @NgModule({
   declarations: [
