@@ -8,12 +8,23 @@ import { AssetExpansionPanelComponent } from './app/shared/components/asset-expa
 import { MaterialModule } from './app/shared/modules/material.module';
 import { HomeComponent } from './app/components/home/home.component';
 
+import { GraphComponent } from './app/shared/components/graph/graph.component'; //Added from here down
+import { AssetsComponent } from './app/core/assets/assets.component';
+import { AccountComponent } from './app/core/account/account.component';
+import { AboutComponent } from './app/core/about/about.component';
+import { NewsComponent } from './app/core/news/news.component'; //Added this line from original branch
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     AssetExpansionPanelComponent,
-    HomeComponent
+    HomeComponent,
+    GraphComponent,
+    AssetsComponent,
+    AccountComponent,
+    AboutComponent,
+    NewsComponent //Added graph component to declaration
   ],
   imports: [
     BrowserModule,
