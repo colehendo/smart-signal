@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { btc_week } from '../../modules/btc_week';
+import { btc_month } from '../../modules/btc_month';
 
 @Component({
   selector: 'app-graph',
@@ -9,9 +11,32 @@ import { Component, OnInit } from '@angular/core';
 
 export class GraphComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+  ) { }
+
+  public btc_week = btc_week;
+  public btc_month = btc_month;
 
   ngOnInit() {
+
+    console.log('single btc month:');
+    console.log(this.btc_month[0])
+    // console.log(JSON.stringify(this.btc_month[0]))
+
+    console.log('bitcoin month:');
+    for (let i = 0; i < 10; i++){
+      console.log(this.btc_month[i]);
+      // console.log(JSON.stringify(this.btc_month[i]));
+    }
+
+    console.log('exact results:');
+    console.log(this.btc_month[0].Date)
+    console.log(this.btc_month[0].Price)
+    console.log(this.btc_month[0].Open)
+    console.log(this.btc_month[0].High)
+    console.log(this.btc_month[0].Low)
+    console.log(this.btc_month[0]["Vol."])
+    console.log(this.btc_month[0]["Change %"])
   }
 
 }
