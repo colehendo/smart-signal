@@ -19,7 +19,11 @@ body > * {
     font-family: 'Lato', sans-serif;
 }
 
-h1, button {
+a {
+    text-decoration: none;
+}
+
+a, button {
     color: white;
     font-family: 'Lato', sans-serif;
 }
