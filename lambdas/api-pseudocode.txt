@@ -1,0 +1,97 @@
+function test() {
+
+    x = call_api()
+
+    write x to second_table
+
+    if (time % 60 == 0) {
+        write x to top of minute_table as new line
+    } else {
+        minute = get top line from minute_table
+        if (high/low/close need to change for minute) {
+            write to minute_table
+        }
+    }
+
+    if (time % 300 == 0) {
+        write x to top of 5_minute_table as new line
+    } else {
+        5 minute = get top line from 5_minute_table
+        if (high/low/close need to change for 5 minute) {
+            write to 5_minute_table
+        }
+    }
+
+    if (time % 900 == 0) {
+        write x to top of 15_minute_table as new line
+    } else {
+        15 minute = get top line from 15_minute_table
+        if (high/low/close need to change for 15 minute) {
+            write to 15_minute_table
+        }
+    }
+
+    if (time % 3,600 == 0) {
+        write x to top of hr_table as new line
+    } else {
+        hr = get top line from hr_table
+        if (high/low/close need to change for hr) {
+            write to hr_table
+        }
+    }
+
+    if (time % 14,400 == 0) {
+        write x to top of 4_hr_table as new line
+    } else {
+        4 hr = get top line from 4_hr_table
+        if (high/low/close need to change for 4 hr) {
+            write to 4_hr_table
+        }
+    }
+
+    if (time % 43,200 == 0) {
+        write x to top of 12_hr_table as new line
+    } else {
+        12 hr = get top line from 12_hr_table
+        if (high/low/close need to change for 12 hr) {
+            write to 12_hr_table
+        }
+    }
+
+    if (time % 86,400 == 0) {
+        write x to top of day_table as new line
+    } else {
+        day = get top line from day_table
+        if (high/low/close need to change for day) {
+            write to day_table
+        }
+    }
+
+    if (time % 259,200 == 0) {
+        write x to top of 3_day_table as new line
+    } else {
+        3 day = get top line from 3_day_table
+        if (high/low/close need to change for 3 day) {
+            write to 3_day_table
+        }
+    }
+
+    if (time % 604,800 == 0) {
+        write x to top of week_table as new line
+    } else {
+        week = get top line from week_table
+        if (high/low/close need to change for week) {
+            write to week_table
+        }
+    }
+
+    if (time % 2,628,000. == 0) {
+        write x to top of month_table as new line
+    } else {
+        month = get top line from month_table
+        if (high/low/close need to change for month) {
+            write to month_table
+        }
+    }
+
+}
