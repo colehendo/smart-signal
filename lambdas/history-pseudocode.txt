@@ -1,0 +1,87 @@
+function fill_15_min() {
+    end = start utc - 87300
+    duration = 900
+
+    for (i = 0; i < 191; i++) {
+        call api ((end - duration) to (end - 1))
+        if (return value is null or something)
+            break
+        else
+            populate new row in week table with return value
+        end -= duration
+    }
+}
+
+function fill_hr() {
+    end = start utc
+    duration = 3600
+
+    for (i = 0; i < 705; i++) {
+        call api ((end - duration) to (end - 1))
+        if (return value is null or something)
+            break
+        else
+            populate new row in week table with return value
+        end -= duration
+    }
+}
+
+function fill_4_hr() {
+    end = start utc
+    duration = 14400
+
+    for (i = 0; i < 1088; i++) {
+        call api ((end - duration) to (end - 1))
+        if (return value is null or something)
+            break
+        else
+            populate new row in week table with return value
+        end -= duration
+    }
+}
+
+function fill_day() {
+    end = start utc
+    duration = 86400
+
+    for (i = 0; i < 1823; i++) {
+        call api ((end - duration) to (end - 1))
+        if (return value is null or something)
+            break
+        else
+            populate new row in week table with return value
+        end -= duration
+    }
+}
+
+function fill_week() {
+    end = utc at beginning of current week
+    duration = 604800
+
+    not_done = true
+
+    while(not_done) {
+        call api ((end - duration) to (end - 1))
+        if (return value is null or something)
+            not_done = false
+        else
+            populate new row in week table with return value
+        end -= duration
+    }
+}
+
+function fill_month() {
+    end = utc at beginning of current week
+    duration = 2628000
+
+    not_done = true
+
+    while(not_done) {
+        call api ((end - duration) to (end - 1))
+        if (return value is null or something)
+            not_done = false
+        else
+            populate new row in week table with return value
+        end -= duration
+    }
+}

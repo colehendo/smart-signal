@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { btc_week } from '../../modules/btc_week';
 import { btc_month } from '../../modules/btc_month';
+import * as FusionCharts from 'fusioncharts';
 
 @Component({
   selector: 'app-graph',
@@ -19,18 +20,54 @@ export class GraphComponent implements OnInit {
 
   public graph_data = btc_week;
 
-  public dataSource = {
-    chart: {
-      caption: "Countries With Most Oil Reserves [2017-18]",  //Set the chart caption
-      subCaption: "In MMbbl = One Million barrels",  //Set the chart subcaption
-      xAxisName: "Country",  //Set the x-axis name
-      yAxisName: "Reserves (MMbbl)",  //Set the y-axis name
-      numberSuffix: "K",
-      theme: "fusion"  //Set the theme for your chart
-    },
-    // Chart Data - from step 2
-    "data": this.graph_data
-  };
+  public chartObj = new FusionCharts({
+    type: 'candlestick',
+    renderAt: 'chart-container',
+    width: '680',
+    height: '390',
+    dataFormat: 'json',
+    dataSource: {
+      chart: {
+        theme: "fusion",
+        caption: "Daily Stock Price HRYS",
+        subCaption: "Last 2 months",
+        numberprefix: "$",
+        vNumberPrefix: " ",
+        pyaxisname: "Price",
+        vyaxisname: "Volume (In Millions)",
+        toolTipColor: "#ffffff",
+        toolTipBorderThickness: "0",
+        toolTipBgColor: "#000000",
+        toolTipBgAlpha: "80",
+        toolTipBorderRadius: "2",
+        toolTipPadding: "5"
+      },
+      categories: [
+          {
+              category: [
+                  {
+                      label: "2 month ago",
+                      x: "1"
+                  },
+                  {
+                      label: "1 month ago",
+                      x: "31"
+                  },
+                  {
+                      label: "Today",
+                      x: "60"
+                  }
+              ]
+          }
+      ],
+      // Chart Data - from step 2
+      dataset: [
+        {
+          data: this.graph_data
+        }
+      ]
+    }
+  });
 
   ngOnInit() {
 
@@ -53,10 +90,13 @@ export class GraphComponent implements OnInit {
     console.log(this.btc_month[0]["Change %"])
     
     console.log(this.graph_data[0])
+
+    this.chartObj.render();
   }
 
 
   testFunction() {
+    this.chartObj.render();
     this.graph_data = this.btc_month;
     console.log(this.graph_data[0])
   }

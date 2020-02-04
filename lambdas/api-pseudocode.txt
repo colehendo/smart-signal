@@ -13,15 +13,6 @@ function test() {
         }
     }
 
-    if (time % 300 == 0) {
-        write x to top of 5_minute_table as new line
-    } else {
-        5 minute = get top line from 5_minute_table
-        if (high/low/close need to change for 5 minute) {
-            write to 5_minute_table
-        }
-    }
-
     if (time % 900 == 0) {
         write x to top of 15_minute_table as new line
     } else {
@@ -49,30 +40,12 @@ function test() {
         }
     }
 
-    if (time % 43,200 == 0) {
-        write x to top of 12_hr_table as new line
-    } else {
-        12 hr = get top line from 12_hr_table
-        if (high/low/close need to change for 12 hr) {
-            write to 12_hr_table
-        }
-    }
-
     if (time % 86,400 == 0) {
         write x to top of day_table as new line
     } else {
         day = get top line from day_table
         if (high/low/close need to change for day) {
             write to day_table
-        }
-    }
-
-    if (time % 259,200 == 0) {
-        write x to top of 3_day_table as new line
-    } else {
-        3 day = get top line from 3_day_table
-        if (high/low/close need to change for 3 day) {
-            write to 3_day_table
         }
     }
 
