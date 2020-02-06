@@ -10,15 +10,14 @@ def populate(event, context):
     print("start")
     print(time.time())
 
+    table = dynamodb.Table('test_second')
     i = 0
 
-    while i < 60:
+    while i < 600:
         if ((time.time() % 1) == 0):
             btc_current = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
             btc_price = btc_current.json()["data"]["amount"]
             timestamp = int(time.time())
-
-            table = dynamodb.Table('test_second')
 
             print(timestamp)
             print(btc_price)
