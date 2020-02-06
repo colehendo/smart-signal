@@ -1,1 +1,3 @@
-I followed this guide: https://lobster1234.github.io/2017/02/28/serverless-framework-java-maven-part-1/
+To import python packages:
+ - cd to lambdas/src/packages
+ - run: `pip install --target=./ <package-name>`
