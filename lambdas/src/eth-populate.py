@@ -1,43 +1,32 @@
 import json
 import time
 import datetime
+from decimal import Decimal
 import requests
 
 import boto3
 dynamodb = boto3.resource('dynamodb')
 
 def populate(event, context):
-    print("start")
-    print(time.time())
 
-    table = dynamodb.Table('test_second')
+    table = dynamodb.Table('another_test')
     i = 0
 
-    while i < 600:
+    while i < 60:
         if ((time.time() % 1) == 0):
-            btc_current = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
-            btc_price = btc_current.json()["data"]["amount"]
-            timestamp = int(time.time())
-
-            print(timestamp)
-            print(btc_price)
+            timestamp = int(time.time()) + 60
+            eth = requests.get('https://api.coinbase.com/v2/prices/ETH-USD/spot')
+            price = Decimal(eth.json()["data"]["amount"])
 
             item = {
-                's': 'BTC',
+                's': 'ETH',
                 't': timestamp,
-                'p': btc_price,
+                'p': price,
             }
 
-            # table.put_item(Item=item)
+            table.put_item(Item=item)
 
-            # table.delete_item(
-            #     Key={
-            #         't': timestamp + 60
-            #     }
-            # )
-            print(i)
             i += 1
-
 
     body = {
         "message": "Table updated successfully",
@@ -48,9 +37,6 @@ def populate(event, context):
         "statusCode": 200,
         "body": json.dumps(body)
     }
-
-    print("end")
-    print(time.time())
 
     return response
 

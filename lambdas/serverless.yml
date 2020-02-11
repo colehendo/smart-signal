@@ -11,10 +11,10 @@
 #
 # Happy Coding!
 
-service: lambdas
+service: smart-signal
 # app and org for use with dashboard.serverless.com
-#app: your-app-name
-#org: your-org-name
+# app: lambdas-app
+# org: hendersoncole98
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -53,15 +53,18 @@ custom:
     dockerizePip: true
 
 functions:
-  populate:
-    handler: src/populate.populate
+  btc-populate:
+    handler: src/btc-populate.populate
     events:
       - schedule: rate(1 minute)
+    timeout: 75
 
-  cole:
-    handler: src/populate.populate
-    events:
-      - schedule: rate(5 minutes)
+  # eth-populate:
+  #   handler: src/eth-populate.populate
+  #   events:
+  #     - schedule: rate(1 minute)
+  #   timeout: 75
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
