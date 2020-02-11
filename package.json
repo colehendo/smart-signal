@@ -26,6 +26,7 @@
     "rxjs": "~6.4.0",
     "scss": "^0.2.4",
     "serverless": "^1.61.1",
+    "serverless-python-requirements": "^5.0.1",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
