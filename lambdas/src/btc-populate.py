@@ -1,3 +1,6 @@
+# Main cryptocompare API key: 52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8
+# Backup cryptocompare API key: 2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8
+
 import json
 import time
 import datetime
@@ -9,148 +12,139 @@ from botocore.exceptions import ClientError
 dynamodb = boto3.resource('dynamodb')
 
 def populate(event, context):
-    table = dynamodb.Table('BTC_second_free')
+    table = dynamodb.Table('BTC_second')
+    index = event['iterator']['index'] + 1
     i = 0
 
-    while i < 60:
-        if ((time.time() % 1) == 0):
+    while i < 1:
+        if ((time.time() % 1) < 0.1):
             timestamp = int(time.time())
             btc = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
             price = Decimal(btc.json()["data"]["amount"])
 
-            minute(timestamp, price)
-            fifteen_minute(timestamp, price)
-            hour(timestamp, price)
-            four_hour(timestamp, price)
-            day(timestamp, price)
-            week(timestamp, price)
-            month(timestamp, price)
-
             item = {
                 's': 'BTC',
-                't': timestamp + 60,
+                't': (timestamp + 60),
                 'p': price
             }
 
-            table.put_item(Item = item)
-            
-            print(time.time())
+            try:
+                table.put_item(Item = item)
+            except ClientError as e:
+                print(e.response['Error']['Code'])
+                print(e.response['ResponseMetadata']['HTTPStatusCode'])
+                print(e.response['Error']['Message'])
+
+            print("starting minute")
+            minute(timestamp, price)
+            print("starting 15")
+            fifteen_minute(timestamp, price)
+            print("starting hr")
+            hour(timestamp, price)
+            print("starting 4")
+            four_hour(timestamp, price)
+            print("starting day")
+            day(timestamp, price)
+            print("starting week")
+            week(timestamp, price)
+            print("starting month")
+            month(timestamp, price)
+            print("we out")
+
             i += 1
 
-    body = {
-        "message": "Table updated successfully",
-        "item": item
+    return {
+        'index': index
     }
-
-    response = {
-        "statusCode": 200,
-        "body": body
-    }
-
-    return response
 
 def minute(timestamp, price):
-    table = dynamodb.Table('BTC_minute_free')
+    table = dynamodb.Table('BTC_minute')
 
     if ((timestamp % 60) == 0):
-        volume_api = requests.get('https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
-        volume = Decimal(str(volume_api.json()["Data"]["Data"][0]["volumeto"]))
-        end_of_period('BTC_minute_free', timestamp, price, 86400, 60, volume)
+        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        end_of_period('BTC_minute', timestamp, price, 86400, 60, volume)
 
     else:
-        update('BTC_minute_free', timestamp, price, 86400, 60)
+        update('BTC_minute', timestamp, price, 86400, 60, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=1&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def fifteen_minute(timestamp, price):
-    table = dynamodb.Table('BTC_fifteen_minute_free')     
+    table = dynamodb.Table('BTC_fifteen_minute')     
 
     if ((timestamp % 900) == 0):
-        volume_api = requests.get('https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=15&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
-        data = volume_api.json()["Data"]["Data"]
-        volume = 0
-        for i in range(0, 15):
-            volume += data[i]["volumeto"]
-        end_of_period('BTC_fifteen_minute_free', timestamp, price, 604800, 900, Decimal(str(volume)))
+        volume = calculate_volume('range', 15, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=15&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        end_of_period('BTC_fifteen_minute', timestamp, price, 604800, 900, volume)
 
     else:
-        update('BTC_fifteen_minute_free', timestamp, price, 604800, 900)
+        update('BTC_fifteen_minute', timestamp, price, 604800, 900, 'range', 15, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=15&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def hour(timestamp, price):
-    table = dynamodb.Table('BTC_hour_free')     
+    table = dynamodb.Table('BTC_hour')
 
     if ((timestamp % 3600) == 0):
-        volume_api = requests.get('https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
-        volume = Decimal(str(volume_api.json()["Data"]["Data"][0]["volumeto"]))
-        end_of_period('BTC_hour_free', timestamp, price, 2628000, 3600, volume)
+        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        end_of_period('BTC_hour', timestamp, price, 2628000, 3600, volume)
 
     else:
-        update('BTC_hour_free', timestamp, price, 2628000, 3600)
+        update('BTC_hour', timestamp, price, 2628000, 3600, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=1&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def four_hour(timestamp, price):
-    table = dynamodb.Table('BTC_four_hour_free')     
+    table = dynamodb.Table('BTC_four_hour')     
 
     if ((timestamp % 14400) == 0):
-        volume_api = requests.get('https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=4&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
-        data = volume_api.json()["Data"]["Data"]
-        volume = 0
-        for i in range(0, 4):
-            volume += data[i]["volumeto"]
-        end_of_period('BTC_four_hour_free', timestamp, price, 15768000, 14400, Decimal(str(volume)))
+        volume = calculate_volume('range', 4, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=4&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        end_of_period('BTC_four_hour', timestamp, price, 15768000, 14400, volume)
 
     else:
-        update('BTC_four_hour_free', timestamp, price, 15768000, 14400)
+        update('BTC_four_hour', timestamp, price, 15768000, 14400, 'range', 4, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=4&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def day(timestamp, price):
-    table = dynamodb.Table('BTC_day_free')     
+    table = dynamodb.Table('BTC_day')     
 
     if ((timestamp % 86400) == 0):
-        volume_api = requests.get('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
-        volume = Decimal(str(volume_api.json()["Data"]["Data"][0]["volumeto"]))
-        end_of_period('BTC_day_free', timestamp, price, 157680000, 86400, volume)
+        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        end_of_period('BTC_day', timestamp, price, 157680000, 86400, volume)
 
     else:
-        update('BTC_day_free', timestamp, price, 157680000, 86400)
+        update('BTC_day', timestamp, price, 157680000, 86400, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def week(timestamp, price):
-    table = dynamodb.Table('BTC_week_free')     
+    table = dynamodb.Table('BTC_week')     
 
     if ((timestamp % 604800) == 0):
-        volume_api = requests.get('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
-        data = volume_api.json()["Data"]["Data"]
-        volume = 0
-        for i in range(0, 7):
-            volume += data[i]["volumeto"]
-        end_of_period('BTC_week_free', timestamp, price, 0, 604800, Decimal(str(volume)))
+        volume = calculate_volume('range', 7, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        end_of_period('BTC_week', timestamp, price, 0, 604800, volume)
 
     else:
-        update('BTC_week_free', timestamp, price, 0, 604800)
+        update('BTC_week', timestamp, price, 0, 604800, 'range', 7, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def month(timestamp, price):
-    table = dynamodb.Table('BTC_month_free')     
+    table = dynamodb.Table('BTC_month')     
 
     if ((timestamp % 2628000) == 0):
-        volume_api = requests.get('https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
-        data = volume_api.json()["Data"]["Data"]
-        volume = 0
-        for i in range(0, 730):
-            volume += data[i]["volumeto"]
-        end_of_period('BTC_month_free', timestamp, price, 0, 2628000, Decimal(str(volume)))
+        volume = calculate_volume('range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        end_of_period('BTC_month', timestamp, price, 0, 2628000, volume)
 
     else:
-        update('BTC_month_free', timestamp, price, 0, 2628000)
+        update('BTC_month', timestamp, price, 0, 2628000, 'range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def end_of_period(table, timestamp, price, ttl_increase, difference, volume):
     table = dynamodb.Table(table)
 
     item = {
         's': 'BTC',
-        't': timestamp + ttl_increase,
+        't': (timestamp + ttl_increase),
         'h': price,
         'l': price,
         'o': price,
         'c': price,
     }
 
-    table.put_item(Item = item)
+    try:
+        table.put_item(Item = item)
+    except ClientError as e:
+        print(e.response['Error']['Code'])
+        print(e.response['ResponseMetadata']['HTTPStatusCode'])
+        print(e.response['Error']['Message'])
 
     try:
         result = table.get_item(
@@ -160,6 +154,8 @@ def end_of_period(table, timestamp, price, ttl_increase, difference, volume):
             }
         )
     except ClientError as e:
+        print(e.response['Error']['Code'])
+        print(e.response['ResponseMetadata']['HTTPStatusCode'])
         print(e.response['Error']['Message'])
     else:
         if 'Item' in result:
@@ -170,18 +166,23 @@ def end_of_period(table, timestamp, price, ttl_increase, difference, volume):
             if ((result['Item']['c'] - result['Item']['o']) != 0):
                 expressionAttributeValues.update({':x': round((((result['Item']['c'] - result['Item']['o']) / result['Item']['o']) * 100), 10)})
 
-            update_result = table.update_item(
-                Key = {
-                    's': 'BTC',
-                    't': ((timestamp + ttl_increase) - difference)
-                },
-                UpdateExpression = "set x = :x, v = :v",
-                ExpressionAttributeValues = expressionAttributeValues,
-                ReturnValues="UPDATED_NEW"
-            )
+            try:
+                update_result = table.update_item(
+                    Key = {
+                        's': 'BTC',
+                        't': ((timestamp + ttl_increase) - difference)
+                    },
+                    UpdateExpression = "set x = :x, v = :v",
+                    ExpressionAttributeValues = expressionAttributeValues,
+                    ReturnValues="UPDATED_NEW"
+                )
+            except ClientError as e:
+                print(e.response['Error']['Code'])
+                print(e.response['ResponseMetadata']['HTTPStatusCode'])
+                print(e.response['Error']['Message'])
 
-def update(table, timestamp, price, ttl_increase, difference):
-    table = dynamodb.Table(table)
+def update(table_str, timestamp, price, ttl_increase, difference, api_type, range_end, api_endpoint):
+    table = dynamodb.Table(table_str)
 
     try:
         result = table.get_item(
@@ -191,6 +192,8 @@ def update(table, timestamp, price, ttl_increase, difference):
             }
         )
     except ClientError as e:
+        print(e.response['Error']['Code'])
+        print(e.response['ResponseMetadata']['HTTPStatusCode'])
         print(e.response['Error']['Message'])
     else:
         if 'Item' in result:
@@ -214,9 +217,31 @@ def update(table, timestamp, price, ttl_increase, difference):
             if ((result['Item']['h'] < price) and (result['Item']['l'] > price)):
                 updateExpression = "set c = :c, h = :h, l = :l"
 
-            update_result = table.update_item(
-                Key = key,
-                UpdateExpression = updateExpression,
-                ExpressionAttributeValues = expressionAttributeValues,
-                ReturnValues = "UPDATED_NEW"
-            )
+            try:
+                update_result = table.update_item(
+                    Key = key,
+                    UpdateExpression = updateExpression,
+                    ExpressionAttributeValues = expressionAttributeValues,
+                    ReturnValues = "UPDATED_NEW"
+                )
+            except ClientError as e:
+                print(e.response['Error']['Code'])
+                print(e.response['ResponseMetadata']['HTTPStatusCode'])
+                print(e.response['Error']['Message'])
+
+        else:
+            volume = calculate_volume(api_type, range_end, api_endpoint)
+            end_of_period(table_str, timestamp, price, (ttl_increase - (timestamp % difference)), difference, volume)
+
+def calculate_volume(api_type, range_end, api_endpoint):
+    if api_type == 'range':
+        volume_api = requests.get(api_endpoint)
+        data = volume_api.json()["Data"]["Data"]
+        volume = 0
+        for i in range(0, range_end):
+            volume += data[i]["volumeto"]
+        return Decimal(str(volume))
+
+    else:
+        volume_api = requests.get(api_endpoint)
+        return Decimal(str(volume_api.json()["Data"]["Data"][0]["volumeto"]))
