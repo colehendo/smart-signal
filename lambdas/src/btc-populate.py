@@ -49,7 +49,7 @@ def populate(event, context):
             week(timestamp, price)
             print("starting month")
             month(timestamp, price)
-            print("we out")
+            print(int(time.time()))
 
             i += 1
 
@@ -118,14 +118,20 @@ def week(timestamp, price):
         update('BTC_week', timestamp, price, 0, 604800, 'range', 7, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def month(timestamp, price):
-    table = dynamodb.Table('BTC_month')     
+    table = dynamodb.Table('BTC_month')
+    today = datetime.date.today()
+    this_month = int(time.mktime((today.year, today.month, 1, 0, 0, 0, 0, 0, 0)))
+    if (today.month == 1):
+        difference = (this_month - int(time.mktime(((today.year - 1), 12, 1, 0, 0, 0, 0, 0, 0))))
+    else:
+        difference = (this_month - int(time.mktime((today.year, (today.month - 1), 1, 0, 0, 0, 0, 0, 0))))
 
-    if ((timestamp % 2628000) == 0):
+    if (timestamp == this_month):
         volume = calculate_volume('range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
-        end_of_period('BTC_month', timestamp, price, 0, 2628000, volume)
+        end_of_period('BTC_month', timestamp, price, 0, difference, volume)
 
     else:
-        update('BTC_month', timestamp, price, 0, 2628000, 'range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
+        update('BTC_month', this_month, price, 0, difference, 'range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
 
 def end_of_period(table, timestamp, price, ttl_increase, difference, volume):
     table = dynamodb.Table(table)
@@ -184,11 +190,16 @@ def end_of_period(table, timestamp, price, ttl_increase, difference, volume):
 def update(table_str, timestamp, price, ttl_increase, difference, api_type, range_end, api_endpoint):
     table = dynamodb.Table(table_str)
 
+    if (table_str == 'BTC_month'):
+        update_time = timestamp
+    else:
+        update_time = ((timestamp + ttl_increase) - (timestamp % difference))
+
     try:
         result = table.get_item(
             Key = {
                 's': 'BTC',
-                't': ((timestamp + ttl_increase) - (timestamp % difference))
+                't': update_time
             }
         )
     except ClientError as e:
@@ -199,7 +210,7 @@ def update(table_str, timestamp, price, ttl_increase, difference, api_type, rang
         if 'Item' in result:
             key = {
                 's': 'BTC',
-                't': ((timestamp + ttl_increase) - (timestamp % difference))
+                't': update_time
             }
             updateExpression = "set c = :c"
             expressionAttributeValues = {
@@ -231,7 +242,10 @@ def update(table_str, timestamp, price, ttl_increase, difference, api_type, rang
 
         else:
             volume = calculate_volume(api_type, range_end, api_endpoint)
-            end_of_period(table_str, timestamp, price, (ttl_increase - (timestamp % difference)), difference, volume)
+            if (table_str == 'BTC_month'):
+                end_of_period(table_str, timestamp, price, 0, difference, volume)
+            else:
+                end_of_period(table_str, timestamp, price, (ttl_increase - (timestamp % difference)), difference, volume)
 
 def calculate_volume(api_type, range_end, api_endpoint):
     if api_type == 'range':
