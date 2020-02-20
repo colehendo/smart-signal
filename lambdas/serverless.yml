@@ -64,7 +64,7 @@ resources:
 
 functions:
   btc-populate:
-    handler: src/btc-populate.populate
+    handler: populate/btc-populate.populate
     timeout: 15
     environment:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
