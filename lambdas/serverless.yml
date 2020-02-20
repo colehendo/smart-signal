@@ -48,9 +48,19 @@ package:
   exclude:
     - README.md
 
+plugins:
+  - serverless-python-requirements
+  - serverless-step-functions
+
 custom:
   pythonRequirements:
     dockerizePip: true
+
+resources:
+  Outputs:
+    TriggerPopulate:
+      Value:
+        Ref: TriggerPopulate
 
 functions:
   btc-populate:
@@ -58,12 +68,6 @@ functions:
     timeout: 15
     environment:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
-
-  test:
-    handler: src/test.populate
-    timeout: 15
-    events:
-    - schedule: rate(1 minute)
 
 stepFunctions:
   stateMachines:
@@ -94,13 +98,3 @@ stepFunctions:
           Done:
             Type: Pass
             End: true
-
-resources:
-  Outputs:
-    TriggerPopulate:
-      Value:
-        Ref: TriggerPopulate
-
-plugins:
-  - serverless-python-requirements
-  - serverless-step-functions
