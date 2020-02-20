@@ -1,5 +1,7 @@
 DEPLOY:
- - To deploy everything, run:
+First run:
+ - `cd lambdas`
+ - To deploy a new function, run:
     - sls deploy
- - To deploy one function, run:
-    - 
+ - To re-deploy one function, run:
+    - sls deploy -f `function name`
