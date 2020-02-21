@@ -1,24 +1,4 @@
-# Welcome to Serverless!
-#
-# This file is the main config file for your service.
-# It's very minimal at this point and uses default values.
-# You can always add more config options for more control.
-# We've included some commented out config examples here.
-# Just uncomment any of them to get that config option.
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-#
-# Happy Coding!
-
 service: smart-signal
-# app and org for use with dashboard.serverless.com
-# app: lambdas-app
-# org: hendersoncole98
-
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
-# frameworkVersion: "=X.X.X"
 
 provider:
   name: aws
@@ -37,11 +17,6 @@ provider:
         - dynamodb:DeleteItem
       Resource: "*"
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
 package:
   include:
     - src/**
@@ -61,6 +36,9 @@ resources:
     TriggerPopulate:
       Value:
         Ref: TriggerPopulate
+    TriggerAlgorithms:
+      Value:
+        Ref: TriggerAlgorithms
 
 functions:
   btc-populate:
@@ -68,6 +46,12 @@ functions:
     timeout: 15
     environment:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
+
+  algorithms:
+    handler: algorithms/algorithms.calculate
+    timeout: 60
+    environment:
+      statemachine_arn: ${self:resources.Outputs.TriggerAlgorithms.Value}
 
 stepFunctions:
   stateMachines:
@@ -86,6 +70,34 @@ stepFunctions:
           Iterator:
             Type: Task
             Resource: arn:aws:lambda:us-east-1:095630622700:function:smart-signal-prod-btc-populate
+            ResultPath: "$.iterator"
+            Next: IsCountReached
+          IsCountReached:
+            Type: Choice
+            Choices:
+            - Variable: "$.iterator.index"
+              NumericLessThan: 60
+              Next: Iterator
+            Default: Done
+          Done:
+            Type: Pass
+            End: true
+
+    triggerAlgorithmsFunc:
+      name: TriggerAlgorithms
+      definition:
+        Comment: "Invoke algorithm lambda every second"
+        StartAt: ConfigureCount
+        States:
+          ConfigureCount:
+            Type: Pass
+            Result:
+              index: 0
+            ResultPath: "$.iterator"
+            Next: Iterator
+          Iterator:
+            Type: Task
+            Resource: arn:aws:lambda:us-east-1:095630622700:function:smart-signal-prod-algorithms
             ResultPath: "$.iterator"
             Next: IsCountReached
           IsCountReached:
