@@ -1,9 +1,9 @@
 # Main cryptocompare API key: 52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8
 # Backup cryptocompare API key: 2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8
 
-import json
 import time
 from decimal import Decimal
+import simplejson as json
 import pandas as pd
 import ta
 
@@ -34,9 +34,15 @@ def calculate(event, context):
                 print(e.response['Error']['Message'])
             else:
                 if 'Items' in results:
-                    print(results['Items'])
-                    test = pd.read_json(results['Items'])
-                    print(test)
+                    df = pd.read_json(json.dumps(results['Items']))
+                    print('START HERE')
+                    print(df)
+                    df = ta.utils.dropna(df)
+                    print(df)
+                    rsi_test_noNa = ta.momentum.rsi(close = df["c"], n = 14, fillna = False)
+                    print(rsi_test_noNa)
+                    rsi_test_na = ta.momentum.rsi(close = df["c"], n = 14, fillna = True)
+                    print(rsi_test_na)
 
 
             i += 1

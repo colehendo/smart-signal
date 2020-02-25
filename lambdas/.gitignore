@@ -21,3 +21,4 @@ var/
 
 # Created files
 ./test_files
+./node_modules
