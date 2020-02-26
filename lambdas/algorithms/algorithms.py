@@ -13,7 +13,7 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
 def calculate(event, context):
-    table = dynamodb.Table('BTC_minute')
+    table = dynamodb.Table('BTC_day')
     index = event['iterator']['index'] + 1
     i = 0
 
@@ -31,7 +31,7 @@ def calculate(event, context):
                 # Query the table for the last 20 rows of data.
                 # TTL and gap values can easily be found in btc-populate.py
                 results = table.query(
-                    KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + minute_ttl) - (minute_gap * 20))
+                    KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + day_ttl) - (day_gap * 50))
                 )
             except ClientError as e:
                 print(e.response['Error']['Code'])
@@ -43,58 +43,19 @@ def calculate(event, context):
                     # and pass it to pandas to make it readable for TA
                     df = pd.read_json(json.dumps(results['Items']))
 
-                    # How to access specific items in a row,
-                    for index, row in df.iterrows():
-                        # print each row
-                        print(row)
-                        # print specific items from each row
-                        print(row['s'], row['t'], row['c'])
+                    rsi = ta.momentum.rsi(close = df["c"], n = 14, fillna = True)
+                    print(rsi)
 
-                    # How to access specific items in specific rows
-                    for index in df.iterrows():
-                        if (index == 4):
-                            print('specific item:')
-                            print(row['h'])
-                            for row in index:
-                                print('specific row:')
-                                print(row)
+                    macd = ta.trend.macd(close = df["c"], n_fast = 12, n_slow = 26, fillna = True)
+                    print(macd)
 
-                    # How to access specific items in a row
-                    for index, column in df.items():
-                        # print each column with each row indexed
-                        print(column)
-                        # print each row value for a specific column
-                        if (index == 'o'):
-                            print('specific column...')
-                            print(column)
+                    macd_diff = ta.trend.macd_diff(close = df["c"], n_fast = 12, n_slow = 26, n_sign = 9, fillna = True)
+                    print(macd_diff)
 
-                    # How to access specific rows by timestamp,
-                    # returning the whole row
-                    access_rows = df.loc[(timestamp - (timestamp % minute_gap))]
-                    print(access_rows)
+                    macd_signal = ta.trend.macd_signal(close = df["c"], n_fast = 12, n_slow = 26, n_sign = 9, fillna = True)
+                    print(macd_signal)
 
-                    # How to access specific rows by index,
-                    # returning the whole row
-                    for index in range(0, 20):
-                        print(df.iloc[index])
-                        # another way to access a specific item in a row
-                        print(df.iloc[index]['c'])
 
-                    # How to access columns, returning the
-                    # values of those columns from each row
-                    access_columns = df[['s', 't', 'c']]
-                    print(access_columns)
-
-                    # Run rsi with rows containing empty values
-                    rsi_test_noNa = ta.momentum.rsi(close = df["c"], n = 14, fillna = False)
-                    print(rsi_test_noNa)
-
-                    # Run rsi without rows containing empty values
-                    rsi_test_na = ta.momentum.rsi(close = df["c"], n = 14, fillna = True)
-                    print(rsi_test_na)
-
-                    # Delete any rows containing null values
-                    df = ta.utils.dropna(df)
 
 
             i += 1
