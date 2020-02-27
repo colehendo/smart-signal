@@ -94,8 +94,9 @@ def rsi_macd(timestamp, timeframe, bot, rsi, rsi_buy, rsi_sell, macd_diff_new, m
     if (rsi < rsi_buy):
         # Going from negative to positive indicates bullish trend. Buy
         if (macd_diff_new >= 0) and (macd_diff_prev < 0):
-            strength = ((macd_diff_new - macd_diff_prev) / (100 - rsi))
-            send_signal(timestamp, timeframe, 'buy', strength, 'rsi_macd', bot)
+            strength = round(Decimal(((macd_diff_new - macd_diff_prev) / (100 - rsi))), 10)
+            check_signal(timestamp, timeframe, 'buy', strength, 'rsi_macd', bot)
+            check_signal(timestamp, 'all', 'buy', strength, 'rsi_macd', 'rsi_macd_all')
             print('BUY BUY BUY: ', timeframe)
             print('rsi: ', rsi)
             print('macd new: ', macd_diff_new, ' macd prev: ', macd_diff_prev)
@@ -105,8 +106,9 @@ def rsi_macd(timestamp, timeframe, bot, rsi, rsi_buy, rsi_sell, macd_diff_new, m
     elif (rsi > rsi_sell):
         # Going from positive to negative indicates bearish trend. Sell
         if (macd_diff_new <= 0) and (macd_diff_prev > 0):
-            strength = (abs(macd_diff_new - macd_diff_prev) / rsi)
-            send_signal(timestamp, timeframe, 'sell', strength, 'rsi_macd', bot)
+            strength = round(Decimal((abs(macd_diff_new - macd_diff_prev) / rsi)), 10)
+            check_signal(timestamp, timeframe, 'sell', strength, 'rsi_macd', bot)
+            check_signal(timestamp, 'all', 'sell', strength, 'rsi_macd', 'rsi_macd_all')
             print('SELL SELL SELL: ', timeframe)
             print('rsi: ', rsi)
             print('macd new: ', macd_diff_new, ' macd prev: ', macd_diff_prev)
@@ -116,12 +118,13 @@ def rsi_macd(timestamp, timeframe, bot, rsi, rsi_buy, rsi_sell, macd_diff_new, m
     else:
         return
 
-def send_signal(timestamp, timeframe, signal, strength, indicator, bot):
-    signals_table = dynamodb.Table('BTC_signals')
+def check_signal(timestamp, timeframe, signal, strength, indicator, bot):
+    table = dynamodb.Table('BTC_signals')
     try:
         # Query for the signals on a specific timeframe and a specific indicator
-        signals_result = signals_table.query(
-            KeyConditionExpression = Key('i').eq(indicator) & Key('tf').eq(timeframe)
+        signals_result = table.query(
+            KeyConditionExpression = Key('i').eq(indicator),
+            FilterExpression = Key('tf').eq(timeframe)
         )
     except ClientError as e:
         print(e.response['Error']['Code'])
@@ -130,76 +133,89 @@ def send_signal(timestamp, timeframe, signal, strength, indicator, bot):
     else:
         # If this is the first signal on the specific timeframe and indicator
         # or if this signal is different from the most recent signal
-        if ('Items' not in signals_result) or (signals_result['Items'][len(signals_result['Items']) - 1]['si'] != signal):
-            second_table = dynamodb.Table('BTC_second')
+        if ('Items' not in signals_result) or (signals_result['Count'] == 0):
+            if (signal == 'buy'):
+                write_signal(timestamp, timeframe, signal, strength, indicator, bot, 0)
+            else:
+                return
+
+        elif (signals_result['Items'][len(signals_result['Items']) - 1]['si'] != signal):
+            write_signal(timestamp, timeframe, signal, strength, indicator, bot, signals_result['Items'][len(signals_result['Items']) - 1]['st'])
+        
+        else:
+            return
+
+def write_signal(timestamp, timeframe, signal, strength, indicator, bot, original_strength):
+    table = dynamodb.Table('BTC_second')
+    try:
+        # Query for the last 10 seconds of prices, just to be safe
+        second_result = table.query(
+            KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + 60) - 10)
+        )
+    except ClientError as e:
+        print(e.response['Error']['Code'])
+        print(e.response['ResponseMetadata']['HTTPStatusCode'])
+        print(e.response['Error']['Message'])
+    else:
+        if 'Items' in second_result:
+            latest_price = second_result['Items'][len(second_result['Items']) - 1]['p']
+            item = {
+                'ts': timestamp,
+                'tf': timeframe,
+                'si': signal,
+                'st': strength,
+                'i': indicator,
+                'p': latest_price
+            }
+
             try:
-                # Query for the last 10 seconds of prices, just to be safe
-                second_result = second_table.query(
-                    KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + 60) - 10)
-                )
+                # Write in the latest signal
+                table = dynamodb.Table('BTC_signals')
+                table.put_item(Item = item)
+            except ClientError as e:
+                print(e.response['Error']['Code'])
+                print(e.response['ResponseMetadata']['HTTPStatusCode'])
+                print(e.response['Error']['Message'])
+
+            table = dynamodb.Table('BTC_bots')
+            try:
+                # Get the row for the bot associated with the timeframe and indicator
+                bots_result = table.get_item(Key = {'name': bot})
             except ClientError as e:
                 print(e.response['Error']['Code'])
                 print(e.response['ResponseMetadata']['HTTPStatusCode'])
                 print(e.response['Error']['Message'])
             else:
-                if 'Items' in second_result:
-                    latest_price = second_result['Items'][len(second_result['Items']) - 1]['p']
-                    item = {
-                        'ts': timestamp,
-                        'tf': timeframe,
-                        'si': signal,
-                        'st': strength,
-                        'i': indicator,
-                        'p': latest_price
-                    }
+                if 'Item' in bots_result:
+                    if (signal == 'sell'):
+                        # The profit is the strength of the previous signal times the latest price.
+                        # This keeps the amount sold proportional to the last buy signal,
+                        # therefore emulating buying/selling a set amount of coins
+                        transaction = round((original_strength * latest_price), 2)
+                        total = round((bots_result['Item']['balance'] + transaction), 2)
+                        s_rate = ((total / 100000) * 100)
 
-                    try:
-                        # Write in the latest signal
-                        signals_table.put_item(Item = item)
-                    except ClientError as e:
-                        print(e.response['Error']['Code'])
-                        print(e.response['ResponseMetadata']['HTTPStatusCode'])
-                        print(e.response['Error']['Message'])
-
-                    bots_table = dynamodb.Table('BTC_bots')
-                    try:
-                        # Get the row for the bot associated with the timeframe and indicator
-                        bots_result = bots_table.get_item(Key = {'name': bot})
-                    except ClientError as e:
-                        print(e.response['Error']['Code'])
-                        print(e.response['ResponseMetadata']['HTTPStatusCode'])
-                        print(e.response['Error']['Message'])
                     else:
-                        if 'Item' in bots_result:
-                            if (signal == 'sell'):
-                                # The profit is the strength of the previous signal times the latest price.
-                                # This keeps the amount sold proportional to the last buy signal,
-                                # therefore emulating buying/selling a set amount of coins
-                                transaction = (signals_result['Items'][len(signals_result['Items']) - 1]['st'] * latest_price)
-                                balance = (bots_result['Item']['balance'] + transaction)
-                                success_rate = ((balance / 100000) * 100)
+                        # The cost of the amount bought is the strength of the signal times the latest price
+                        transaction = round((strength * latest_price), 2)
+                        total = round((bots_result['Item']['balance'] - transaction), 2)
+                        s_rate = ((total / 100000) * 100)
 
-                            else:
-                                # The cost of the amount bought is the strength of the signal times the latest price
-                                transaction = (strength * latest_price)
-                                balance = (bots_result['Item']['balance'] - transaction)
-                                success_rate = ((balance / 100000) * 100)
-
-
-                            try:
-                                # Update the associated bot with the latest values
-                                update_result = bots_table.update_item(
-                                    Key = {'name': bot},
-                                    UpdateExpression = "set balance = :b, success_rate = :s, indicator = :i, transaction_amt = :t",
-                                    ExpressionAttributeValues = {
-                                        ':b': balance,
-                                        ':s': success_rate,
-                                        ':i': indicator,
-                                        ':t': transaction
-                                    },
-                                    ReturnValues="UPDATED_NEW"
-                                )
-                            except ClientError as e:
-                                print(e.response['Error']['Code'])
-                                print(e.response['ResponseMetadata']['HTTPStatusCode'])
-                                print(e.response['Error']['Message'])
+                    try:
+                        # Update the associated bot with the latest values
+                        update_result = table.update_item(
+                            Key = {'name': bot},
+                            UpdateExpression = "set balance = :b, success_rate = :s, alg = :a, transaction_amt = :t, prev_signal = :ps",
+                            ExpressionAttributeValues = {
+                                ':b': total,
+                                ':s': s_rate,
+                                ':a': indicator,
+                                ':t': transaction,
+                                ':ps': signal
+                            },
+                            ReturnValues="UPDATED_NEW"
+                        )
+                    except ClientError as e:
+                        print(e.response['Error']['Code'])
+                        print(e.response['ResponseMetadata']['HTTPStatusCode'])
+                        print(e.response['Error']['Message'])
