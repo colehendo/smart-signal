@@ -64,12 +64,12 @@ def get_values(table, timestamp, ttl, gap, timeframe):
             df = pd.read_json(json.dumps(results['Items']))
 
             # Get the past `timeframe` rsi values in a dataframe
-            rsi = ta.momentum.rsi(close = df["c"], n = 14, fillna = True)
+            rsi_total = ta.momentum.rsi(close = df["c"], n = 14, fillna = True)
             for i in range(0, timeframe):
-                if (rsi.iloc[i] < 100) and (rsi.iloc[i] > 0):
+                if (rsi_total.iloc[i] < 100) and (rsi_total.iloc[i] > 0):
                     # Find the first value in the list that
                     # isn't equal to 100 or 0
-                    rsi_val = rsi.iloc[i]
+                    rsi_val = rsi_total.iloc[i]
                     break
 
             # Get the past `timeframe` MACD histogram values in a dataframe
@@ -80,32 +80,22 @@ def get_values(table, timestamp, ttl, gap, timeframe):
             macd_diff_prev = macd_diff.iloc[2]
 
             if (table == 'BTC_hour'):
-                rsi(timestamp, 'rsi_hour', rsi_val, 20, 80)
+                rsi(timestamp, 'rsi_hour', rsi_val, 20, 80, 30)
                 rsi_macd(timestamp, 'rsi_macd_hour', rsi_val, 20, 80, macd_diff_new, macd_diff_prev)
             elif (table == 'BTC_four_hour'):
-                rsi(timestamp, 'rsi_four_hour', rsi_val, 20, 80)
+                rsi(timestamp, 'rsi_four_hour', rsi_val, 20, 80, 20)
                 rsi_macd(timestamp, 'rsi_macd_four_hour', rsi_val, 20, 80, macd_diff_new, macd_diff_prev)
             elif (table == 'BTC_day'):
-                rsi(timestamp, 'rsi_day', rsi_val, 30, 70)
+                rsi(timestamp, 'rsi_day', rsi_val, 30, 70, 10)
                 rsi_macd(timestamp, 'rsi_macd_day', rsi_val, 30, 70, macd_diff_new, macd_diff_prev)
             elif (table == 'BTC_week'):
-                rsi(timestamp, 'rsi_week', rsi_val, 40, 60)
+                rsi(timestamp, 'rsi_week', rsi_val, 40, 60, 0)
                 rsi_macd(timestamp, 'rsi_macd_week', rsi_val, 40, 60, macd_diff_new, macd_diff_prev)
             else:
                 return
 
-def rsi(timestamp, bot, rsi, rsi_buy, rsi_sell):
+def rsi(timestamp, bot, rsi, rsi_buy, rsi_sell, timeframe_adjust):
     ##Weekly = 0, Daily = 10, 4Hour = 20, Hour = 30..we will be subtracting these values from the strength to account for timeframe
-    timeframe_adjust = 0
-    if (bot == 'rsi_hour'):
-        timeframe_adjust = 30
-    elif (bot == 'rsi_four_hour'):
-        timeframe_adjust = 20
-    elif (bot == 'rsi_day'):
-        timeframe_adjust = 10
-    elif (bot == 'rsi_week'):
-        timeframe_adjust = 0
-
     if (rsi < rsi_buy):
         strength = round(Decimal(100 - rsi), 10) - timeframe_adjust
         check_signal(timestamp, 'buy', strength, 'rsi', bot) ##idk differences between "bot and rsi_mac"
