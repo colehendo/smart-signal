@@ -99,12 +99,12 @@ def rsi(timestamp, bot, rsi, rsi_buy, rsi_sell, timeframe_adjust):
     if (rsi < rsi_buy):
         strength = round(Decimal((100 - rsi - timeframe_adjust) / 100), 10)
         check_signal(timestamp, 'buy', strength, 'rsi', bot)
-        check_signal(timestamp, 'buy', strength, 'rsi', 'rsi_all')
+        # check_signal(timestamp, 'buy', strength, 'rsi', 'rsi_all')
         print('BUY because our RSI is: ', rsi, ' bc of the indicator: ', bot)
     elif (rsi > rsi_sell):
         strength = round(Decimal((rsi - timeframe_adjust) / 100), 10)
         check_signal(timestamp, 'sell', strength, 'rsi', bot)
-        check_signal(timestamp, 'sell', strength, 'rsi', 'rsi_all')
+        # check_signal(timestamp, 'sell', strength, 'rsi', 'rsi_all')
         print('Sell because our RSI is: ', rsi, ' bc of the indicator: ', bot)
     else:
         return
