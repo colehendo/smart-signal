@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ChartModule } from 'angular2-highcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './app/core/header/header.component';
@@ -41,7 +42,8 @@ import { GraphComponent } from './app/shared/components/graph/graph.component'; 
     BrowserModule,
     AppRoutingModule,
     MaterialModule,
-    ChartModule.forRoot(require('highcharts')),
+    HighchartsChartModule,
+    // ChartModule.forRoot(require('highcharts')),
     FusionChartsModule
   ],
   providers: [],
