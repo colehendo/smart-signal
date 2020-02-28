@@ -80,15 +80,43 @@ def get_values(table, timestamp, ttl, gap, timeframe):
             macd_diff_prev = macd_diff.iloc[2]
 
             if (table == 'BTC_hour'):
+                rsi(timestamp, 'rsi_hour', rsi_val, 20, 80)
                 rsi_macd(timestamp, 'rsi_macd_hour', rsi_val, 20, 80, macd_diff_new, macd_diff_prev)
             elif (table == 'BTC_four_hour'):
+                rsi(timestamp, 'rsi_four_hour', rsi_val, 20, 80)
                 rsi_macd(timestamp, 'rsi_macd_four_hour', rsi_val, 20, 80, macd_diff_new, macd_diff_prev)
             elif (table == 'BTC_day'):
+                rsi(timestamp, 'rsi_day', rsi_val, 30, 70)
                 rsi_macd(timestamp, 'rsi_macd_day', rsi_val, 30, 70, macd_diff_new, macd_diff_prev)
             elif (table == 'BTC_week'):
+                rsi(timestamp, 'rsi_week', rsi_val, 40, 60)
                 rsi_macd(timestamp, 'rsi_macd_week', rsi_val, 40, 60, macd_diff_new, macd_diff_prev)
             else:
                 return
+
+def rsi(timestamp, bot, rsi, rsi_buy, rsi_sell):
+    ##Weekly = 0, Daily = 10, 4Hour = 20, Hour = 30..we will be subtracting these values from the strength to account for timeframe
+    timeframe_adjust = 0
+    if (bot == 'rsi_hour'):
+        timeframe_adjust = 30
+    elif (bot == 'rsi_four_hour'):
+        timeframe_adjust = 20
+    elif (bot == 'rsi_day'):
+        timeframe_adjust = 10
+    elif (bot == 'rsi_week'):
+        timeframe_adjust = 0
+
+    if (rsi < rsi_buy):
+        strength = round(Decimal(100 - rsi), 10) - timeframe_adjust
+        check_signal(timestamp, 'buy', strength, 'rsi', bot) ##idk differences between "bot and rsi_mac"
+        print('BUY because our RSI is: ', rsi, ' bc of the indicator: ', bot)
+    elif (rsi > rsi_sell):
+        strength = round(Decimal(rsi), 10) - timeframe_adjust
+        check_signal(timestamp, 'sell', strength, 'rsi', bot)
+        print('Sell because our RSI is: ', rsi, ' bc of the indicator: ', bot)
+    else:
+        return
+
 
 def rsi_macd(timestamp, bot, rsi, rsi_buy, rsi_sell, macd_diff_new, macd_diff_prev):
     if (rsi < rsi_buy):
@@ -137,10 +165,11 @@ def check_signal(timestamp, signal, strength, indicator, bot):
                 write_signal(timestamp, signal, strength, indicator, bot, 0)
             else:
                 return
-
+        # Checks if our most recent signal sent is equal to our current one
+        # to avoid repetitive signals
         elif (signals_result['Items'][len(signals_result['Items']) - 1]['si'] != signal):
             write_signal(timestamp, signal, strength, indicator, bot, signals_result['Items'][len(signals_result['Items']) - 1]['st'])
-        
+
         else:
             return
 
