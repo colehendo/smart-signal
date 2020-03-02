@@ -30,7 +30,7 @@
     "ng2-charts": "^2.2.4",
     "rxjs": "~6.4.0",
     "scss": "^0.2.4",
-    "serverless": "^1.64.1",
+    "serverless": "^1.65.0",
     "serverless-python-requirements": "^5.0.1",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

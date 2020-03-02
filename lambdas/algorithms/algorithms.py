@@ -13,7 +13,7 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
 def calculate(event, context):
-    index = event['iterator']['index'] + 1
+    # index = event['iterator']['index'] + 1
     i = 0
 
     hour_ttl = 2628000
@@ -42,7 +42,7 @@ def calculate(event, context):
             i += 1
 
     return {
-        'index': index
+        # 'index': index
     }
 
 def get_values(table, timestamp, ttl, gap, timeframe):
@@ -117,7 +117,7 @@ def rsi_macd(timestamp, bot, rsi, rsi_buy, rsi_sell, macd_diff_new, macd_diff_pr
             strength = round(Decimal(((macd_diff_new - macd_diff_prev) / (100 - rsi))), 10)
             check_signal(timestamp, 'buy', strength, 'rsi_macd', bot)
             check_signal(timestamp, 'buy', strength, 'rsi_macd', 'rsi_macd_all')
-            print('BUY BUY BUY: ', __BuiltinFunction__)
+            print('BUY BUY BUY: ', bot)
             print('rsi: ', rsi)
             print('macd new: ', macd_diff_new, ' macd prev: ', macd_diff_prev)
         else:
