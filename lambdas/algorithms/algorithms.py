@@ -13,7 +13,7 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
 def calculate(event, context):
-    index = event['iterator']['index'] + 1
+    # index = event['iterator']['index'] + 1
     i = 0
 
     hour_ttl = 2628000
@@ -42,7 +42,7 @@ def calculate(event, context):
             i += 1
 
     return {
-        'index': index
+        # 'index': index
     }
 
 def get_values(table, timestamp, ttl, gap, timeframe):
@@ -99,12 +99,12 @@ def rsi(timestamp, bot, rsi, rsi_buy, rsi_sell, timeframe_adjust):
     if (rsi < rsi_buy):
         strength = round(Decimal((100 - rsi - timeframe_adjust) / 100), 10)
         check_signal(timestamp, 'buy', strength, 'rsi', bot)
-        # check_signal(timestamp, 'buy', strength, 'rsi', 'rsi_all')
+        check_signal(timestamp, 'buy', strength, 'rsi', 'rsi_all')
         print('BUY because our RSI is: ', rsi, ' bc of the indicator: ', bot)
     elif (rsi > rsi_sell):
         strength = round(Decimal((rsi - timeframe_adjust) / 100), 10)
         check_signal(timestamp, 'sell', strength, 'rsi', bot)
-        # check_signal(timestamp, 'sell', strength, 'rsi', 'rsi_all')
+        check_signal(timestamp, 'sell', strength, 'rsi', 'rsi_all')
         print('Sell because our RSI is: ', rsi, ' bc of the indicator: ', bot)
     else:
         return
@@ -117,7 +117,7 @@ def rsi_macd(timestamp, bot, rsi, rsi_buy, rsi_sell, macd_diff_new, macd_diff_pr
             strength = round(Decimal(((macd_diff_new - macd_diff_prev) / (100 - rsi))), 10)
             check_signal(timestamp, 'buy', strength, 'rsi_macd', bot)
             check_signal(timestamp, 'buy', strength, 'rsi_macd', 'rsi_macd_all')
-            print('BUY BUY BUY: ', __BuiltinFunction__)
+            print('BUY BUY BUY: ', bot)
             print('rsi: ', rsi)
             print('macd new: ', macd_diff_new, ' macd prev: ', macd_diff_prev)
         else:
@@ -212,25 +212,31 @@ def write_signal(timestamp, signal, strength, indicator, bot, original_strength)
                         # therefore emulating buying/selling a set amount of coins
                         transaction = round((original_strength * latest_price), 2)
                         total = round((bots_result['Item']['balance'] + transaction), 2)
-                        s_rate = ((total / 100000) * 100)
+                        rate = round((((total - 100000) / 100000) * 100), 4)
+                        count = (bots_result['Item']['transactions'] + 1)
+                        avg_rate = round((rate / count), 6)
 
                     else:
                         # The cost of the amount bought is the strength of the signal times the latest price
                         transaction = round((strength * latest_price), 2)
                         total = round((bots_result['Item']['balance'] - transaction), 2)
-                        s_rate = ((total / 100000) * 100)
+                        rate = round((((total - 100000) / 100000) * 100), 4)
+                        count = (bots_result['Item']['transactions'] + 1)
+                        avg_rate = round((rate / count), 6)
 
                     try:
                         # Update the associated bot with the latest values
                         update_result = table.update_item(
                             Key = {'name': bot},
-                            UpdateExpression = "set balance = :b, success_rate = :s, alg = :a, transaction_amt = :t, prev_signal = :ps",
+                            UpdateExpression = "set balance = :b, total_roi = :tr, avg_roi = :ar, alg = :a, transaction_amt = :ta, prev_signal = :ps, transactions = :t",
                             ExpressionAttributeValues = {
                                 ':b': total,
-                                ':s': s_rate,
+                                ':tr': rate,
+                                ':ar': avg_rate,
                                 ':a': indicator,
-                                ':t': transaction,
-                                ':ps': signal
+                                ':ta': transaction,
+                                ':ps': signal,
+                                ':t': count
                             },
                             ReturnValues="UPDATED_NEW"
                         )
