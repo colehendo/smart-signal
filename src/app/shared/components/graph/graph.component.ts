@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { btc_week } from '../../modules/btc_week';
 import { btc_month } from '../../modules/btc_month';
 
+import * as Highcharts from 'highcharts';
+import HighchartsMore from 'highcharts/highcharts-more';
+HighchartsMore(Highcharts);
+
+
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
@@ -10,6 +15,38 @@ import { btc_month } from '../../modules/btc_month';
 
 
 export class GraphComponent implements OnInit {
+  public Highcharts: typeof Highcharts = Highcharts;
+    public chartOptions: Highcharts.Options = {
+      series: [{
+        data: [
+          [760, 801, 848, 895, 965],
+          [733, 853, 939, 980, 1080],
+          [714, 762, 817, 870, 918],
+          [724, 802, 806, 871, 950],
+          [834, 836, 864, 882, 910],
+          [600, 702,795, 849, 971],
+          [760, 801, 848, 895, 965],
+          [733, 853, 939, 980, 1080],
+          [714, 762, 817, 870, 918],
+          [724, 802, 806, 871, 950],
+          [834, 836, 864, 882, 910],
+          [600, 702,795, 849, 971],
+          [760, 801, 848, 895, 965],
+          [733, 853, 939, 980, 1080],
+          [714, 762, 817, 870, 918],
+          [724, 802, 806, 871, 950],
+          [834, 836, 864, 882, 910],
+          [600, 702,795, 849, 971],
+          [760, 801, 848, 895, 965],
+          [799, 953, 1039, 980, 1080],
+          [714, 762, 817, 870, 918],
+          [724, 802, 806, 871, 950],
+          [834, 836, 864, 882, 910],
+          [600, 702,795, 849, 971],
+        ],
+        type: 'boxplot'
+      }]
+    };
 
   constructor(
   ) { }
@@ -34,33 +71,12 @@ export class GraphComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log('single btc month:');
-    console.log(this.btc_month[0])
+  // testFunction() {
+  //   this.graph_data = this.btc_month;
+  //   console.log(this.graph_data[0])
+  // }
 
-    console.log('bitcoin month:');
-    for (let i = 0; i < 10; i++){
-      console.log(this.btc_month[i]);
-      // console.log(JSON.stringify(this.btc_month[i]));
-    }
-
-    console.log('exact results:');
-    console.log(this.btc_month[0].Date)
-    console.log(this.btc_month[0].Price)
-    console.log(this.btc_month[0].Open)
-    console.log(this.btc_month[0].High)
-    console.log(this.btc_month[0].Low)
-    console.log(this.btc_month[0]["Vol."])
-    console.log(this.btc_month[0]["Change %"])
-    
-    console.log(this.graph_data[0])
   }
-
-
-  testFunction() {
-    this.graph_data = this.btc_month;
-    console.log(this.graph_data[0])
-  }
-
 }
 
 

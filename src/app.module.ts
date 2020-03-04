@@ -23,6 +23,7 @@ import { NewsComponent } from './app/components/news/news.component'; //Added th
 import { AssetExpansionPanelComponent } from './app/shared/components/asset-expansion-panel/asset-expansion-panel.component';
 import { MaterialModule } from './app/shared/modules/material.module';
 import { GraphComponent } from './app/shared/components/graph/graph.component'; //Added from here down
+import { HighchartsChartModule } from 'highcharts-angular';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { GraphComponent } from './app/shared/components/graph/graph.component'; 
     BrowserModule,
     AppRoutingModule,
     MaterialModule,
-    FusionChartsModule
+    FusionChartsModule,
+    HighchartsChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]

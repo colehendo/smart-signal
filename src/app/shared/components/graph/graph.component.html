@@ -1,10 +1,13 @@
-<button (click)="testFunction()">hello</button>
+<highcharts-chart 
+  [Highcharts]="Highcharts"
 
-<fusioncharts
-  width="700"
-  height="400"
-  type="Column2d"
-  [dataSource]="dataSource"
->
-</fusioncharts>
+  [constructorType]="chartConstructor"
+  [options]="chartOptions"
+  [callbackFunction]="chartCallback"
 
+  [(update)]="updateFlag"
+  [oneToOne]="oneToOneFlag"
+  [runOutsideAngular]="runOutsideAngularFlag"
+
+  style="width: 100%; height: 400px; display: block;"
+></highcharts-chart>
