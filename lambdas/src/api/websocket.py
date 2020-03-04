@@ -1,5 +1,5 @@
-import json
 import time
+import simplejson as json
 
 import boto3
 from botocore.exceptions import ClientError
@@ -45,7 +45,7 @@ def get_prices(event, context):
     timestamp = int(time.time())
     ttl = 2628000
     gap = 3600
-    timeframe = 20
+    timeframe = 760
     table = 'BTC_hour'
 
     # Get the most recent data
