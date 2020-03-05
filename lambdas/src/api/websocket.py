@@ -43,10 +43,10 @@ def get_prices(event, context):
 
     symbol = 'BTC'
     timestamp = int(time.time())
-    ttl = 2628000
-    gap = 3600
-    timeframe = 760
-    table = 'BTC_hour'
+    ttl = 157680000
+    gap = 86400
+    timeframe = 100
+    table = 'BTC_day'
 
     # Get the most recent data
     table = dynamodb.Table(table)
