@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ApplicationRef } from '@angular/core';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { btc_week } from '../../modules/btc_week';
 import { btc_month } from '../../modules/btc_month';
@@ -18,12 +18,12 @@ HighchartsMore(Highcharts);
 
 export class GraphComponent implements OnInit {
 
-  constructor() { }
+  constructor(private appRef: ApplicationRef) { }
 
   public Highcharts: typeof Highcharts = Highcharts;
   public socket;
   public candles: any;
-  public dataReady = false;
+  public updateFlag: boolean = false;
 
   public chartOptions: Highcharts.Options = {
     series: [{
@@ -47,10 +47,12 @@ export class GraphComponent implements OnInit {
     this.socket.onmessage = (message) => {
       this.candles = JSON.parse(message.data).prices;
       console.log(this.candles)
-      let newData = [];
-      _.forEach(this.candles, (item) => {
-        this.chartOptions.series[0]['data'].push([item.h, item.l, item.o, item.c])
-      });
+      // _.forEach(this.candles, (item) => {
+      //   this.chartOptions.series[0]['data'].push([item.h, item.l, item.o, item.c])
+      // });
+      this.chartOptions.series[0]['data'].push(10, 1, 4, 5)
+      this.updateFlag = true;
+      this.appRef.tick();
     };
   }
 
