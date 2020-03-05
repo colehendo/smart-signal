@@ -91,9 +91,13 @@ stepFunctions:
             Type: Choice
             Choices:
             - Variable: "$.iterator.index"
-              NumericLessThan: 60
-              Next: Iterator
+              NumericLessThan: 6
+              Next: Wait
             Default: Done
+          Wait:
+            Type: Wait
+            Seconds: 9
+            Next: Iterator
           Done:
             Type: Pass
             End: true
