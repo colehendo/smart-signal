@@ -25,6 +25,9 @@ export class GraphComponent implements OnInit {
       data: [],
       type: 'candlestick'
     }],
+    title:{
+      text:"BTC Monthly"
+    }
   };
 
   public Highcharts: typeof Highcharts = Highcharts;
