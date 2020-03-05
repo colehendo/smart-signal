@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import { btc_week } from '../../modules/btc_week';
 import { btc_month } from '../../modules/btc_month';
 
@@ -51,26 +52,23 @@ export class GraphComponent implements OnInit {
   constructor(
   ) { }
 
-  public btc_week = btc_week;
-  public btc_month = btc_month;
+  public socket;
+  public candles: any;
 
-  public graph_data = btc_week;
+  ngOnInit() { this.setupWebSocket() }
 
-  public dataSource = {
-    chart: {
-      caption: "Countries With Most Oil Reserves [2017-18]",  //Set the chart caption
-      subCaption: "In MMbbl = One Million barrels",  //Set the chart subcaption
-      xAxisName: "Country",  //Set the x-axis name
-      yAxisName: "Reserves (MMbbl)",  //Set the y-axis name
-      numberSuffix: "K",
-      theme: "fusion"  //Set the theme for your chart
-    },
-    // Chart Data - from step 2
-    "data": this.graph_data
-  };
+  setupWebSocket() {
+    this.socket = new ReconnectingWebSocket("wss://rix9fti73l.execute-api.us-east-1.amazonaws.com/prod");
+    console.log(this.socket)
 
-  ngOnInit() {
+    this.socket.onopen = (event) => {
+      console.log(event)
+      let data = {"action": "getPrices"};
+      // this.socket.send(data);
+      this.socket.send(JSON.stringify(data));
+    };
 
+<<<<<<< HEAD
   // testFunction() {
   //   this.graph_data = this.btc_month;
   //   console.log(this.graph_data[0])
@@ -86,3 +84,13 @@ export class GraphComponent implements OnInit {
 	// type="CandlestickChart";
 	// data=[];
 	// columnNames=['time','a','b','c','d'];
+=======
+    this.socket.onmessage = function(message) {
+      console.log(message)
+      this.candles = JSON.parse(message.data);
+      console.log(this.candles)
+    };
+  }
+
+}
+>>>>>>> 441b9f0de5db8167b3ce69e1f1f4eb04617bd34c

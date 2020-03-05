@@ -14,18 +14,23 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
+        - execute-api:ManageConnections
       Resource: "*"
+
 package:
   include:
     - src/**
   exclude:
     - README.md
+
 plugins:
   - serverless-python-requirements
   - serverless-step-functions
+
 custom:
   pythonRequirements:
     dockerizePip: true
+
 resources:
   Outputs:
     TriggerPopulate:
@@ -34,19 +39,35 @@ resources:
     # TriggerAlgorithms:
     #   Value:
     #     Ref: TriggerAlgorithms
+
 functions:
+  connect:
+    handler: src/api/websocket.connect
+    events:
+     - websocket:
+        route: $connect
+     - websocket:
+        route: $disconnect
+  getPrices:
+    handler: src/api/websocket.get_prices
+    events:
+     - websocket:
+        route: getPrices
+
   btc-populate:
-    handler: populate/btc-populate.populate
+    handler: src/populate/btc-populate.populate
     timeout: 15
     environment:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
+
   algorithms:
-    handler: algorithms/algorithms.calculate
+    handler: src/algorithms/algorithms.calculate
     timeout: 60
     events:
      - schedule: rate(1 hour)
     # environment:
     #   statemachine_arn: ${self:resources.Outputs.TriggerAlgorithms.Value}
+
 stepFunctions:
   stateMachines:
     triggerPopulateFunc:
@@ -76,6 +97,7 @@ stepFunctions:
           Done:
             Type: Pass
             End: true
+
     # triggerAlgorithmsFunc:
     #   name: TriggerAlgorithms
     #   definition:

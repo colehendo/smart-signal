@@ -18,7 +18,7 @@ def populate(event, context):
     i = 0
 
     while i < 1:
-        # If it is at the start of a second, run everything
+        # If it is at the start of a 5 second period, run everything
         if ((time.time() % 1) < 0.1):
             timestamp = int(time.time())
             btc = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
@@ -38,19 +38,12 @@ def populate(event, context):
                 print(e.response['ResponseMetadata']['HTTPStatusCode'])
                 print(e.response['Error']['Message'])
 
-            print("starting minute")
             minute(timestamp, price)
-            print("starting 15")
             fifteen_minute(timestamp, price)
-            print("starting hr")
             hour(timestamp, price)
-            print("starting 4")
             four_hour(timestamp, price)
-            print("starting day")
             day(timestamp, price)
-            print("starting week")
             week(timestamp, price)
-            print("starting month")
             month(timestamp, price)
             print(int(time.time()))
 
