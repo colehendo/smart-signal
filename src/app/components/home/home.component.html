@@ -1,4 +1,5 @@
 <app-graph></app-graph>
+<button (click)="testApi()">Click me!</button>
 <ng-container *ngFor="let coin of cryptocurrencies">
     <app-asset-expansion-panel [id]="coin.id" [price]="coin.price" [change]="coin.change" [volume]="coin.volume"></app-asset-expansion-panel>
 </ng-container>

@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
@@ -31,6 +32,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     MaterialModule,
     HighchartsChartModule
   ],

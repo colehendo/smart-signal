@@ -60,6 +60,26 @@ functions:
     environment:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
 
+  rsi:
+    handler: src/indicators/rsi.calculate
+    events:
+      - http:
+          path: rsi
+          method: get
+          request:
+            parameters:
+              querystrings:
+                timeframe: true
+                sell_val: true
+                buy_val: true
+                strength_adjust: true
+      - http:
+          path: rsi
+          method: options
+          integration: lambda
+          cors:
+            origin: "*"
+
   algorithms:
     handler: src/algorithms/algorithms.calculate
     timeout: 60

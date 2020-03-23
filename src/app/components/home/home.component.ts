@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+
+import { IndicatorsService } from '../../core/http/indicators.service'
 
 @Component({
   selector: 'app-home',
@@ -7,7 +10,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private indicatorsService: IndicatorsService) { }
+
+  private params = new HttpParams();
 
   cryptocurrencies = [
     { id: "BTC", price: 8656.65, change: 0.65, volume: 7300 },
@@ -28,6 +33,16 @@ export class HomeComponent implements OnInit {
   ]
 
   ngOnInit() {
+  }
+
+  testApi() {
+    this.params = new HttpParams();
+    this.params.append('timeframe', 'day');
+    this.params.append('sell_val', '70');
+    this.params.append('buy_val', '30');
+    this.params.append('strength_adjust', '10');
+    this.indicatorsService.rsi(this.params).subscribe(data => console.log(data));
+    // console.log(results);
   }
 
 }

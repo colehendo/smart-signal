@@ -51,7 +51,6 @@ export class GraphComponent implements OnInit {
     this.socket.onmessage = (message) => {
       this.updateFlag = false;
       this.candles = JSON.parse(message.data).prices;
-      console.log(this.candles)
       _.forEach(this.candles, (item) => {
         let mean = ((item.l + item.o + item.o + item.h) / 4)
         this.chartOptions.series[0]['data'].push([item.o, item.h, item.l, item.c])
