@@ -66,13 +66,13 @@ functions:
       - http:
           path: rsi
           method: get
-          request:
-            parameters:
-              querystrings:
-                timeframe: true
-                sell_val: true
-                buy_val: true
-                strength_adjust: true
+          # request:
+          #   parameters:
+          #     querystrings:
+          #       timeframe: true
+          #       sell_val: true
+          #       buy_val: true
+          #       strength_adjust: true
       - http:
           path: rsi
           method: options

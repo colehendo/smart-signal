@@ -13,6 +13,7 @@ export class IndicatorsService {
   public baseUrl = 'https://rwd7t69k41.execute-api.us-east-1.amazonaws.com/prod';
 
   rsi(params: HttpParams): Observable<any> {
-    return this.http.get<object>(`${this.baseUrl}/rsi`, { params: params });
+    // return this.http.get<object>(`${this.baseUrl}/rsi`, { params: params });
+    return this.http.get<object>(`${this.baseUrl}/rsi`);
   }
 }
