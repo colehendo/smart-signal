@@ -14,6 +14,6 @@ export class IndicatorsService {
 
   rsi(params: HttpParams): Observable<any> {
     // return this.http.get<object>(`${this.baseUrl}/rsi`, { params: params });
-    return this.http.get<object>(`${this.baseUrl}/rsi`);
+    return this.http.get<object>(`${this.baseUrl}/indicators`);
   }
 }

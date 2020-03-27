@@ -27,6 +27,10 @@ def calculate(event, context):
 
     all_signals = []
     final_signals = []
+    balance = 100000
+    strength = 0
+    total_roi = 0
+    roi_count = 0
 
     for i in range(1, len(test_payload)):
         all_signals.append(match_indicator(test_payload[i], data))
@@ -34,14 +38,39 @@ def calculate(event, context):
     a_s_length = len(all_signals)
 
     for i in range (0, len(data)):
-        signal = all_signals[0][i]
-        if (signal != 'hold' and ((not final_signals) or (signal != final_signals[len(final_signals) - 1]))):
+        signal = all_signals[0][i]['sig']
+        if (signal != 'hold' and ((not final_signals) or (signal != final_signals[len(final_signals) - 1]['sig']))):
+            strength += all_signals[0][i]['str']
             for j in range (1, a_s_length):
-                if (all_signals[j][i] != signal):
+                if (all_signals[j][i]['sig'] != signal):
                     break
                 elif (j == (a_s_length - 1)):
-                    final_signals.append(signal)
+                    final_strength = round((strength / a_s_length), 10)
+                    transaction = round((final_strength * round(Decimal(data['c'][i]), 6)), 2)
+                    roi = round((((balance - 100000) / 100000) * 100), 4)
+                    if (signal == 'buy'):
+                        balance = round((balance - transaction), 2)
+                    else:
+                        balance = round((balance + transaction), 2)
+                        if (final_signals):
+                            total_roi += roi
+                            roi_count += 1
+
+                    final_signals.append({
+                        'sig': signal,
+                        'time': int(data['t'][i]),
+                        'amt': transaction,
+                        'roi': roi
+                    })
                     break
+                else:
+                    strength += all_signals[j][i]['str']
+
+
+    final_signals.append({
+        'bal': balance,
+        'avg_roi': round((total_roi / roi_count, 6)
+    })
 
     return {
         "statusCode": 200,
@@ -104,13 +133,13 @@ def rsi(data):
         current_rsi = rsi_total.iloc[i]
         if (current_rsi < 100) and (current_rsi > 0):
             if (current_rsi < 30):
-                signals.append('buy')
+                signals.append({'sig': 'buy', 'str': round(Decimal((100 - current_rsi - 10) / 100), 10)})
             elif (current_rsi > 70):
-                signals.append('sell')
+                signals.append({'sig': 'sell', 'str': round(Decimal((current_rsi - 10) / 100), 10)})
             else:
-                signals.append('hold')
+                signals.append({'sig': 'hold', 'str': 0})
         else:
-            signals.append('hold')
+            signals.append({'sig': 'hold', 'str': 0})
 
     return signals
 
@@ -119,11 +148,11 @@ def macd(data):
 
     for i in range(0, len(data)):
         if (data['c'][i] < 8000):
-            signals.append('buy')
+            signals.append({'sig': 'buy', 'str': Decimal(.5)})
         elif (data['c'][i] > 8000):
-            signals.append('sell')
+            signals.append({'sig': 'sell', 'str': Decimal(.5)})
         else:
-            signals.append('hold')
+            signals.append({'sig': 'hold', 'str': 0})
 
     return signals
 
@@ -132,59 +161,12 @@ def bb(data):
 
     for i in range(0, len(data)):
         if (data['c'][i] < data['o'][i]):
-            signals.append('buy')
+            signals.append({'sig': 'buy', 'str': Decimal(.5)})
         elif (data['c'][i] > data['o'][i]):
-            signals.append('sell')
+            signals.append({'sig': 'sell', 'str': Decimal(.5)})
         else:
-            signals.append('hold')
+            signals.append({'sig': 'hold', 'str': 0})
 
     return signals
- 
-# def rsi_test(data):
-#     # Get the past `timeframe` rsi values in a dataframe
-#     rsi_total = ta.momentum.rsi(close = df["c"], n = 14, fillna = True)
 
-#     signals = []
-#     balance = 100000
-#     signal_total = 0
-
-#     for i in range(0, len(rsi_total)):
-#         print(rsi_total.iloc[i])
-#         current_rsi = rsi_total.iloc[i]
-#         if (current_rsi < 100) and (current_rsi > 0):
-#             if (current_rsi < 30):
-#                 if (not signals) or (signals[len(signals) - 1]['signal'] != 'buy'):
-#                     signal_total += 1
-#                     strength = round(Decimal((100 - current_rsi - 10) / 100), 10)
-#                     transaction = round((strength * results['Items'][i]['c']), 2)
-#                     balance = round((balance - transaction), 2)
-#                     roi = round((((balance - 100000) / 100000) * 100), 4)
-#                     signals.append({
-#                         'signal': 'buy',
-#                         'time': results['Items'][i]['t'],
-#                         'price': results['Items'][i]['c'],
-#                         'balance': balance,
-#                         'strength': strength,
-#                         'roi': roi,
-#                         'avg_roi': round((roi / signal_total), 6)
-#                     })
-#             elif (current_rsi > 70):
-#                 if (not signals) or (signals[len(signals) - 1]['signal'] != 'sell'):
-#                     signal_total += 1
-#                     strength = round(Decimal((current_rsi - 10) / 100), 10)
-#                     transaction = round((strength * results['Items'][i]['c']), 2)
-#                     balance = round((balance - transaction), 2)
-#                     roi = round((((balance - 100000) / 100000) * 100), 4)
-#                     signals.append({
-#                         'signal': 'sell',
-#                         'time': results['Items'][i]['t'],
-#                         'price': results['Items'][i]['c'],
-#                         'balance': balance,
-#                         'strength': strength,
-#                         'roi': roi,
-#                         'avg_roi': round((roi / signal_total), 6)
-#                     })
-
-    print(signals)
-    return signals
 

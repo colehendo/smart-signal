@@ -61,10 +61,10 @@ functions:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
 
   rsi:
-    handler: src/indicators/rsi.calculate
+    handler: src/indicators/indicators.calculate
     events:
       - http:
-          path: rsi
+          path: indicators
           method: get
           # request:
           #   parameters:
@@ -74,17 +74,17 @@ functions:
           #       buy_val: true
           #       strength_adjust: true
       - http:
-          path: rsi
+          path: indicators
           method: options
           integration: lambda
           cors:
             origin: "*"
 
-  algorithms:
-    handler: src/algorithms/algorithms.calculate
-    timeout: 60
-    events:
-     - schedule: rate(1 hour)
+  # algorithms:
+  #   handler: src/algorithms/algorithms.calculate
+  #   timeout: 60
+  #   events:
+  #    - schedule: rate(1 hour)
     # environment:
     #   statemachine_arn: ${self:resources.Outputs.TriggerAlgorithms.Value}
 
