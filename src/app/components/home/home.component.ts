@@ -32,17 +32,20 @@ export class HomeComponent implements OnInit {
     { id: "NEO", price: 8656.65, change: 0.65, volume: 7300 },
   ]
 
+  public test_payload = [
+    ['day', 'hour', 'month'],
+    {indicator: 'rsi', timeframe: 'day'},
+    {indicator: 'macd', timeframe: 'hour'},
+    {indicator: 'bb', timeframe: 'month'},
+  ]
+
   ngOnInit() {
   }
 
   testApi() {
     this.params = new HttpParams();
-    this.params.append('timeframe', 'day');
-    this.params.append('sell_val', '70');
-    this.params.append('buy_val', '30');
-    this.params.append('strength_adjust', '10');
+    this.params = this.params.append('vals', JSON.stringify(this.test_payload));
     this.indicatorsService.rsi(this.params).subscribe(data => console.log(data));
-    // console.log(results);
   }
 
 }
