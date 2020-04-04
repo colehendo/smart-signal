@@ -22,7 +22,6 @@ export class WebsocketService {
 
       this.socket.onmessage = function(message) {
         this.candles = JSON.parse(message.data);
-        console.log(this.candles)
         // this.candles["messages"].forEach(function(message) {
         //     if ($("#message-container").children(0).attr("id") == "empty-message") {
         //         $("#message-container").empty();

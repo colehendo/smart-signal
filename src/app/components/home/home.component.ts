@@ -34,9 +34,9 @@ export class HomeComponent implements OnInit {
 
   public test_payload = [
     ['day', 'hour', 'month'],
-    {indicator: 'rsi', timeframe: 'day'},
+    {indicator: 'rsi', timeframe: 'month'},
     {indicator: 'macd', timeframe: 'hour'},
-    {indicator: 'bb', timeframe: 'month'},
+    {indicator: 'bb', timeframe: 'day'},
   ]
 
   ngOnInit() {

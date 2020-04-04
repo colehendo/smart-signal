@@ -26,7 +26,7 @@ export class GraphComponent implements OnInit {
       type: 'candlestick'
     }],
     title:{
-      text:"BTC Monthly"
+      text:"BTC Day"
     }
   };
 
@@ -51,9 +51,11 @@ export class GraphComponent implements OnInit {
     this.socket.onmessage = (message) => {
       this.updateFlag = false;
       this.candles = JSON.parse(message.data).prices;
+      let newData = [];
       _.forEach(this.candles, (item) => {
-        let mean = ((item.l + item.o + item.o + item.h) / 4)
-        this.chartOptions.series[0]['data'].push([item.o, item.h, item.l, item.c])
+        let mean = ((item.l + item.o + item.o + item.h) / 4);
+        newData.push([item.o, item.h, item.l, item.c]);
+        this.chartOptions.series[0]['data'] = newData;
       });
       this.updateFlag = true;
     };
