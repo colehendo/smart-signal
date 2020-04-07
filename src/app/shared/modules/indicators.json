@@ -1,0 +1,917 @@
+[
+    {
+        "indicator": "adi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "obv",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "cmf",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "fi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "emv",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "vpt",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "nvi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "atr",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "bb",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "kc",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "dc",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "macd",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "adx",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "vi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "trix",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "mi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "cci",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "dpo",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "kst",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "ichimoku",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "parabolic_sar",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "mfi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "rsi",
+        "month": {
+            "params": {
+                "sell": 60,
+                "buy": 40
+            }
+        },
+        "week": {
+            "params": {
+                "sell": 70,
+                "buy": 30
+            }
+        },
+        "day": {
+            "params": {
+                "sell": 80,
+                "buy": 20
+            }
+        },
+        "four_hour": {
+            "params": {
+                "sell": 70,
+                "buy": 30
+            }
+        },
+        "hour": {
+            "params": {
+                "sell": 70,
+                "buy": 30
+            }
+        },
+        "fifteen_minute": {
+            "params": {
+                "sell": 70,
+                "buy": 30
+            }
+        },
+        "minute": {
+            "params": {
+                "sell": 70,
+                "buy": 30
+            }
+        },
+        "second": {
+            "params": {
+                "sell": 70,
+                "buy": 30
+            }
+        }
+    },
+    {
+        "indicator": "tsi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "uo",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "sr",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "wr",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "ao",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "kama",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "roc",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "dr",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "dlr",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    },
+    {
+        "indicator": "cr",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        },
+        "second": {
+            "params": {}
+        }
+    }
+]

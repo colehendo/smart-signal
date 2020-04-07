@@ -10,6 +10,7 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
 def calculate(event, context):
+    print(event)
     if (event['queryStringParameters'] == None):
         return {
             "statusCode": 502,
@@ -18,9 +19,11 @@ def calculate(event, context):
                 "Access-Control-Allow-Origin": "*"
             }
         }
+    print(event['queryStringParameters'])
 
     # Load the payload into a usable format
     data = json.loads(event['queryStringParameters']['vals'])
+    print(data)
 
     if not data:
         return {
@@ -32,8 +35,8 @@ def calculate(event, context):
         }
 
     # Remove the array of timeframes from the data
-    timeframes = data[0]
-    data.pop(0)
+    timeframes = data[len(data) - 1]
+    del data[-1]
 
     if not data:
         return {
@@ -75,10 +78,6 @@ def calculate(event, context):
             all_signals.append(signals)
     if ('minute' in timeframes):
         signals = condense_timeframe(data, get_data('BTC_minute'), 'minute')
-        if signals:
-            all_signals.append(signals)
-    if ('second' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_second'), 'second')
         if signals:
             all_signals.append(signals)
 
@@ -142,7 +141,7 @@ def condense_timeframe(data, candles, timeframe):
     # append that indicator's data to an array
     for i in range(0, len(data)):
         if (data[i]['timeframe'] == timeframe):
-            indicator = match_indicator(data[i]['indicator'], candles)
+            indicator = match_indicator(data[i]['indicator'], data[i]['params'], candles)
             if indicator:
                 timeframe_data.append(indicator)
 
@@ -424,49 +423,57 @@ def multi_tf(all_signals, a_s_length):
 
 # A simple function to call the indicators.
 # This may be better done with a struct
-def match_indicator(indicator, data):
+def match_indicator(indicator, params, candles):
     if (indicator == 'rsi'):
-        return rsi(data)
+        return rsi(params, candles)
     elif (indicator == 'macd'):
-        return macd(data)
+        return macd(candles)
     elif (indicator == 'bb'):
-        return bb(data)
+        return bb(candles)
     else:
         return []
 
-def rsi(data):
-    # Get the past `timeframe` rsi values in a dataframe
-    rsi_total = ta.momentum.rsi(close = data["c"], n = 14, fillna = True)
 
-    signals = []
 
-    for i in range(0, len(rsi_total)):
-        current_rsi = rsi_total.iloc[i]
-        if (current_rsi < 100) and (current_rsi > 0):
-            if (current_rsi < 30):
-                signals.append({'sig': 'buy', 'str': round(Decimal((100 - current_rsi - 10) / 100), 10)})
-            elif (current_rsi > 70):
-                signals.append({'sig': 'sell', 'str': round(Decimal((current_rsi - 10) / 100), 10)})
-            else:
-                signals.append({'sig': 'hold', 'str': 0})
-        else:
-            signals.append({'sig': 'hold', 'str': 0})
+# VOLUME
 
-    return signals
+# Accumulation/Distribution Index
+def adi():
+    print('adi')
 
-def macd(data):
-    signals = []
+# Chaikin Money Flow
+def cmf():
+    print('cmf')
 
-    for i in range(0, len(data)):
-        if (data['c'][i] < 6500):
-            signals.append({'sig': 'buy', 'str': Decimal(.5)})
-        elif (data['c'][i] > 8000):
-            signals.append({'sig': 'sell', 'str': Decimal(.5)})
-        else:
-            signals.append({'sig': 'hold', 'str': 0})
+# Ease of Movement
+def emv():
+    print('emv')
 
-    return signals
+# Force Index
+def fi():
+    print('fi')
 
+# Negative Volume Index
+def nvi():
+    print('nvi')
+
+# On-Balance Volume
+def obv():
+    print('obv')
+
+# Volume-price Trend
+def vpt():
+    print('vpt')
+
+
+
+# VOLATILITY
+
+# Average True Range
+def atr():
+    print('atr')
+
+# Bollinger Bands
 def bb(data):
     signals = []
 
@@ -480,55 +487,141 @@ def bb(data):
 
     return signals
 
+# Donchian Channel
+def dc():
+    print('dc')
 
-# Volume
-
-# Accumulation/Distribution Index (ADI)
-# On-Balance Volume (OBV)
-# Chaikin Money Flow (CMF)
-# Force Index (FI)
-# Ease of Movement (EoM, EMV)
-# Volume-price Trend (VPT)
-# Negative Volume Index (NVI)
+# Keltner Channel
+def kc():
+    print('kc')
 
 
-# Volatility
 
-# Average True Range (ATR)
-# Bollinger Bands (BB)
-# Keltner Channel (KC)
-# Donchian Channel (DC)
+# TREND
+
+# Average Directional Movement Index
+def adx():
+    print('adx')
+
+# Commodity Channel Index
+def cci():
+    print('cci')
+
+# Detrended Price Oscillator
+def dpo():
+    print('dpo')
+
+# Ichimoku Kinkō Hyō
+def ichimoku():
+    print('Ichimoku')
+
+# KST Oscillator
+def kst():
+    print('kst')
+
+# Moving Average Convergence Divergence
+def macd(data):
+    signals = []
+
+    for i in range(0, len(data)):
+        if (data['c'][i] < 6500):
+            signals.append({'sig': 'buy', 'str': Decimal(.5)})
+        elif (data['c'][i] > 8000):
+            signals.append({'sig': 'sell', 'str': Decimal(.5)})
+        else:
+            signals.append({'sig': 'hold', 'str': 0})
+
+    return signals
+
+# Mass Index
+def mi():
+    print('mi')
+
+# Parabolic Stop And Reverse
+def parabolic_sar():
+    print('parabolic_sar')
+
+# Trix
+def trix():
+    print('trix')
+
+# Vortex Indicator
+def vi():
+    print('vi')
 
 
-# Trend
 
-# Moving Average Convergence Divergence (MACD)
-# Average Directional Movement Index (ADX)
-# Vortex Indicator (VI)
-# Trix (TRIX)
-# Mass Index (MI)
-# Commodity Channel Index (CCI)
-# Detrended Price Oscillator (DPO)
-# KST Oscillator (KST)
-# Ichimoku Kinkō Hyō (Ichimoku)
-# Parabolic Stop And Reverse (Parabolic SAR)
+# MOMENTUM
+
+# Awesome Oscillator
+def ao():
+    print('ao')
+
+# Kaufman's Adaptive Moving Average
+def kama():
+    print('kama')
+
+# Money Flow Index
+def mfi():
+    print('mfi')
+
+# Relative Strength Index
+def rsi(params, candles):
+    # Get the past `timeframe` rsi values in a dataframe
+    rsi_total = ta.momentum.rsi(close = candles["c"], n = 14, fillna = True)
+    print('params: ', params)
+    print('rsi: ', rsi)
+
+    signals = []
+
+    for i in range(0, len(rsi_total)):
+        current_rsi = rsi_total.iloc[i]
+        if (current_rsi < 100) and (current_rsi > 0):
+            if (current_rsi < params['buy']):
+                print('buy: ', i, ': ', current_rsi)
+                signals.append({'sig': 'buy', 'str': round(Decimal((100 - current_rsi - 10) / 100), 10)})
+            elif (current_rsi > params['sell']):
+                print('sell: ', i, ': ', current_rsi)
+                signals.append({'sig': 'sell', 'str': round(Decimal((current_rsi - 10) / 100), 10)})
+            else:
+                signals.append({'sig': 'hold', 'str': 0})
+        else:
+            signals.append({'sig': 'hold', 'str': 0})
+
+    return signals
+
+# Rate of Change
+def roc():
+    print('roc')
+
+# Stochastic Oscillator
+def sr():
+    print('sr')
+
+# True strength index
+def tsi():
+    print('tsi')
+
+# Ultimate Oscillator
+def uo():
+    print('uo')
+
+# Williams %R
+def wr():
+    print('wr')
 
 
-# Momentum
 
-# Money Flow Index (MFI)
-# Relative Strength Index (RSI)
-# True strength index (TSI)
-# Ultimate Oscillator (UO)
-# Stochastic Oscillator (SR)
-# Williams %R (WR)
-# Awesome Oscillator (AO)
-# Kaufman's Adaptive Moving Average (KAMA)
-# Rate of Change (ROC)
+# OTHERS
 
+# Daily Return
+def dr():
+    print('dr')
 
-# Others
+# Daily Log Return
+def dlr():
+    print('dlr')
 
-# Daily Return (DR)
-# Daily Log Return (DLR)
-# Cumulative Return (CR)
+# Cumulative Return
+def cr():
+    print('cr')

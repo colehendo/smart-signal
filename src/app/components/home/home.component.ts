@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
-
-import { IndicatorsService } from '../../core/http/indicators.service'
+import * as _ from 'lodash';
+import { IndicatorsService } from '../../core/http/indicators.service';
+import  *  as  data  from  '../../shared/modules/indicators.json';
+const indicatorData: any =  (data  as  any).default;
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
+
 export class HomeComponent implements OnInit {
 
   constructor(private indicatorsService: IndicatorsService) { }
@@ -32,20 +35,87 @@ export class HomeComponent implements OnInit {
     { id: "NEO", price: 8656.65, change: 0.65, volume: 7300 },
   ]
 
-  public test_payload = [
-    ['day', 'hour', 'month'],
-    {indicator: 'rsi', timeframe: 'month'},
-    {indicator: 'macd', timeframe: 'hour'},
-    {indicator: 'bb', timeframe: 'day'},
-  ]
-
   ngOnInit() {
   }
 
+  // How to test a payload with parameters from the front end
+  public payload = [];
+  public timeframe = 'day';
+  testParams() {
+    _.forEach(indicatorData, (item) => {
+      if (item.indicator === 'rsi') {
+        if (this.timeframe === 'month') {
+          this.payload.push({
+            indicator: item.indicator,
+            timeframe: 'month',
+            params: item.month.params
+          });
+        } else if (this.timeframe === 'week') {
+          this.payload.push({
+            indicator: item.indicator,
+            timeframe: 'week',
+            params: item.month.params
+          });
+        } else if (this.timeframe === 'day') {
+          this.payload.push({
+            indicator: item.indicator,
+            timeframe: 'day',
+            params: item.month.params
+          });
+        } else if (this.timeframe === 'four_hour') {
+          this.payload.push({
+            indicator: item.indicator,
+            timeframe: 'four_hour',
+            params: item.month.params
+          });
+        } else if (this.timeframe === 'hour') {
+          this.payload.push({
+            indicator: item.indicator,
+            timeframe: 'hour',
+            params: item.month.params
+          });
+        } else if (this.timeframe === 'fifteen_minute') {
+          this.payload.push({
+            indicator: item.indicator,
+            timeframe: 'fifteen_minute',
+            params: item.month.params
+          });
+        } else {
+          this.payload.push({
+            indicator: item.indicator,
+            timeframe: 'minute',
+            params: item.month.params
+          });
+        }
+      }
+    });
+
+    let all_timeframes = [];
+
+    _.forEach(this.payload, (item) => {
+      if (!all_timeframes.includes(item.timeframe)) {
+        all_timeframes.push(item.timeframe);
+      }
+    });
+
+    this.payload.push(all_timeframes);
+
+    this.params = this.params.append('vals', JSON.stringify(this.payload));
+    this.indicatorsService.indicators(this.params).subscribe(data => console.log(data));
+    this.payload = [];
+  }
+
+  // How to test a custom payload
+  public test_payload = [
+    ['day', 'hour', 'month'],
+    {indicator: 'rsi', timeframe: 'month'},
+    {indicator: 'macd', timeframe: 'month'},
+    {indicator: 'bb', timeframe: 'day'},
+  ];
+
   testApi() {
-    this.params = new HttpParams();
     this.params = this.params.append('vals', JSON.stringify(this.test_payload));
-    this.indicatorsService.rsi(this.params).subscribe(data => console.log(data));
+    this.indicatorsService.indicators(this.params).subscribe(data => console.log(data));
   }
 
 }
