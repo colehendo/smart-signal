@@ -148,7 +148,7 @@ def condense_timeframe(data, candles, timeframe):
         return []
 
     t_d_length = len(timeframe_data)
-    
+
     # If only one indicator returned signals
     # make an array of signals different from the
     # one before and the one after it
@@ -305,7 +305,7 @@ def multi_tf(all_signals, a_s_length):
                             roi = (((transaction - prev_buy) / prev_buy) * 100)
                             total_roi += roi
                             roi_count += 1
-                        
+
                         final_signals.append({
                             'sig': signal,
                             'time': timestamp,
@@ -366,7 +366,7 @@ def multi_tf(all_signals, a_s_length):
                                 roi = (((transaction - prev_buy) / prev_buy) * 100)
                                 total_roi += roi
                                 roi_count += 1
-                            
+
                             final_signals.append({
                                 'sig': signal,
                                 'time': timestamp,
@@ -476,6 +476,9 @@ def match_indicator(indicator, params, candles):
 # VOLUME
 
 # Accumulation/Distribution Index
+# Works best in a ranging period(so maybe after huge moves up or down),
+# does not work well when market is trending hard, good for locating trend reversals through top/bottom divergences
+# The AD line compares the strength of the open to the strength of the close divided by the range
 def adi(params, candles):
     adi = ta.volume.acc_dist_index(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], fillna = False)
     for i in range(0, len(adi)):
@@ -483,6 +486,7 @@ def adi(params, candles):
             print('adi ', i, ': ', adi[i])
 
 # Chaikin Money Flow
+# similar to MACD exccept also uses volume.
 def cmf(params, candles):
     cmf = ta.volume.chaikin_money_flow(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], n = 20, fillna = False)
     print('cmf: ')
@@ -500,6 +504,7 @@ def eom(params, candles):
             print('eom ', i, ': ', eom[i])
 
 # Force Index
+# Multiplies the change in volume * price for each day
 def fi(params, candles):
     fi = ta.volume.force_index(close = candles["c"], volume = candles["v"], n = 13, fillna = False)
     print('fi: ')
@@ -723,6 +728,7 @@ def kama(params, candles):
     print('kama: ', kama)
 
 # Money Flow Index
+# Basically an even better RSI indicator because it implements volume too.
 def mfi(params, candles):
     mfi = ta.momentum.money_flow_index(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], n = 14, fillna = False)
     print('mfi: ')
