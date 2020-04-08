@@ -422,14 +422,14 @@ def multi_tf(all_signals, a_s_length):
 # A simple function to call the indicators.
 # This may be better done with a struct
 def match_indicator(indicator, params, candles):
-    # adi(params, candles)
-    # cmf(params, candles)
-    # eom(params, candles)
-    # fi(params, candles)
-    # nvi(params, candles)
-    # obv(params, candles)
-    # seom(params, candles)
-    # vpt(params, candles)
+    adi(params, candles)
+    cmf(params, candles)
+    eom(params, candles)
+    fi(params, candles)
+    nvi(params, candles)
+    obv(params, candles)
+    seom(params, candles)
+    vpt(params, candles)
     atr(params, candles)
     bb(params, candles)
     dc(params, candles)
@@ -438,12 +438,10 @@ def match_indicator(indicator, params, candles):
     aroon(params, candles)
     cci(params, candles)
     dpo(params, candles)
-    ichimoku(params, candles)
     kst(params, candles)
     macd(params, candles)
     mi(params, candles)
     psar(params, candles)
-    sma(params, candles)
     trix(params, candles)
     vi(params, candles)
     ao(params, candles)
@@ -457,6 +455,9 @@ def match_indicator(indicator, params, candles):
     cr(params, candles)
     dlr(params, candles)
     dr(params, candles)
+
+    # ichimoku(params, candles)
+    # sma(params, candles)
 
     if (indicator == 'rsi'):
         return rsi(params, candles)
@@ -545,15 +546,11 @@ def vpt(params, candles):
 # Average True Range
 def atr(params, candles):
     atr = ta.volatility.average_true_range(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
-    print('atr: ')
-    for i in range(0, len(atr)):
-        if (i < 10) or (i > (len(atr) - 10)):
-            print('atr ', i, ': ', atr[i])
+    print('atr: ', atr)
 
 # Bollinger Bands
 def bb(params, candles):
     bb = ta.volatility.BollingerBands(close = candles["c"], n=20, ndev=2)
-    print('bb: ', bb)
     mavg = bb.bollinger_mavg()
     print('bb mavg: ', mavg)
     hband = bb.bollinger_hband()
@@ -566,12 +563,12 @@ def bb(params, candles):
     print('bb lband_i: ', lband_i)
     wband = bb.bollinger_wband()
     print('bb wband: ', wband)
-    pband = bb.bollinger_pband()
-    print('bb pband: ', pband)
+    # pband = bb.bollinger_pband()
+    # print('bb pband: ', pband)
 
 # Donchian Channel
 def dc(params, candles):
-    dc = ta.volatility.DonchianChannel(close = candles["c"], n=20, ndev=2)
+    dc = ta.volatility.DonchianChannel(close = candles["c"], n=20, fillna = False)
     print('dc: ', dc)
     hband = dc.donchian_channel_hband()
     print('dc hband: ', hband)
@@ -584,10 +581,10 @@ def dc(params, candles):
 
 # Keltner Channel
 def kc(params, candles):
-    kc = ta.volatility.KeltnerChannel(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False, ov = True)
+    kc = ta.volatility.KeltnerChannel(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
     print('kc: ', kc)
-    mband = kc.keltner_channel_mband()
-    print('kc mband: ', mband)
+    # mband = kc.keltner_channel_mband()
+    # print('kc mband: ', mband)
     hband = kc.keltner_channel_hband()
     print('kc hband: ', hband)
     lband = kc.keltner_channel_lband()
@@ -596,10 +593,10 @@ def kc(params, candles):
     print('kc hband_i: ', hband_i)
     lband_i = kc.keltner_channel_lband_indicator()
     print('kc lband_i: ', lband_i)
-    wband = kc.keltner_channel_wband()
-    print('kc wband: ', wband)
-    pband = kc.keltner_channel_pband()
-    print('kc pband: ', pband)
+    # wband = kc.keltner_channel_wband()
+    # print('kc wband: ', wband)
+    # pband = kc.keltner_channel_pband()
+    # print('kc pband: ', pband)
 
 
 
