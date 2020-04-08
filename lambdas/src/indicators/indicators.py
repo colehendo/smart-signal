@@ -10,7 +10,6 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
 def calculate(event, context):
-    print(event)
     if (event['queryStringParameters'] == None):
         return {
             "statusCode": 502,
@@ -19,11 +18,9 @@ def calculate(event, context):
                 "Access-Control-Allow-Origin": "*"
             }
         }
-    print(event['queryStringParameters'])
 
     # Load the payload into a usable format
     data = json.loads(event['queryStringParameters']['vals'])
-    print(data)
 
     if not data:
         return {
@@ -133,6 +130,7 @@ def condense_timeframe(data, candles, timeframe):
         return []
     else:
         candles = pd.read_json(candles)
+        # candles = ta.utils.dropna(candles)
 
     timeframe_data = []
     timeframe_signals = []
@@ -289,9 +287,9 @@ def multi_tf(all_signals, a_s_length):
                 if (prev_too_early):
                     final_strength = round(Decimal(strength / str_count), 10)
                     transaction = round((final_strength * round(Decimal(all_signals[tf][a_s_record[tf][0]]['price']), 6)), 2)
-                    print('strength: ', strength, ' str count: ', str_count, ' final str: ', final_strength)
-                    print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
-                    print(all_signals[tf][a_s_record[tf][0]])
+                    # print('strength: ', strength, ' str count: ', str_count, ' final str: ', final_strength)
+                    # print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
+                    # print(all_signals[tf][a_s_record[tf][0]])
                     if (signal == 'buy'):
                         balance = round((balance - transaction), 2)
                         prev_buy = transaction
@@ -351,8 +349,8 @@ def multi_tf(all_signals, a_s_length):
                     if (tf == (a_s_length - 1)):
                         final_strength = round(Decimal(strength / str_count), 10)
                         transaction = round((final_strength * round(Decimal(all_signals[tf][a_s_record[tf][0]]['price']), 6)), 2)
-                        print('strength: ', strength, ' str count: ', str_count, ' final str: ', final_strength)
-                        print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
+                        # print('strength: ', strength, ' str count: ', str_count, ' final str: ', final_strength)
+                        # print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
                         if (signal == 'buy'):
                             balance = round((balance - transaction), 2)
                             prev_buy = transaction
@@ -424,6 +422,42 @@ def multi_tf(all_signals, a_s_length):
 # A simple function to call the indicators.
 # This may be better done with a struct
 def match_indicator(indicator, params, candles):
+    # adi(params, candles)
+    # cmf(params, candles)
+    # eom(params, candles)
+    # fi(params, candles)
+    # nvi(params, candles)
+    # obv(params, candles)
+    # seom(params, candles)
+    # vpt(params, candles)
+    atr(params, candles)
+    bb(params, candles)
+    dc(params, candles)
+    kc(params, candles)
+    adx(params, candles)
+    aroon(params, candles)
+    cci(params, candles)
+    dpo(params, candles)
+    ichimoku(params, candles)
+    kst(params, candles)
+    macd(params, candles)
+    mi(params, candles)
+    psar(params, candles)
+    sma(params, candles)
+    trix(params, candles)
+    vi(params, candles)
+    ao(params, candles)
+    kama(params, candles)
+    mfi(params, candles)
+    roc(params, candles)
+    sr(params, candles)
+    tsi(params, candles)
+    uo(params, candles)
+    wr(params, candles)
+    cr(params, candles)
+    dlr(params, candles)
+    dr(params, candles)
+
     if (indicator == 'rsi'):
         return rsi(params, candles)
     elif (indicator == 'macd'):
@@ -435,142 +469,278 @@ def match_indicator(indicator, params, candles):
 
 
 
+# THE END OF THE ARRAY CONTAINS THE LATEST VALUES
+
+
+
 # VOLUME
 
 # Accumulation/Distribution Index
-def adi():
-    print('adi')
+def adi(params, candles):
+    adi = ta.volume.acc_dist_index(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], fillna = False)
+    for i in range(0, len(adi)):
+        if (i < 10) or (i > (len(adi) - 10)):
+            print('adi ', i, ': ', adi[i])
 
 # Chaikin Money Flow
-def cmf():
-    print('cmf')
+def cmf(params, candles):
+    cmf = ta.volume.chaikin_money_flow(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], n = 20, fillna = False)
+    print('cmf: ')
+    for i in range(0, len(cmf)):
+        if (i < 10) or (i > (len(cmf) - 10)):
+            print('cmf ', i, ': ', cmf[i])
 
 # Ease of Movement
-def emv():
-    print('emv')
+# NOT SURE
+def eom(params, candles):
+    eom = ta.volume.ease_of_movement(high = candles["h"], low = candles["l"], volume = candles["v"], n = 14, fillna = False)
+    print('eom: ')
+    for i in range(0, len(eom)):
+        if (i < 10) or (i > (len(eom) - 10)):
+            print('eom ', i, ': ', eom[i])
 
 # Force Index
-def fi():
-    print('fi')
+def fi(params, candles):
+    fi = ta.volume.force_index(close = candles["c"], volume = candles["v"], n = 13, fillna = False)
+    print('fi: ')
+    for i in range(0, len(fi)):
+        if (i < 10) or (i > (len(fi) - 10)):
+            print('fi ', i, ': ', fi[i])
 
 # Negative Volume Index
-def nvi():
-    print('nvi')
+def nvi(params, candles):
+    nvi = ta.volume.negative_volume_index(close = candles["c"], volume = candles["v"], fillna = False)
+    print('nvi: ')
+    for i in range(0, len(nvi)):
+        if (i < 10) or (i > (len(nvi) - 10)):
+            print('nvi ', i, ': ', nvi[i])
 
 # On-Balance Volume
-def obv():
-    print('obv')
+def obv(params, candles):
+    obv = ta.volume.on_balance_volume(close = candles["c"], volume = candles["v"], fillna = False)
+    print('obv: ')
+    for i in range(0, len(obv)):
+        if (i < 10) or (i > (len(obv) - 10)):
+            print('obv ', i, ': ', obv[i])
+
+# Signal Ease of Movement
+def seom(params, candles):
+    seom = ta.volume.sma_ease_of_movement(high = candles["h"], low = candles["l"], volume = candles["v"], n = 14, fillna = False)
+    print('seom: ')
+    for i in range(0, len(seom)):
+        if (i < 10) or (i > (len(seom) - 10)):
+            print('seom ', i, ': ', seom[i])
 
 # Volume-price Trend
-def vpt():
-    print('vpt')
+def vpt(params, candles):
+    obv = ta.volume.on_balance_volume(close = candles["c"], volume = candles["v"], fillna = False)
+    print('vpt: ', vpt)
+    # for i in range(0, len(vpt)):
+    #     print(vpt[i])
 
 
 
 # VOLATILITY
 
 # Average True Range
-def atr():
-    print('atr')
+def atr(params, candles):
+    atr = ta.volatility.average_true_range(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
+    print('atr: ')
+    for i in range(0, len(atr)):
+        if (i < 10) or (i > (len(atr) - 10)):
+            print('atr ', i, ': ', atr[i])
 
 # Bollinger Bands
-def bb(data):
-    signals = []
-
-    for i in range(0, len(data)):
-        if (data['c'][i] < 7000):
-            signals.append({'sig': 'buy', 'str': Decimal(.5)})
-        elif (data['c'][i] > 8500):
-            signals.append({'sig': 'sell', 'str': Decimal(.5)})
-        else:
-            signals.append({'sig': 'hold', 'str': 0})
-
-    return signals
+def bb(params, candles):
+    bb = ta.volatility.BollingerBands(close = candles["c"], n=20, ndev=2)
+    print('bb: ', bb)
+    mavg = bb.bollinger_mavg()
+    print('bb mavg: ', mavg)
+    hband = bb.bollinger_hband()
+    print('bb hband: ', hband)
+    lband = bb.bollinger_lband()
+    print('bb lband: ', lband)
+    hband_i = bb.bollinger_hband_indicator()
+    print('bb hband_i: ', hband_i)
+    lband_i = bb.bollinger_lband_indicator()
+    print('bb lband_i: ', lband_i)
+    wband = bb.bollinger_wband()
+    print('bb wband: ', wband)
+    pband = bb.bollinger_pband()
+    print('bb pband: ', pband)
 
 # Donchian Channel
-def dc():
-    print('dc')
+def dc(params, candles):
+    dc = ta.volatility.DonchianChannel(close = candles["c"], n=20, ndev=2)
+    print('dc: ', dc)
+    hband = dc.donchian_channel_hband()
+    print('dc hband: ', hband)
+    hband_i = dc.donchian_channel_hband_indicator()
+    print('dc hband_i: ', hband_i)
+    lband = dc.donchian_channel_lband()
+    print('dc lband: ', lband)
+    lband_i = dc.donchian_channel_lband_indicator()
+    print('dc lband_i: ', lband_i)
 
 # Keltner Channel
-def kc():
-    print('kc')
+def kc(params, candles):
+    kc = ta.volatility.KeltnerChannel(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False, ov = True)
+    print('kc: ', kc)
+    mband = kc.keltner_channel_mband()
+    print('kc mband: ', mband)
+    hband = kc.keltner_channel_hband()
+    print('kc hband: ', hband)
+    lband = kc.keltner_channel_lband()
+    print('kc lband: ', lband)
+    hband_i = kc.keltner_channel_hband_indicator()
+    print('kc hband_i: ', hband_i)
+    lband_i = kc.keltner_channel_lband_indicator()
+    print('kc lband_i: ', lband_i)
+    wband = kc.keltner_channel_wband()
+    print('kc wband: ', wband)
+    pband = kc.keltner_channel_pband()
+    print('kc pband: ', pband)
 
 
 
 # TREND
 
 # Average Directional Movement Index
-def adx():
-    print('adx')
+def adx(params, candles):
+    all_adx = ta.trend.ADXIndicator(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
+    print('all adx: ', all_adx)
+    adx = all_adx.adx()
+    print('adx: ', adx)
+    neg = all_adx.adx_neg()
+    print('neg adx: ', neg)
+    pos = all_adx.adx_pos()
+    print('pos adx: ', pos)
+
+# Aroon Indicator
+def aroon(params, candles):
+    aroon = ta.trend.AroonIndicator(close = candles["c"], n = 25, fillna = False)
+    print('aroon: ', aroon)
+    down = aroon.aroon_down()
+    print('aroon down: ', down)
+    up = aroon.aroon_up()
+    print('aroon up: ', up)
+    indicator = aroon.aroon_indicator()
+    print('aroon indicator: ', indicator)
 
 # Commodity Channel Index
-def cci():
-    print('cci')
+def cci(params, candles):
+    cci = ta.trend.cci(high = candles["h"], low = candles["l"], close = candles["c"], n = 20, c = 0.015, fillna = False)
+    print('cci: ', cci)
 
 # Detrended Price Oscillator
-def dpo():
-    print('dpo')
+def dpo(params, candles):
+    dpo = ta.trend.dpo(close = candles["c"], n = 20, fillna = False)
+    print('dpo: ', dpo)
 
 # Ichimoku Kinkō Hyō
-def ichimoku():
-    print('Ichimoku')
+def ichimoku(params, candles):
+    ichimoku = ta.trend.IchimokuIndicato(high = candles["h"], low = candles["l"], n1 = 9, n2 = 26, n3 = 52, visual = False, fillna = False)
+    print('ichi: ', ichimoku)
+    ichimoku_a = ichimoku.ichimoku_a()
+    print('ichi a: ', ichimoku_a)
+    ichimoku_b = ichimoku.ichimoku_b()
+    print('ichi b: ', ichimoku_b)
 
 # KST Oscillator
-def kst():
-    print('kst')
+def kst(params, candles):
+    all_kst = ta.trend.KSTIndicator(close = candles["c"], r1 = 10, r2 = 15, r3 = 20, r4 = 30, n1 = 10, n2 = 10, n3 = 10, n4 = 15, nsig = 9, fillna = False)
+    print('all kst: ', all_kst)
+    kst = all_kst.kst()
+    print('kst: ', kst)
+    kst_diff = all_kst.kst_diff()
+    print('kst diff: ', kst_diff)
+    kst_sig = all_kst.kst_sig()
+    print('kst_sig: ', kst_sig)
 
 # Moving Average Convergence Divergence
-def macd(data):
-    signals = []
-
-    for i in range(0, len(data)):
-        if (data['c'][i] < 6500):
-            signals.append({'sig': 'buy', 'str': Decimal(.5)})
-        elif (data['c'][i] > 8000):
-            signals.append({'sig': 'sell', 'str': Decimal(.5)})
-        else:
-            signals.append({'sig': 'hold', 'str': 0})
-
-    return signals
+def macd(params, candles):
+    all_macd = ta.trend.MACD(close = candles["c"], n_slow = 26, n_fast = 12, n_sign = 9, fillna = False)
+    print('all macd: ', all_macd)
+    macd = all_macd.macd()
+    print('macd: ', macd)
+    macd_diff = all_macd.macd_diff()
+    print('macd diff: ', macd_diff)
+    macd_signal = all_macd.macd_signal()
+    print('macd_signal: ', macd_signal)
 
 # Mass Index
-def mi():
-    print('mi')
+def mi(params, candles):
+    mi = ta.trend.mass_index(high = candles["h"], low = candles["l"], n = 9, n2 = 25, fillna = False)
+    print('mi: ', mi)
 
 # Parabolic Stop And Reverse
-def parabolic_sar():
-    print('parabolic_sar')
+def psar(params, candles):
+    all_psar = ta.trend.PSARIndicator(high = candles["h"], low = candles["l"], close = candles["c"], step = 0.02, max_step = 0.2, fillna = False)
+    print('all psar: ', all_psar)
+    psar = all_psar.psar()
+    print('psar: ', psar)
+    psar_down = all_psar.psar_down()
+    print('psar_down: ', psar_down)
+    psar_down_i = all_psar.psar_down_indicator()
+    print('psar_down_i: ', psar_down_i)
+    psar_up = all_psar.psar_up()
+    print('psar_up: ', psar_up)
+    psar_up_i = all_psar.psar_up_indicator()
+    print('psar_up_i: ', psar_up_i)
+
+# Simple Moving Average
+def sma(params, candles):
+    sma = ta.trend.sma_indicator(close = candles["c"], n = 12, fillna = False)
+    print('sma: ', sma)
 
 # Trix
-def trix():
-    print('trix')
+def trix(params, candles):
+    trix = ta.trend.trix(close = candles["c"], n = 15, fillna = False)
+    print('trix: ', trix)
 
 # Vortex Indicator
-def vi():
-    print('vi')
-
+def vi(params, candles):
+    vi = ta.trend.VortexIndicator(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
+    print('vi: ', vi)
+    vi_diff = vi.vortex_indicator_diff()
+    print('vi_diff: ', vi_diff)
+    vi_pos = vi.vortex_indicator_pos()
+    print('vi_pos: ', vi_pos)
+    vi_neg = vi.vortex_indicator_neg()
+    print('vi_neg: ', vi_neg)
 
 
 # MOMENTUM
 
 # Awesome Oscillator
-def ao():
-    print('ao')
+def ao(params, candles):
+    ao = ta.momentum.ao(high = candles["h"], low = candles["l"], s = 5, len = 34, fillna = False)
+    print('ao: ', ao)
 
 # Kaufman's Adaptive Moving Average
-def kama():
-    print('kama')
+def kama(params, candles):
+    kama = ta.momentum.kama(close = candles["c"], n = 10, pow1 = 2, pow2 = 30, fillna = False)
+    print('kama: ', kama)
 
 # Money Flow Index
-def mfi():
-    print('mfi')
+def mfi(params, candles):
+    mfi = ta.momentum.money_flow_index(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], n = 14, fillna = False)
+    print('mfi: ')
+    for i in range(0, len(mfi)):
+        if (i < 10) or (i > (len(mfi) - 10)):
+            print('mfi ', i, ': ', mfi[i])
+
+# Rate of Change
+def roc(params, candles):
+    roc = ta.momentum.roc(close = candles["c"], n = 12, fillna = False)
+    print('roc: ', roc)
 
 # Relative Strength Index
 def rsi(params, candles):
     # Get the past `timeframe` rsi values in a dataframe
     rsi_total = ta.momentum.rsi(close = candles["c"], n = 14, fillna = True)
-    print('params: ', params)
-    print('rsi: ', rsi)
+    # print('params: ', params)
+    # print('rsi: ', rsi)
 
     signals = []
 
@@ -578,10 +748,10 @@ def rsi(params, candles):
         current_rsi = rsi_total.iloc[i]
         if (current_rsi < 100) and (current_rsi > 0):
             if (current_rsi < params['buy']):
-                print('buy: ', i, ': ', current_rsi)
+                # print('buy: ', i, ': ', current_rsi)
                 signals.append({'sig': 'buy', 'str': round(Decimal((100 - current_rsi - 10) / 100), 10)})
             elif (current_rsi > params['sell']):
-                print('sell: ', i, ': ', current_rsi)
+                # print('sell: ', i, ': ', current_rsi)
                 signals.append({'sig': 'sell', 'str': round(Decimal((current_rsi - 10) / 100), 10)})
             else:
                 signals.append({'sig': 'hold', 'str': 0})
@@ -590,38 +760,45 @@ def rsi(params, candles):
 
     return signals
 
-# Rate of Change
-def roc():
-    print('roc')
-
 # Stochastic Oscillator
-def sr():
-    print('sr')
+def sr(params, candles):
+    all_sr = ta.momentum.StochasticOscillator(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, d_n = 3, fillna = False)
+    print('all_sr: ', all_sr)
+    sr = all_sr.stoch()
+    print('sr: ', sr)
+    sr_sig = all_sr.stoch_signal()
+    print('sr_sig: ', sr_sig)
 
 # True strength index
-def tsi():
-    print('tsi')
+def tsi(params, candles):
+    tsi = ta.momentum.tsi(close = candles["c"], r = 25, s = 13, fillna = False)
+    print('tsi: ', tsi)
 
 # Ultimate Oscillator
-def uo():
-    print('uo')
+def uo(params, candles):
+    uo = ta.momentum.uo(high = candles["h"], low = candles["l"], close = candles["c"], s = 7, m = 14, len = 28, ws = 4.0, wm = 2.0, wl = 1.0, fillna = False)
+    print('uo: ', uo)
 
 # Williams %R
-def wr():
-    print('wr')
+def wr(params, candles):
+    wr = ta.momentum.wr(high = candles["h"], low = candles["l"], close = candles["c"], lbp = 14, fillna = False)
+    print('wr: ', wr)
 
 
 
 # OTHERS
 
-# Daily Return
-def dr():
-    print('dr')
+# Cumulative Return
+def cr(params, candles):
+    ta.others.cumulative_return(close = candles["c"], fillna = False)
+    print('cr: ', cr)
 
 # Daily Log Return
-def dlr():
-    print('dlr')
+def dlr(params, candles):
+    dlr = ta.others.daily_log_return(close = candles["c"], fillna = False)
+    print('dlr: ', dlr)
 
-# Cumulative Return
-def cr():
-    print('cr')
+# Daily Return
+def dr(params, candles):
+    dr = ta.others.daily_return(close = candles["c"], fillna = False)
+    print('dr: ', dr)
