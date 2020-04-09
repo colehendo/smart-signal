@@ -57,31 +57,31 @@ def calculate(event, context):
     # Condense all signals of all indicators for each timeframe given
     # into a single array, and append that array to the main array
     if ('month' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_month', 0), 'month')
+        signals = condense_timeframe(data, get_data('BTC_month'), 'month', 0)
         if signals:
             all_signals.append(signals)
     if ('week' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_week', 0), 'week')
+        signals = condense_timeframe(data, get_data('BTC_week'), 'week', 0)
         if signals:
             all_signals.append(signals)
     if ('day' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_day', 157680000), 'day')
+        signals = condense_timeframe(data, get_data('BTC_day'), 'day', 157680000)
         if signals:
             all_signals.append(signals)
     if ('four_hour' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_four_hour', 15768000), 'four_hour')
+        signals = condense_timeframe(data, get_data('BTC_four_hour'), 'four_hour', 15768000)
         if signals:
             all_signals.append(signals)
     if ('hour' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_hour', 2628000), 'hour')
+        signals = condense_timeframe(data, get_data('BTC_hour'), 'hour', 2628000)
         if signals:
             all_signals.append(signals)
     if ('fifteen_minute' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_fifteen_minute', 604800), 'fifteen_minute')
+        signals = condense_timeframe(data, get_data('BTC_fifteen_minute'), 'fifteen_minute', 604800)
         if signals:
             all_signals.append(signals)
     if ('minute' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_minute', 86400), 'minute')
+        signals = condense_timeframe(data, get_data('BTC_minute'), 'minute', 86400)
         if signals:
             all_signals.append(signals)
 
@@ -114,7 +114,7 @@ def calculate(event, context):
             }
         }
 
-def get_data(table, ttl):
+def get_data(table):
     dynamo_table = dynamodb.Table(table)
     try:
         # Scan the table for all datapoints
@@ -127,16 +127,11 @@ def get_data(table, ttl):
         if 'Items' in results:
             # Turn the returned object into a JSON string,
             # and pass it to pandas to make it readable for TA
-            data = json.dumps(results['Items'])
-            for i in range(0, len(data)):
-                print('start: ', data[i]['t'])
-                data[i]['t'] -= ttl
-                print('result: ', data[i]['t'])
-            return data
+            return json.dumps(results['Items'])
         else:
             return []
 
-def condense_timeframe(data, candles, timeframe):
+def condense_timeframe(data, candles, timeframe, ttl):
     # Error catching for get_data
     if not candles:
         return []
@@ -171,7 +166,7 @@ def condense_timeframe(data, candles, timeframe):
                 timeframe_signals.append({
                     'sig': signal,
                     'str': timeframe_data[0][i]['str'],
-                    'time': int(candles['t'][i]),
+                    'time': int(candles['t'][i]) - ttl,
                     'price': int(candles['c'][i])
                 })
 
@@ -193,7 +188,7 @@ def condense_timeframe(data, candles, timeframe):
                         timeframe_signals.append({
                             'sig': signal,
                             'str': final_strength,
-                            'time': int(candles['t'][i]),
+                            'time': int(candles['t'][i]) - ttl,
                             'price': int(candles['c'][i])
                         })
 
