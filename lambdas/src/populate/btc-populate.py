@@ -60,12 +60,12 @@ def minute(timestamp, price):
     # of the past minute period, write that volume in along with the
     # change, write a new row to the minute table
     if ((timestamp % 60) == 0):
-        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=1&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
+        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=1&e=coinbase&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
         end_of_period('BTC_minute', timestamp, price, 86400, 60, volume)
 
     # If it's not starting a new minute, update the latest value in the table
     else:
-        update('BTC_minute', timestamp, price, 86400, 60, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        update('BTC_minute', timestamp, price, 86400, 60, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=1&e=coinbase&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
 
 def fifteen_minute(timestamp, price):
     table = dynamodb.Table('BTC_fifteen_minute')     
@@ -74,13 +74,13 @@ def fifteen_minute(timestamp, price):
     # the volume of the past period, write that volume in along with the
     # change, write a new row to the fifteen minute table
     if ((timestamp % 900) == 0):
-        volume = calculate_volume('range', 15, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=15&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
+        volume = calculate_volume('range', 15, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=15&e=coinbase&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
         end_of_period('BTC_fifteen_minute', timestamp, price, 604800, 900, volume)
 
     # If it's not starting a new fifteen minute period,
     # update the latest value in the table
     else:
-        update('BTC_fifteen_minute', timestamp, price, 604800, 900, 'range', 15, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=15&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        update('BTC_fifteen_minute', timestamp, price, 604800, 900, 'range', 15, 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=15&e=coinbase&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
 
 def hour(timestamp, price):
     table = dynamodb.Table('BTC_hour')
@@ -89,13 +89,13 @@ def hour(timestamp, price):
     # the past hour, write that volume in along with the
     # change, write a new row to the hour table
     if ((timestamp % 3600) == 0):
-        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=1&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
+        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=1&e=coinbase&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
         end_of_period('BTC_hour', timestamp, price, 2628000, 3600, volume)
 
     # If it's not starting a new hour,
     # update the latest value in the table
     else:
-        update('BTC_hour', timestamp, price, 2628000, 3600, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        update('BTC_hour', timestamp, price, 2628000, 3600, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=1&e=coinbase&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
 
 def four_hour(timestamp, price):
     table = dynamodb.Table('BTC_four_hour')     
@@ -104,33 +104,33 @@ def four_hour(timestamp, price):
     # calculate the volume of the past period, write that volume in
     # along with the change, write a new row to the four hour table
     if ((timestamp % 14400) == 0):
-        volume = calculate_volume('range', 4, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=4&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
+        volume = calculate_volume('range', 4, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=4&e=coinbase&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
         end_of_period('BTC_four_hour', timestamp, price, 15768000, 14400, volume)
 
     # If it's not starting a new four hour period,
     # update the latest value in the table
     else:
-        update('BTC_four_hour', timestamp, price, 15768000, 14400, 'range', 4, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=4&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        update('BTC_four_hour', timestamp, price, 15768000, 14400, 'range', 4, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=4&e=coinbase&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
 
 def day(timestamp, price):
     table = dynamodb.Table('BTC_day')     
 
     if ((timestamp % 86400) == 0):
-        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
+        volume = calculate_volume('single', 0, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&e=coinbase&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
         end_of_period('BTC_day', timestamp, price, 157680000, 86400, volume)
 
     else:
-        update('BTC_day', timestamp, price, 157680000, 86400, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        update('BTC_day', timestamp, price, 157680000, 86400, 'single', 0, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&e=coinbase&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
 
 def week(timestamp, price):
     table = dynamodb.Table('BTC_week')     
 
     if ((timestamp % 604800) == 0):
-        volume = calculate_volume('range', 7, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
+        volume = calculate_volume('range', 7, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7&e=coinbase&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
         end_of_period('BTC_week', timestamp, price, 0, 604800, volume)
 
     else:
-        update('BTC_week', timestamp, price, 0, 604800, 'range', 7, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        update('BTC_week', timestamp, price, 0, 604800, 'range', 7, 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=7&e=coinbase&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
 
 def month(timestamp, price):
     table = dynamodb.Table('BTC_month')
@@ -142,11 +142,11 @@ def month(timestamp, price):
         difference = (this_month - int(time.mktime((today.year, (today.month - 1), 1, 0, 0, 0, 0, 0, 0))))
 
     if (timestamp == this_month):
-        volume = calculate_volume('range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
+        volume = calculate_volume('range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&e=coinbase&api_key=2290c26ba11beff3bf85e4a7c72d6386f7e6215c710586c1996c8895387d5dc8')
         end_of_period('BTC_month', timestamp, price, 0, difference, volume)
 
     else:
-        update('BTC_month', this_month, price, 0, difference, 'range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
+        update('BTC_month', this_month, price, 0, difference, 'range', 730, 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USD&limit=730&e=coinbase&api_key=52d6bec486eaf67f12a1462e29f2fa83b047b7ffb6c953de9e6bdc0b84ef98c8')
 
 def end_of_period(table, timestamp, price, ttl_increase, difference, volume):
     table = dynamodb.Table(table)
