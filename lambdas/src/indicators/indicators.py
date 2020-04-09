@@ -9,6 +9,13 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
+curr_time = int(time.time())
+year_time = 31536000
+month_time = 2628000
+week_time = 604800
+day_time = 86400
+
+
 def calculate(event, context):
     if (event['queryStringParameters'] == None):
         return {
@@ -50,31 +57,31 @@ def calculate(event, context):
     # Condense all signals of all indicators for each timeframe given
     # into a single array, and append that array to the main array
     if ('month' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_month'), 'month')
+        signals = condense_timeframe(data, get_data('BTC_month', 0), 'month')
         if signals:
             all_signals.append(signals)
     if ('week' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_week'), 'week')
+        signals = condense_timeframe(data, get_data('BTC_week', 0), 'week')
         if signals:
             all_signals.append(signals)
     if ('day' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_day'), 'day')
+        signals = condense_timeframe(data, get_data('BTC_day', 157680000), 'day')
         if signals:
             all_signals.append(signals)
     if ('four_hour' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_four_hour'), 'four_hour')
+        signals = condense_timeframe(data, get_data('BTC_four_hour', 15768000), 'four_hour')
         if signals:
             all_signals.append(signals)
     if ('hour' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_hour'), 'hour')
+        signals = condense_timeframe(data, get_data('BTC_hour', 2628000), 'hour')
         if signals:
             all_signals.append(signals)
     if ('fifteen_minute' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_fifteen_minute'), 'fifteen_minute')
+        signals = condense_timeframe(data, get_data('BTC_fifteen_minute', 604800), 'fifteen_minute')
         if signals:
             all_signals.append(signals)
     if ('minute' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_minute'), 'minute')
+        signals = condense_timeframe(data, get_data('BTC_minute', 86400), 'minute')
         if signals:
             all_signals.append(signals)
 
@@ -107,7 +114,7 @@ def calculate(event, context):
             }
         }
 
-def get_data(table):
+def get_data(table, ttl):
     dynamo_table = dynamodb.Table(table)
     try:
         # Scan the table for all datapoints
@@ -120,7 +127,12 @@ def get_data(table):
         if 'Items' in results:
             # Turn the returned object into a JSON string,
             # and pass it to pandas to make it readable for TA
-            return json.dumps(results['Items'])
+            data = json.dumps(results['Items'])
+            for i in range(0, len(data)):
+                print('start: ', data[i]['t'])
+                data[i]['t'] -= ttl
+                print('result: ', data[i]['t'])
+            return data
         else:
             return []
 
@@ -199,9 +211,18 @@ def one_tf(all_signals):
 
     balance = 100000
     prev_buy = 0
+    
     roi = 0
+    day_roi = 0
+    day_roi_count = -1
+    week_roi = 0
+    week_roi_count = -1
+    month_roi = 0
+    month_roi_count = -1
+    year_roi = 0
+    year_roi_count = -1
     total_roi = 0
-    roi_count = 0
+    total_roi_count = 0
 
     # Run a loop over the signals given.
     # Remove all hold signals.
@@ -222,24 +243,56 @@ def one_tf(all_signals):
 
             else:
                 balance = round((balance + transaction), 2)
+                signal_time = all_signals[i]['time']
+                # Calculate total roi, roi over past year, month, week, and day
                 if (prev_buy != 0):
                     roi = (((transaction - prev_buy) / prev_buy) * 100)
                     total_roi += roi
-                    roi_count += 1
+                    total_roi_count += 1
+                    if ((curr_time - signal_time) < year_time):
+                        year_roi_count += 1
+                        if (year_roi_count > 0):
+                            year_roi += roi
+                        if ((curr_time - signal_time) < month_time):
+                            month_roi_count += 1
+                            if (month_roi_count > 0):
+                                month_roi += roi
+                            if ((curr_time - signal_time) < week_time):
+                                week_roi_count += 1
+                                if (week_roi_count > 0):
+                                    week_roi += roi
+                                if ((curr_time - signal_time) < day_time):
+                                    day_roi_count += 1
+                                    if (day_roi_count > 0):
+                                        day_roi += roi
 
                 final_signals.append({
                     'sig': signal,
-                    'time': all_signals[i]['time'],
+                    'time': signal_time,
                     'amt': transaction,
                     'roi': roi
                 })
 
-    if (roi_count == 0):
-        final_signals.append({'bal': balance})
-    else:
+    final_signals.append({'bal': balance})
+    if (day_roi_count > 0):
         final_signals.append({
-            'bal': balance,
-            'avg_roi': round(total_roi / roi_count, 6)
+            'day_roi': round(day_roi / day_roi_count, 6)
+        })
+    if (week_roi_count > 0):
+        final_signals.append({
+            'week_roi': round(week_roi / week_roi_count, 6)
+        })
+    if (month_roi_count > 0):
+        final_signals.append({
+            'month_roi': round(month_roi / month_roi_count, 6)
+        })
+    if (year_roi_count > 0):
+        final_signals.append({
+            'year_roi': round(year_roi / year_roi_count, 6)
+        })
+    if (total_roi_count > 0):
+        final_signals.append({
+            'avg_roi': round(total_roi / total_roi_count, 6)
         })
 
     return final_signals
@@ -254,11 +307,21 @@ def multi_tf(all_signals, a_s_length):
     str_count = 1
     timestamp = all_signals[0][0]['time']
     tf = 1
+
     balance = 100000
     prev_buy = 0
+    
     roi = 0
+    day_roi = 0
+    day_roi_count = -1
+    week_roi = 0
+    week_roi_count = -1
+    month_roi = 0
+    month_roi_count = -1
+    year_roi = 0
+    year_roi_count = -1
     total_roi = 0
-    roi_count = 0
+    total_roi_count = 0
 
     # This keeps track of the current signal being looked at
     # for each timeframe and the final signal for each timeframe.
@@ -301,10 +364,27 @@ def multi_tf(all_signals, a_s_length):
 
                     else:
                         balance = round((balance + transaction), 2)
+                        # Calculate total roi, roi over past year, month, week, and day
                         if (prev_buy != 0):
                             roi = (((transaction - prev_buy) / prev_buy) * 100)
                             total_roi += roi
-                            roi_count += 1
+                            total_roi_count += 1
+                            if ((curr_time - timestamp) < year_time):
+                                year_roi_count += 1
+                                if (year_roi_count > 0):
+                                    year_roi += roi
+                                if ((curr_time - timestamp) < month_time):
+                                    month_roi_count += 1
+                                    if (month_roi_count > 0):
+                                        month_roi += roi
+                                    if ((curr_time - timestamp) < week_time):
+                                        week_roi_count += 1
+                                        if (week_roi_count > 0):
+                                            week_roi += roi
+                                        if ((curr_time - timestamp) < day_time):
+                                            day_roi_count += 1
+                                            if (day_roi_count > 0):
+                                                day_roi += roi
 
                         final_signals.append({
                             'sig': signal,
@@ -362,10 +442,27 @@ def multi_tf(all_signals, a_s_length):
 
                         else:
                             balance = round((balance + transaction), 2)
+                            # Calculate total roi, roi over past year, month, week, and day
                             if (prev_buy != 0):
                                 roi = (((transaction - prev_buy) / prev_buy) * 100)
                                 total_roi += roi
-                                roi_count += 1
+                                total_roi_count += 1
+                                if ((curr_time - timestamp) < year_time):
+                                    year_roi_count += 1
+                                    if (year_roi_count > 0):
+                                        year_roi += roi
+                                    if ((curr_time - timestamp) < month_time):
+                                        month_roi_count += 1
+                                        if (month_roi_count > 0):
+                                            month_roi += roi
+                                        if ((curr_time - timestamp) < week_time):
+                                            week_roi_count += 1
+                                            if (week_roi_count > 0):
+                                                week_roi += roi
+                                            if ((curr_time - timestamp) < day_time):
+                                                day_roi_count += 1
+                                                if (day_roi_count > 0):
+                                                    day_roi += roi
 
                             final_signals.append({
                                 'sig': signal,
@@ -409,12 +506,26 @@ def multi_tf(all_signals, a_s_length):
             continue
 
 
-    if (roi_count == 0):
-        final_signals.append({'bal': balance})
-    else:
+    final_signals.append({'bal': balance})
+    if (day_roi_count > 0):
         final_signals.append({
-            'bal': balance,
-            'avg_roi': round(total_roi / roi_count, 6)
+            'day_roi': round(day_roi / day_roi_count, 6)
+        })
+    if (week_roi_count > 0):
+        final_signals.append({
+            'week_roi': round(week_roi / week_roi_count, 6)
+        })
+    if (month_roi_count > 0):
+        final_signals.append({
+            'month_roi': round(month_roi / month_roi_count, 6)
+        })
+    if (year_roi_count > 0):
+        final_signals.append({
+            'year_roi': round(year_roi / year_roi_count, 6)
+        })
+    if (total_roi_count > 0):
+        final_signals.append({
+            'avg_roi': round(total_roi / total_roi_count, 6)
         })
 
     return final_signals
@@ -422,39 +533,39 @@ def multi_tf(all_signals, a_s_length):
 # A simple function to call the indicators.
 # This may be better done with a struct
 def match_indicator(indicator, params, candles):
-    adi(params, candles)
-    cmf(params, candles)
-    eom(params, candles)
-    fi(params, candles)
-    nvi(params, candles)
-    obv(params, candles)
-    seom(params, candles)
-    vpt(params, candles)
-    atr(params, candles)
-    bb(params, candles)
-    dc(params, candles)
-    kc(params, candles)
-    adx(params, candles)
-    aroon(params, candles)
-    cci(params, candles)
-    dpo(params, candles)
-    kst(params, candles)
-    macd(params, candles)
-    mi(params, candles)
-    psar(params, candles)
-    trix(params, candles)
-    vi(params, candles)
-    ao(params, candles)
-    kama(params, candles)
-    mfi(params, candles)
-    roc(params, candles)
-    sr(params, candles)
-    tsi(params, candles)
-    uo(params, candles)
-    wr(params, candles)
-    cr(params, candles)
-    dlr(params, candles)
-    dr(params, candles)
+    # adi(params, candles)
+    # cmf(params, candles)
+    # eom(params, candles)
+    # fi(params, candles)
+    # nvi(params, candles)
+    # obv(params, candles)
+    # seom(params, candles)
+    # vpt(params, candles)
+    # atr(params, candles)
+    # bb(params, candles)
+    # dc(params, candles)
+    # kc(params, candles)
+    # adx(params, candles)
+    # aroon(params, candles)
+    # cci(params, candles)
+    # dpo(params, candles)
+    # kst(params, candles)
+    # macd(params, candles)
+    # mi(params, candles)
+    # psar(params, candles)
+    # trix(params, candles)
+    # vi(params, candles)
+    # ao(params, candles)
+    # kama(params, candles)
+    # mfi(params, candles)
+    # roc(params, candles)
+    # sr(params, candles)
+    # tsi(params, candles)
+    # uo(params, candles)
+    # wr(params, candles)
+    # cr(params, candles)
+    # dlr(params, candles)
+    # dr(params, candles)
 
     # ichimoku(params, candles)
     # sma(params, candles)

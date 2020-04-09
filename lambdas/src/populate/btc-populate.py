@@ -45,7 +45,6 @@ def populate(event, context):
             day(timestamp, price)
             week(timestamp, price)
             month(timestamp, price)
-            print(int(time.time()))
 
             i += 1
 
