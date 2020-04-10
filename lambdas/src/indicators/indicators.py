@@ -529,6 +529,7 @@ def multi_tf(all_signals, a_s_length):
 # This may be better done with a struct
 def match_indicator(indicator, params, candles):
     if indicator in all_indicators:
+        print(indicator)
         return all_indicators[indicator](params, candles)
     else:
         return []
@@ -846,6 +847,7 @@ def roc(params, candles):
 
 # Relative Strength Index
 def rsi(params, candles):
+    print('rsi!!!!')
     # Get the past `timeframe` rsi values in a dataframe
     rsi_total = ta.momentum.rsi(close = candles["c"], n = 14, fillna = True)
     # print('params: ', params)
@@ -939,6 +941,7 @@ all_indicators = {
     "obv": obv,
     "psar": psar,
     "roc": roc,
+    "rsi": rsi,
     "seom": seom,
     "sr": sr,
     "trix": trix,
@@ -946,5 +949,5 @@ all_indicators = {
     "uo": uo,
     "vi": vi,
     "vpt": vpt,
-    "wr": wr,
+    "wr": wr
 }
