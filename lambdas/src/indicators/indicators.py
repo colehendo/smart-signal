@@ -528,6 +528,10 @@ def multi_tf(all_signals, a_s_length):
 # A simple function to call the indicators.
 # This may be better done with a struct
 def match_indicator(indicator, params, candles):
+    if indicator in all_indicators:
+        return all_indicators[indicator](params, candles)
+    else:
+        return []
     # adi(params, candles)
     # cmf(params, candles)
     # eom(params, candles)
@@ -564,15 +568,6 @@ def match_indicator(indicator, params, candles):
 
     # ichimoku(params, candles)
     # sma(params, candles)
-
-    if (indicator == 'rsi'):
-        return rsi(params, candles)
-    elif (indicator == 'macd'):
-        return macd(candles)
-    elif (indicator == 'bb'):
-        return bb(candles)
-    else:
-        return []
 
 
 
@@ -916,3 +911,40 @@ def dlr(params, candles):
 def dr(params, candles):
     dr = ta.others.daily_return(close = candles["c"], fillna = False)
     print('Daily Return: ', dr)
+
+
+all_indicators = {
+    "adi": adi,
+    "adx": adx,
+    "ao": ao,
+    "aroon": aroon,
+    "atr": atr,
+    "bb": bb,
+    "cci": cci,
+    "cmf": cmf,
+    "cr": cr,
+    "dlr": dlr,
+    "dpo": dpo,
+    "dr": dr,
+    "dc": dc,
+    "eom": eom,
+    "fi": fi,
+    "kama": kama,
+    "kc": kc,
+    "kst": kst,
+    "macd": macd,
+    "mfi": mfi,
+    "mi": mi,
+    "nvi": nvi,
+    "obv": obv,
+    "psar": psar,
+    "roc": roc,
+    "seom": seom,
+    "sr": sr,
+    "trix": trix,
+    "tsi": tsi,
+    "uo": uo,
+    "vi": vi,
+    "vpt": vpt,
+    "wr": wr,
+}
