@@ -480,6 +480,7 @@ def match_indicator(indicator, params, candles):
 # Works best in a ranging period(so maybe after huge moves up or down),
 # does not work well when market is trending hard, good for locating trend reversals through top/bottom divergences
 # The AD line compares the strength of the open to the strength of the close divided by the range
+# drop this hoe
 def adi(params, candles):
     adi = ta.volume.acc_dist_index(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], fillna = False)
     print("Accumulation/Distribution Index")
@@ -489,6 +490,7 @@ def adi(params, candles):
 
 # Chaikin Money Flow
 # similar to MACD exccept also uses volume.
+# uhh its kinda close but definitely a good bit off..leave it for now
 def cmf(params, candles):
     cmf = ta.volume.chaikin_money_flow(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], n = 20, fillna = False)
     print('Chaikin Money Flow')
@@ -497,7 +499,7 @@ def cmf(params, candles):
             print('cmf ', i, ': ', round(cmf[i], 2))
 
 # Ease of Movement
-# NOT SURE
+# drop this hoe
 def eom(params, candles):
     eom = ta.volume.ease_of_movement(high = candles["h"], low = candles["l"], volume = candles["v"], n = 14, fillna = False)
     print('Ease of Movement')
@@ -507,6 +509,7 @@ def eom(params, candles):
 
 # Force Index
 # Multiplies the change in volume * price for each day
+# probably drop this hoe bc too inconsistent
 def fi(params, candles):
     fi = ta.volume.force_index(close = candles["c"], volume = candles["v"], n = 13, fillna = False)
     print('Force Index')
@@ -524,6 +527,7 @@ def nvi(params, candles):
     #         print('nvi ', i, ': ', nvi[i])
 
 # On-Balance Volume
+#Pretty pooop
 def obv(params, candles):
     obv = ta.volume.on_balance_volume(close = candles["c"], volume = candles["v"], fillna = False)
     print('On-Balance Volume')
@@ -552,11 +556,13 @@ def vpt(params, candles):
 # VOLATILITY
 
 # Average True Range
+# Pretty solid, maybe off like a few percent for each value
 def atr(params, candles):
     atr = ta.volatility.average_true_range(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
     print('Average True Range: ', atr)
 
 # Bollinger Bands
+# Pretty accurate
 def bb(params, candles):
     bb = ta.volatility.BollingerBands(close = candles["c"], n=20, ndev=2)
     mavg = bb.bollinger_mavg()
@@ -566,16 +572,17 @@ def bb(params, candles):
     print('bb hband: ', hband)
     lband = bb.bollinger_lband()
     print('bb lband: ', lband)
-    hband_i = bb.bollinger_hband_indicator()
+    hband_i = bb.bollinger_hband_indicator() # idk what this is, get rid of these
     print('bb hband_i: ', hband_i)
-    lband_i = bb.bollinger_lband_indicator()
+    lband_i = bb.bollinger_lband_indicator() # idk what this is, get rid of these
     print('bb lband_i: ', lband_i)
-    wband = bb.bollinger_wband()
+    wband = bb.bollinger_wband() # idk what this is, get rid of these
     print('bb wband: ', wband)
     # pband = bb.bollinger_pband()
     # print('bb pband: ', pband)
 
 # Donchian Channel
+# drop this hoe
 def dc(params, candles):
     dc = ta.volatility.DonchianChannel(close = candles["c"], n=20, fillna = False)
     print('Donchian Channel')
@@ -589,6 +596,7 @@ def dc(params, candles):
     print('dc lband_i: ', lband_i)
 
 # Keltner Channel
+# drop this hoe
 def kc(params, candles):
     kc = ta.volatility.KeltnerChannel(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
     print('Keltner Channel')
@@ -598,9 +606,9 @@ def kc(params, candles):
     print('kc hband: ', hband)
     lband = kc.keltner_channel_lband()
     print('kc lband: ', lband)
-    hband_i = kc.keltner_channel_hband_indicator()
+    hband_i = kc.keltner_channel_hband_indicator() ##remove this idk what they do
     print('kc hband_i: ', hband_i)
-    lband_i = kc.keltner_channel_lband_indicator()
+    lband_i = kc.keltner_channel_lband_indicator() ##remove this idk what they do
     print('kc lband_i: ', lband_i)
     # wband = kc.keltner_channel_wband()
     # print('kc wband: ', wband)
@@ -612,6 +620,7 @@ def kc(params, candles):
 # TREND
 
 # Average Directional Movement Index
+# a little off, general trend is right tho
 def adx(params, candles):
     all_adx = ta.trend.ADXIndicator(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
     print('Average Directional Movement Index')
@@ -623,6 +632,7 @@ def adx(params, candles):
     print('pos adx: ', pos)
 
 # Aroon Indicator
+# i hate this name drop this hoe
 def aroon(params, candles):
     aroon = ta.trend.AroonIndicator(close = candles["c"], n = 25, fillna = False)
     print('Aroon Indicator')
@@ -639,6 +649,7 @@ def cci(params, candles):
     print('Commodity Channel Index: ', cci)
 
 # Detrended Price Oscillator
+# drop this hoe hella inaccurate
 def dpo(params, candles):
     dpo = ta.trend.dpo(close = candles["c"], n = 20, fillna = False)
     print('Detrended Price Oscillator: ', dpo)
@@ -653,6 +664,7 @@ def ichimoku(params, candles):
     print('ichi b: ', ichimoku_b)
 
 # KST Oscillator
+# delete the kst diff it doesnt relate to tradingview shit
 def kst(params, candles):
     all_kst = ta.trend.KSTIndicator(close = candles["c"], r1 = 10, r2 = 15, r3 = 20, r4 = 30, n1 = 10, n2 = 10, n3 = 10, n4 = 15, nsig = 9, fillna = False)
     print('KST Oscillator')
@@ -664,6 +676,7 @@ def kst(params, candles):
     print('kst_sig: ', kst_sig)
 
 # Moving Average Convergence Divergence
+# histogram and signal values match up, but the "macd signal one is not matching up well...this one represents the macd fast line on tradingview"
 def macd(params, candles):
     all_macd = ta.trend.MACD(close = candles["c"], n_slow = 26, n_fast = 12, n_sign = 9, fillna = False)
     print('MACD')
