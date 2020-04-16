@@ -5,17 +5,25 @@ import { HomeComponent } from './app/components/home/home.component'; //Imported
 import { AccountComponent } from './app/components/account/account.component';
 import { AboutComponent } from './app/components/about/about.component';
 import { NewsComponent } from './app/components/news/news.component';
+import { LandingPageComponent } from './app/components/landing-page/landing-page.component';
+import { PageNotFoundComponent } from './app/components/page-not-found/page-not-found.component';
 
 
 
 const routes: Routes = [
-	{ path:'assets', component: AssetsComponent },
-	{ path:'home', component: HomeComponent },
-	{ path: 'account', component: AccountComponent },
-	{ path: '',   redirectTo: '/home', pathMatch: 'full' },
-	{ path: 'about', component:AboutComponent },
-	{ path: 'news', component:NewsComponent }
-	];
+	{
+		path: '',
+		component: LandingPageComponent,
+		children: [
+			{ path: 'about', component: AboutComponent },
+			{ path: 'account', component: AccountComponent },
+			{ path: 'assets', component: AssetsComponent },
+			{ path: 'home', component: HomeComponent },
+			{ path: 'news', component: NewsComponent },
+		]
+	},
+  	{ path: '**', component: PageNotFoundComponent }
+];
 
 @NgModule({
   imports: [
