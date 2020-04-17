@@ -206,7 +206,7 @@ def one_tf(all_signals):
 
     balance = 100000
     prev_buy = 0
-    
+
     roi = 0
     day_roi = 0
     day_roi_count = -1
@@ -305,7 +305,7 @@ def multi_tf(all_signals, a_s_length):
 
     balance = 100000
     prev_buy = 0
-    
+
     roi = 0
     day_roi = 0
     day_roi_count = -1
