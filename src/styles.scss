@@ -1,19 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/scss/bootstrap";
 body {
     margin: 0;
 }
 
-button {
-    border: none;
-    border-radius: 6px;
-    padding: .7% 1%;
-    font-size: 100%;
-    background-color: #2EE8A0;
-    &:hover {
-        background-color: #54ECB1;
-        cursor: pointer;
-    }
-}
+// button {
+//     border: none;
+//     border-radius: 6px;
+//     padding: .7% 1%;
+//     font-size: 100%;
+//     background-color: #2EE8A0;
+//     &:hover {
+//         background-color: #54ECB1;
+//         cursor: pointer;
+//     }
+// }
 
 body > * {
     font-family: 'Lato', sans-serif;
@@ -23,7 +24,7 @@ a {
     text-decoration: none;
 }
 
-a, button {
-    color: white;
-    font-family: 'Lato', sans-serif;
-}
+// a, button {
+//     color: white;
+//     font-family: 'Lato', sans-serif;
+// }

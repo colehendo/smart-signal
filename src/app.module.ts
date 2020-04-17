@@ -13,11 +13,13 @@ import { AccountComponent } from './app/components/account/account.component';
 import { AboutComponent } from './app/components/about/about.component';
 import { NewsComponent } from './app/components/news/news.component'; //Added this line from original branch
 import { AssetExpansionPanelComponent } from './app/shared/components/asset-expansion-panel/asset-expansion-panel.component';
-import { MaterialModule } from './app/shared/modules/material.module';
+// import { MaterialModule } from './app/shared/modules/material.module';
 import { GraphComponent } from './app/shared/components/graph/graph.component'; //Added from here down
 import { HighchartsChartModule } from 'highcharts-angular';
 import { LandingPageComponent } from './app/components/landing-page/landing-page.component';
 import { PageNotFoundComponent } from './app/components/page-not-found/page-not-found.component';
+
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -37,8 +39,9 @@ import { PageNotFoundComponent } from './app/components/page-not-found/page-not-
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MaterialModule,
-    HighchartsChartModule
+    // MaterialModule,
+    HighchartsChartModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
