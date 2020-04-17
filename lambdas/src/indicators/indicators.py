@@ -792,7 +792,7 @@ def macd(params, candles):
 
 # Mass Index
 def mi(params, candles):
-    mi = ta.trend.mass_index(high = candles["h"], low = candles["l"], n = 9, n2 = 25, fillna = False)
+    mi = ta.trend.mass_index(high = candles["h"], low = candles["l"], n = 10, n2 = 10, fillna = False)
     print('Mass Index: ', mi)
 
 # Parabolic Stop And Reverse
