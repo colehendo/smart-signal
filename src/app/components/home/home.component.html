@@ -1,2 +1,14 @@
-<h1>Welcome to Smart Signal!</h1>
-<button><a src=loginURL>Login</a></button>
+<app-graph></app-graph>
+<button (click)="timeframe = 'month'">Month</button>
+<button (click)="timeframe = 'week'">Week</button>
+<button (click)="timeframe = 'day'">Day</button>
+<button (click)="timeframe = 'four_hour'">Four Hour</button>
+<button (click)="timeframe = 'hour'">Hour</button>
+<button (click)="timeframe = 'fifteen_minute'">Fifteen Minute</button>
+<button (click)="timeframe = 'minute'">Minute</button>
+<button (click)="testParams()">Send</button>
+<br><br>
+<button (click)="testApi()">Test run</button>
+<ng-container *ngFor="let coin of cryptocurrencies">
+    <app-asset-expansion-panel [id]="coin.id" [price]="coin.price" [change]="coin.change" [volume]="coin.volume"></app-asset-expansion-panel>
+</ng-container>

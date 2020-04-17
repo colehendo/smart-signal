@@ -1,14 +1,7 @@
-<app-graph></app-graph>
-<button (click)="timeframe = 'month'">Month</button>
-<button (click)="timeframe = 'week'">Week</button>
-<button (click)="timeframe = 'day'">Day</button>
-<button (click)="timeframe = 'four_hour'">Four Hour</button>
-<button (click)="timeframe = 'hour'">Hour</button>
-<button (click)="timeframe = 'fifteen_minute'">Fifteen Minute</button>
-<button (click)="timeframe = 'minute'">Minute</button>
-<button (click)="testParams()">Send</button>
-<br><br>
-<button (click)="testApi()">Test run</button>
-<ng-container *ngFor="let coin of cryptocurrencies">
-    <app-asset-expansion-panel [id]="coin.id" [price]="coin.price" [change]="coin.change" [volume]="coin.volume"></app-asset-expansion-panel>
-</ng-container>
+<h1>Welcome to Smart Signal!</h1>
+
+<form action="https://smartsignal.auth.us-east-1.amazoncognito.com/login?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=https://www.smartsignal.watch/home">
+    <button type="submit">Login</button>
+</form>
+
+<button href="https://smartsignal.auth.us-east-1.amazoncognito.com/signup?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=https://www.smartsignal.watch/home">Sign Up</button>
