@@ -11,17 +11,12 @@ import { PageNotFoundComponent } from './app/components/page-not-found/page-not-
 
 
 const routes: Routes = [
-	{
-		path: '',
-		component: LandingPageComponent,
-		children: [
-			{ path: 'about', component: AboutComponent },
-			{ path: 'account', component: AccountComponent },
-			{ path: 'assets', component: AssetsComponent },
-			{ path: 'home', component: HomeComponent },
-			{ path: 'news', component: NewsComponent },
-		]
-	},
+	{ path: '', component: LandingPageComponent },
+	{ path: 'about', component: AboutComponent },
+	{ path: 'account', component: AccountComponent },
+	{ path: 'assets', component: AssetsComponent },
+	{ path: 'home', component: HomeComponent },
+	{ path: 'news', component: NewsComponent },
   	{ path: '**', component: PageNotFoundComponent }
 ];
 
