@@ -10,7 +10,6 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
 def calculate(event, context):
-    print(event)
     if (event['queryStringParameters'] == None):
         return {
             "statusCode": 502,
@@ -23,7 +22,6 @@ def calculate(event, context):
 
     # Load the payload into a usable format
     data = json.loads(event['queryStringParameters']['vals'])
-    print(data)
 
     if not data:
         return {
@@ -50,34 +48,42 @@ def calculate(event, context):
     all_signals = []
     final_signals = []
 
+    month_ttl = 0
+    week_ttl = 0
+    day_ttl = 157680000
+    four_hour_ttl = 15768000
+    hour_ttl = 2628000
+    fifteen_minute_ttl = 604800
+    minute_ttl = 86400
+
     # Condense all signals of all indicators for each timeframe given
     # into a single array, and append that array to the main array
     if ('month' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_month'), 'month')
+        signals = condense_timeframe(data, get_data('BTC_month', month_ttl), 'month')
         if signals:
             all_signals.append(signals)
     if ('week' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_week'), 'week')
+        signals = condense_timeframe(data, get_data('BTC_week', week_ttl), 'week')
         if signals:
             all_signals.append(signals)
     if ('day' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_day'), 'day')
+        signals = condense_timeframe(data, get_data('BTC_day', day_ttl), 'day')
         if signals:
             all_signals.append(signals)
     if ('four_hour' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_four_hour'), 'four_hour')
+        signals = condense_timeframe(data, get_data('BTC_four_hour', four_hour_ttl), 'four_hour')
         if signals:
             all_signals.append(signals)
     if ('hour' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_hour'), 'hour')
+        signals = condense_timeframe(data, get_data('BTC_hour', hour_ttl), 'hour')
         if signals:
             all_signals.append(signals)
     if ('fifteen_minute' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_fifteen_minute'), 'fifteen_minute')
+        signals = condense_timeframe(data, get_data('BTC_fifteen_minute', fifteen_minute_ttl), 'fifteen_minute')
         if signals:
             all_signals.append(signals)
     if ('minute' in timeframes):
-        signals = condense_timeframe(data, get_data('BTC_minute'), 'minute')
+        signals = condense_timeframe(data, get_data('BTC_minute', minute_ttl), 'minute')
         if signals:
             all_signals.append(signals)
 
@@ -110,7 +116,7 @@ def calculate(event, context):
             }
         }
 
-def get_data(table):
+def get_data(table, ttl):
     dynamo_table = dynamodb.Table(table)
     try:
         # Scan the table for all datapoints
@@ -123,6 +129,8 @@ def get_data(table):
         if 'Items' in results:
             # Turn the returned object into a JSON string,
             # and pass it to pandas to make it readable for TA
+            for i in range(0, len(results['Items'])):
+                results['Items'][i]['t'] = results['Items'][i]['t'] - ttl
             return json.dumps(results['Items'])
         else:
             return []
