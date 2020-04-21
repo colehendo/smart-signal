@@ -60,7 +60,7 @@ functions:
     environment:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
 
-  rsi:
+  indicators:
     handler: src/indicators/indicators.calculate
     events:
       - http:
