@@ -15,8 +15,9 @@ const routes: Routes = [
 	{ path: '', component: LandingPageComponent },
 	{ path: 'about', component: AboutComponent },
 	{ path: 'account', component: AccountComponent },
+	{ path: 'algorithms', component: AlgorithmsComponent },
 	{ path: 'assets', component: AssetsComponent },
-	{ path: 'home', component: AlgorithmsComponent },
+	{ path: 'home', component: HomeComponent },
 	{ path: 'news', component: NewsComponent },
   	{ path: '**', component: PageNotFoundComponent }
 ];

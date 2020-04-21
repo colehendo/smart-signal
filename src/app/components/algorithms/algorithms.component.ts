@@ -103,12 +103,17 @@ export class AlgorithmsComponent implements OnInit {
     });
 
     this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
-    this.indicatorsService.get_data(this.graph_params).subscribe(data => console.log(data));
-    console.log('here comes the payload...')
+    this.indicatorsService.get_data(this.graph_params).subscribe(data => {
+      console.log('graph data:')
+      console.log(data);
+    });
     this.payload.push(all_timeframes);
 
     this.alg_params = this.alg_params.append('vals', JSON.stringify(this.payload));
-    this.indicatorsService.indicators(this.alg_params).subscribe(data => console.log(data));
+    this.indicatorsService.indicators(this.alg_params).subscribe(data => {
+      console.log('alg data:')
+      console.log(data);
+    });
     this.payload = [];
   }
 
