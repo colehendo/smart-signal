@@ -1,0 +1,16 @@
+<button (click)="timeframe = 'month'">Month</button>
+<button (click)="timeframe = 'week'">Week</button>
+<button (click)="timeframe = 'day'">Day</button>
+<button (click)="timeframe = 'four_hour'">Four Hour</button>
+<button (click)="timeframe = 'hour'">Hour</button>
+<button (click)="timeframe = 'fifteen_minute'">Fifteen Minute</button>
+<button (click)="timeframe = 'minute'">Minute</button>
+<button (click)="testParams()">Send</button>
+<br><br>
+
+<highcharts-chart 
+    [Highcharts]="Highcharts"
+    [options]="chartOptions"
+    [(update)]="updateFlag"
+    style="width: 100%; height: 400px; display: block;"
+></highcharts-chart>

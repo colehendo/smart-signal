@@ -15,4 +15,8 @@ export class IndicatorsService {
   indicators(params: HttpParams): Observable<any> {
     return this.http.get<object>(`${this.baseUrl}/indicators`, {params: params});
   }
+
+  get_data(params: HttpParams): Observable<any> {
+    return this.http.get<object>(`${this.baseUrl}/get-data`, {params: params});
+  }
 }
