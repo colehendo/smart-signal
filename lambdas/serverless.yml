@@ -45,7 +45,7 @@ functions:
     handler: src/api/websocket.connect
     events:
      - websocket:
-        route: $connectWebsocket
+        route: $connect
      - websocket:
         route: $disconnect
   getWebsocketPrices:
