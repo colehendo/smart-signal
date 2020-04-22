@@ -93,6 +93,19 @@ functions:
           cors:
             origin: "*"
 
+  testCombos:
+    handler: src/indicators/indicators.test_combos
+    events:
+      - http:
+          path: test-combos
+          method: get
+      - http:
+          path: test-combos
+          method: options
+          integration: lambda
+          cors:
+            origin: "*"
+
   # algorithms:
   #   handler: src/algorithms/algorithms.calculate
   #   timeout: 60

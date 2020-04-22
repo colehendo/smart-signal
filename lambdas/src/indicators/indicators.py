@@ -1,6 +1,8 @@
 import time
 from decimal import Decimal
 import simplejson as json
+from itertools import combinations
+
 import pandas as pd
 import ta
 
@@ -8,6 +10,14 @@ import boto3
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
+
+month_ttl = 0
+week_ttl = 0
+day_ttl = 157680000
+four_hour_ttl = 15768000
+hour_ttl = 2628000
+fifteen_minute_ttl = 604800
+minute_ttl = 86400
 
 def calculate(event, context):
     if (event['queryStringParameters'] == None):
@@ -47,14 +57,6 @@ def calculate(event, context):
 
     all_signals = []
     final_signals = []
-
-    month_ttl = 0
-    week_ttl = 0
-    day_ttl = 157680000
-    four_hour_ttl = 15768000
-    hour_ttl = 2628000
-    fifteen_minute_ttl = 604800
-    minute_ttl = 86400
 
     # Condense all signals of all indicators for each timeframe given
     # into a single array, and append that array to the main array
@@ -96,9 +98,7 @@ def calculate(event, context):
             }
         }
 
-    a_s_length = len(all_signals)
-
-    if (a_s_length == 1):
+    if (len(all_signals) == 1):
         return {
             "statusCode": 200,
             "body": json.dumps(one_tf(all_signals[0])),
@@ -110,11 +110,163 @@ def calculate(event, context):
     else:
         return {
             "statusCode": 200,
-            "body": json.dumps(multi_tf(all_signals, a_s_length)),
+            "body": json.dumps(multi_tf(all_signals, len(all_signals))),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
         }
+
+def test_combos(event, context):
+    if (event['queryStringParameters'] == None):
+        return {
+            "statusCode": 502,
+            "body": "No parameters given",
+            "headers": {
+                "Access-Control-Allow-Origin": "*"
+            }
+        }
+
+    # Load the payload into a usable format
+    data = json.loads(event['queryStringParameters']['data'])
+
+    if not data:
+        return {
+            "statusCode": 502,
+            "body": "No data given",
+            "headers": {
+                "Access-Control-Allow-Origin": "*"
+            }
+        }
+
+    all_indicators = []
+    all_signals = []
+    
+    for indicator in data:
+        if 'month' in indicator:
+            all_indicators.append({
+                'indicator': indicator['indicator'],
+                'timeframe': 'month',
+                'params': indicator['month']['params']
+            })
+
+        if 'week' in indicator:
+            all_indicators.append({
+                'indicator': indicator['indicator'],
+                'timeframe': 'week',
+                'params': indicator['week']['params']
+            })
+        
+        if 'day' in indicator:
+            all_indicators.append({
+                'indicator': indicator['indicator'],
+                'timeframe': 'day',
+                'params': indicator['day']['params']
+            })
+
+        if 'four_hour' in indicator:
+            all_indicators.append({
+                'indicator': indicator['indicator'],
+                'timeframe': 'four_hour',
+                'params': indicator['four_hour']['params']
+            })
+
+        if 'hour' in indicator:
+            all_indicators.append({
+                'indicator': indicator['indicator'],
+                'timeframe': 'hour',
+                'params': indicator['hour']['params']
+            })
+
+        if 'fifteen_minute' in indicator:
+            all_indicators.append({
+                'indicator': indicator['indicator'],
+                'timeframe': 'fifteen_minute',
+                'params': indicator['fifteen_minute']['params']
+            })
+
+        if 'minute' in indicator:
+            all_indicators.append({
+                'indicator': indicator['indicator'],
+                'timeframe': 'minute',
+                'params': indicator['minute']['params']
+            })
+
+    month_candles = get_data('BTC_month', month_ttl)
+    week_candles = get_data('BTC_week', week_ttl)
+    day_candles = get_data('BTC_day', day_ttl)
+    four_hour_candles = get_data('BTC_four_hour', four_hour_ttl)
+    hour_candles = get_data('BTC_hour', hour_ttl)
+    fifteen_minute_candles = get_data('BTC_fifteen_minute', fifteen_minute_ttl)
+    minute_candles = get_data('BTC_minute', minute_ttl)
+
+    for i in range(len(all_indicators)):
+        comb_list = list(combinations(all_indicators, (i+1)))
+        print(len(comb_list))
+        for combination in comb_list:
+            combination_signals = []
+            month_indicators = []
+            week_indicators = []
+            day_indicators = []
+            four_hour_indicators = []
+            hour_indicators = []
+            fifteen_minute_indicators = []
+            minute_indicators = []
+            for item in combination:
+                if item['timeframe'] == 'month': month_indicators.append(item)
+                elif item['timeframe'] == 'week': week_indicators.append(item)
+                elif item['timeframe'] == 'day': day_indicators.append(item)
+                elif item['timeframe'] == 'four_hour': four_hour_indicators.append(item)
+                elif item['timeframe'] == 'hour': hour_indicators.append(item)
+                elif item['timeframe'] == 'fifteen_minute': fifteen_minute_indicators.append(item)
+                elif item['timeframe'] == 'minute': minute_indicators.append(item)
+
+            if month_indicators:
+                signals = condense_timeframe(month_indicators, month_candles, 'month')
+                if signals:
+                    combination_signals.append(signals)
+            if week_indicators:
+                signals = condense_timeframe(week_indicators, week_candles, 'week')
+                if signals:
+                    combination_signals.append(signals)
+            if day_indicators:
+                signals = condense_timeframe(day_indicators, day_candles, 'day')
+                if signals:
+                    combination_signals.append(signals)
+            if four_hour_indicators:
+                signals = condense_timeframe(four_hour_indicators, four_hour_candles, 'four_hour')
+                if signals:
+                    combination_signals.append(signals)
+            if hour_indicators:
+                signals = condense_timeframe(hour_indicators, hour_candles, 'hour')
+                if signals:
+                    combination_signals.append(signals)
+            if fifteen_minute_indicators:
+                signals = condense_timeframe(fifteen_minute_indicators, fifteen_minute_candles, 'fifteen_minute')
+                if signals:
+                    combination_signals.append(signals)
+            if minute_indicators:
+                signals = condense_timeframe(minute_indicators, minute_candles, 'minute')
+                if signals:
+                    combination_signals.append(signals)
+
+            if combination_signals:
+                if len(combination_signals) == 1:
+                    all_signals.append([combination, one_tf(combination_signals[0])])
+
+                else:
+                    all_signals.append([combination, multi_tf(combination_signals, len(combination_signals))])
+
+                all_signals.sort(key = lambda current_signals: current_signals[1][len(current_signals[1]) - 1]['avg_roi'], reverse = True)
+                all_signals[:100]
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps(all_signals),
+        "headers": {
+            "Access-Control-Allow-Origin": "*"
+        }
+    }
+
 
 def get_data(table, ttl):
     dynamo_table = dynamodb.Table(table)
@@ -129,7 +281,7 @@ def get_data(table, ttl):
         if 'Items' in results:
             # Turn the returned object into a JSON string,
             # and pass it to pandas to make it readable for TA
-            for i in range(0, len(results['Items'])):
+            for i in range(len(results['Items'])):
                 results['Items'][i]['t'] = results['Items'][i]['t'] - ttl
             return json.dumps(results['Items'])
         else:
@@ -147,7 +299,7 @@ def condense_timeframe(data, candles, timeframe):
 
     # If an indicator is requested on this timeframe,
     # append that indicator's data to an array
-    for i in range(0, len(data)):
+    for i in range(len(data)):
         if (data[i]['timeframe'] == timeframe):
             indicator = match_indicator(data[i]['indicator'], data[i]['params'], candles)
             if indicator:
@@ -163,7 +315,7 @@ def condense_timeframe(data, candles, timeframe):
     # make an array of signals different from the
     # one before and the one after it
     if (t_d_length == 1):
-        for i in range(0, len(candles)):
+        for i in range(len(candles)):
             signal = timeframe_data[0][i]['sig']
             if ((not timeframe_signals) or (signal != timeframe_signals[len(timeframe_signals) - 1]['sig'])):
                 timeframe_signals.append({
@@ -217,7 +369,7 @@ def one_tf(all_signals):
     # Remove all hold signals.
     # Calculate ROI for any sell that comes after a buy.
     # Calculate transaction amounts based on strength of the signal.
-    for i in range(0, len(all_signals)):
+    for i in range(len(all_signals)):
         signal = all_signals[i]['sig']
         if (signal != 'hold' and ((not final_signals) or (signal != final_signals[len(final_signals) - 1]['sig']))):
             transaction = (all_signals[i]['str'] * all_signals[i]['price'])
@@ -245,7 +397,10 @@ def one_tf(all_signals):
                 })
 
     if (roi_count == 0):
-        final_signals.append({'bal': balance})
+        final_signals.append({
+            'bal': balance,
+            'avg_roi': 0
+        })
     else:
         final_signals.append({
             'bal': balance,
@@ -274,7 +429,7 @@ def multi_tf(all_signals, a_s_length):
     # for each timeframe and the final signal for each timeframe.
     # This lets us not look through old data and error catches
     # going past the last index
-    for i in range(0, a_s_length):
+    for i in range(a_s_length):
         a_s_record.append([0, len(all_signals[i])])
 
     # Loop through the largest timeframe's signals.
@@ -297,9 +452,9 @@ def multi_tf(all_signals, a_s_length):
                 if (prev_too_early):
                     final_strength = round(Decimal(strength / str_count), 10)
                     transaction = round((final_strength * round(Decimal(all_signals[tf][a_s_record[tf][0]]['price']), 6)), 2)
-                    print('strength: ', strength, ' str count: ', str_count, ' final str: ', final_strength)
-                    print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
-                    print(all_signals[tf][a_s_record[tf][0]])
+                    # print('strength: ', strength, ' str count: ', str_count, ' final str: ', final_strength)
+                    # print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
+                    # print(all_signals[tf][a_s_record[tf][0]])
                     if (signal == 'buy'):
                         balance = round((balance - transaction), 2)
                         prev_buy = transaction
@@ -359,8 +514,8 @@ def multi_tf(all_signals, a_s_length):
                     if (tf == (a_s_length - 1)):
                         final_strength = round(Decimal(strength / str_count), 10)
                         transaction = round((final_strength * round(Decimal(all_signals[tf][a_s_record[tf][0]]['price']), 6)), 2)
-                        print('strength: ', strength, ' str count: ', str_count, ' final str: ', final_strength)
-                        print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
+                        # print('strength: ', strength, ' str count: ', str_count, ' final str: ', final_strength)
+                        # print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
                         if (signal == 'buy'):
                             balance = round((balance - transaction), 2)
                             prev_buy = transaction
@@ -420,7 +575,10 @@ def multi_tf(all_signals, a_s_length):
 
 
     if (roi_count == 0):
-        final_signals.append({'bal': balance})
+        final_signals.append({
+            'bal': balance,
+            'avg_roi': 0
+        })
     else:
         final_signals.append({
             'bal': balance,
@@ -485,7 +643,7 @@ def atr():
 def bb(data):
     signals = []
 
-    for i in range(0, len(data)):
+    for i in range(len(data)):
         if (data['c'][i] < 7000):
             signals.append({'sig': 'buy', 'str': Decimal(.5)})
         elif (data['c'][i] > 8500):
@@ -531,7 +689,7 @@ def kst():
 def macd(data):
     signals = []
 
-    for i in range(0, len(data)):
+    for i in range(len(data)):
         if (data['c'][i] < 6500):
             signals.append({'sig': 'buy', 'str': Decimal(.5)})
         elif (data['c'][i] > 8000):
@@ -577,19 +735,19 @@ def mfi():
 def rsi(params, candles):
     # Get the past `timeframe` rsi values in a dataframe
     rsi_total = ta.momentum.rsi(close = candles["c"], n = 14, fillna = True)
-    print('params: ', params)
-    print('rsi: ', rsi)
+    # print('params: ', params)
+    # print('rsi: ', rsi)
 
     signals = []
 
-    for i in range(0, len(rsi_total)):
+    for i in range(len(rsi_total)):
         current_rsi = rsi_total.iloc[i]
         if (current_rsi < 100) and (current_rsi > 0):
             if (current_rsi < params['buy']):
-                print('buy: ', i, ': ', current_rsi)
+                # print('buy: ', i, ': ', current_rsi)
                 signals.append({'sig': 'buy', 'str': round(Decimal((100 - current_rsi - 10) / 100), 10)})
             elif (current_rsi > params['sell']):
-                print('sell: ', i, ': ', current_rsi)
+                # print('sell: ', i, ': ', current_rsi)
                 signals.append({'sig': 'sell', 'str': round(Decimal((current_rsi - 10) / 100), 10)})
             else:
                 signals.append({'sig': 'hold', 'str': 0})

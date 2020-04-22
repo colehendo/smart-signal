@@ -19,4 +19,8 @@ export class IndicatorsService {
   get_data(params: HttpParams): Observable<any> {
     return this.http.get<object>(`${this.baseUrl}/get-data`, {params: params});
   }
+
+  combinations(params: HttpParams): Observable<any> {
+    return this.http.get<object>(`${this.baseUrl}/test-combos`, {params: params});
+  }
 }

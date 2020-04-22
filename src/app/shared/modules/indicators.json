@@ -21,9 +21,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -47,9 +44,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -75,9 +69,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -101,9 +92,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -129,9 +117,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -155,9 +140,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -183,9 +165,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -209,9 +188,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -237,9 +213,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -263,9 +236,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -291,9 +261,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -317,9 +284,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -345,9 +309,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -371,9 +332,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -399,9 +357,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -425,9 +380,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -453,9 +405,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -479,9 +428,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -507,9 +453,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -533,9 +476,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -561,9 +501,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -587,9 +524,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -636,12 +570,6 @@
                 "sell": 70,
                 "buy": 30
             }
-        },
-        "second": {
-            "params": {
-                "sell": 70,
-                "buy": 30
-            }
         }
     },
     {
@@ -665,9 +593,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -693,9 +618,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -719,9 +641,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -747,9 +666,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -773,9 +689,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -801,9 +714,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -827,9 +737,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     },
@@ -855,9 +762,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -882,9 +786,6 @@
         },
         "minute": {
             "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -908,9 +809,6 @@
             "params": {}
         },
         "minute": {
-            "params": {}
-        },
-        "second": {
             "params": {}
         }
     }

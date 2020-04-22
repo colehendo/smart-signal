@@ -3,7 +3,7 @@ import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 
 import { IndicatorsService } from '../../core/http/indicators.service';
-import  *  as  data  from  '../../shared/modules/indicators.json';
+import  *  as  data  from  '../../shared/modules/test-indicators.json';
 const indicatorData: any =  (data  as  any).default;
 
 import * as Highcharts from 'highcharts/highstock';
@@ -41,6 +41,17 @@ export class AlgorithmsComponent implements OnInit {
 
   ngOnInit() {
     // this.chartOptions.series[0]['data'] = newData;
+    
+  }
+
+  combos() {
+    console.log(indicatorData)
+    let params = new HttpParams();
+    params = params.append('data', JSON.stringify(indicatorData));
+    this.indicatorsService.combinations(params).subscribe(data => {
+      console.log('graph data:')
+      console.log(data);
+    });
   }
 
   public payload = [];
