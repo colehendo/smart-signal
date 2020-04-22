@@ -566,14 +566,14 @@ def match_indicator(indicator, params, candles):
 # THE END OF THE ARRAY CONTAINS THE LATEST VALUES
 
 
-
-# VOLUME
-
-# Accumulation/Distribution Index
-# Works best in a ranging period(so maybe after huge moves up or down),
-# does not work well when market is trending hard, good for locating trend reversals through top/bottom divergences
-# The AD line compares the strength of the open to the strength of the close divided by the range
-# drop this hoe
+#
+# # VOLUME
+#
+# # Accumulation/Distribution Index
+# # Works best in a ranging period(so maybe after huge moves up or down),
+# # does not work well when market is trending hard, good for locating trend reversals through top/bottom divergences
+# # The AD line compares the strength of the open to the strength of the close divided by the range
+# # drop this hoe
 def adi(params, candles):
     adi = ta.volume.acc_dist_index(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], fillna = False)
     print("Accumulation/Distribution Index")
@@ -675,11 +675,11 @@ def bb(params, candles):
     # print('bb pband: ', pband)
 
 
-
-
-
+#
+#
+#
 # TREND
-
+#
 # Average Directional Movement Index
 # a little off, general trend is right tho
 def adx(params, candles):
@@ -699,15 +699,6 @@ def cci(params, candles):
     print('Commodity Channel Index: ', cci)
 
 
-# Ichimoku Kinkō Hyō
-# shit broke
-def ichimoku(params, candles):
-    ichimoku = ta.trend.IchimokuIndicato(high = candles["h"], low = candles["l"], n1 = 9, n2 = 26, n3 = 52, visual = False, fillna = False)
-    print('ichi: ', ichimoku)
-    ichimoku_a = ichimoku.ichimoku_a()
-    print('ichi a: ', ichimoku_a)
-    ichimoku_b = ichimoku.ichimoku_b()
-    print('ichi b: ', ichimoku_b)
 
 
 # Moving Average Convergence Divergence
@@ -729,19 +720,42 @@ def mi(params, candles):
     print('Mass Index: ', mi)
 
 # Parabolic Stop And Reverse
-# good
+# we'll trigger signals whenever we have a reversal so if
 def psar(params, candles):
     all_psar = ta.trend.PSARIndicator(high = candles["h"], low = candles["l"], close = candles["c"], step = 0.02, max_step = 0.2, fillna = False)
     print('Parabolic Stop And Reverse')
     psar = all_psar.psar()
-    print('psar: ', psar)
+    # print('psar: ', psar)
+    psar_signals = []
+    trend = "flat"
+    for i in range(0, len(psar)):
+        current_psar = psar.iloc[i]
+        curr_price = candles["c"][i];
+        if trend == "up" and current_psar > curr_price:
+            psar_signals.append({'sig': 'sell', 'str': 100})
+            trend = "down"
+        elif trend == "down" and current_psar < curr_price:
+            psar_signals.append({'sig': 'buy', 'str': 100})
+            trend = "up"
+        else:
+            if current_psar > curr_price:
+                trend = "down"
+            elif current_psar < curr_price:
+                trend = "up"
+            else:
+                trend = "flat"
+    for i in range(0, len(psar_signals)):
+        print(psar_signals[i][0])
+
+    return psar_signals
+
 
 
 # Simple Moving Average
 #shit is broke
 def sma(params, candles):
     sma = ta.trend.sma_indicator(close = candles["c"], n = 12, fillna = False)
-    print('sma: ', sma)
+    # print('sma: ', sma)
 
 
 # Vortex Indicator
@@ -752,32 +766,32 @@ def vi(params, candles):
     # vi_diff = vi.vortex_indicator_diff() <-- probly useful when actually implementing
     # print('vi_diff: ', vi_diff)
     vi_pos = vi.vortex_indicator_pos()
-    print('vi_pos: ', vi_pos)
+    # print('vi_pos: ', vi_pos)
     vi_neg = vi.vortex_indicator_neg()
-    print('vi_neg: ', vi_neg)
+    # print('vi_neg: ', vi_neg)
 
 
 # MOMENTUM
 
 # Awesome Oscillator
-#lil off but solid
+# lil off but solid
 def ao(params, candles):
     ao = ta.momentum.ao(high = candles["h"], low = candles["l"], s = 5, len = 34, fillna = False)
-    print('Awesome Oscillator: ', ao)
+    # print('Awesome Oscillator: ', ao)
 
 # Kaufman's Adaptive Moving Average
 # good
 def kama(params, candles):
     kama = ta.momentum.kama(close = candles["c"], n = 21, pow1 = 2, pow2 = 30, fillna = False)
-    print('Kaufmans Adaptive Moving Average: ', kama)
+    # print('Kaufmans Adaptive Moving Average: ', kama)
 
 # Money Flow Index
 # Basically an even better RSI indicator because it implements volume too.
 # not good but fuk volume
 def mfi(params, candles):
     mfi = ta.momentum.money_flow_index(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], n = 14, fillna = False)
-    print('Money Flow Index')
-    print('mfi: ', mfi)
+    # print('Money Flow Index')
+    # print('mfi: ', mfi)
     # for i in range(0, len(mfi)):
     #     if (i < 10) or (i > (len(mfi) - 10)):
     #         print('mfi ', i, ': ', mfi[i])
@@ -786,7 +800,7 @@ def mfi(params, candles):
 #gucci
 def roc(params, candles):
     roc = ta.momentum.roc(close = candles["c"], n = 12, fillna = False)
-    print(' Rate of Change: ', roc)
+    # print(' Rate of Change: ', roc)
 
 # Relative Strength Index
 def rsi(params, candles):
@@ -818,22 +832,39 @@ def rsi(params, candles):
 #sr_sig correlates to the %K line on tradingview
 def sr(params, candles):
     all_sr = ta.momentum.StochasticOscillator(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, d_n = 3, fillna = False)
-    print('Stochastic Oscillator')
+    print('HERE IS Stochastic Oscillator!!!!')
     sr_sig = all_sr.stoch_signal()
     print('sr_sig: ', sr_sig)
 
+    signals = []
+    for i in range(0, len(all_sr.stoch_signal())):
+        curr_sr = all_sr.stoch_signal().iloc[i]
+        if (curr_sr < 100) and (curr_sr > 0):
+            if (curr_sr < params['buy']):
+                # print('buy: ', i, ': ', curr_sr)
+                signals.append({'sig': 'buy', 'str': round(Decimal((100 - curr_sr - 10) / 100), 10)})
+            elif (curr_sr > params['sell']):
+                # print('sell: ', i, ': ', curr_sr)
+                signals.append({'sig': 'sell', 'str': round(Decimal((curr_sr - 10) / 100), 10)})
+            else:
+                signals.append({'sig': 'hold', 'str': 0})
+        else:
+            signals.append({'sig': 'hold', 'str': 0})
 
-# Ultimate Oscillator
+    return signals
+
+
+#U ltimate Oscillator
 # gucci
 def uo(params, candles):
     uo = ta.momentum.uo(high = candles["h"], low = candles["l"], close = candles["c"], s = 7, m = 14, len = 28, ws = 4.0, wm = 2.0, wl = 1.0, fillna = False)
-    print('Ultimate Oscillator: ', uo)
+    # print('Ultimate Oscillator: ', uo)
 
 # Williams %R
 #gucci
 def wr(params, candles):
     wr = ta.momentum.wr(high = candles["h"], low = candles["l"], close = candles["c"], lbp = 14, fillna = False)
-    print('Williams %R: ', wr)
+    # print('Williams %R: ', wr)
 
 
 

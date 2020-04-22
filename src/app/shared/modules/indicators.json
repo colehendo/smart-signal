@@ -243,60 +243,6 @@
         }
     },
     {
-        "indicator": "kc",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
-        }
-    },
-    {
-        "indicator": "dc",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
-        }
-    },
-    {
         "indicator": "macd",
         "month": {
             "params": {}
@@ -352,33 +298,6 @@
     },
     {
         "indicator": "vi",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
-        }
-    },
-    {
-        "indicator": "trix",
         "month": {
             "params": {}
         },
@@ -486,60 +405,6 @@
         }
     },
     {
-        "indicator": "kst",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
-        }
-    },
-    {
-        "indicator": "ichimoku",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
-        }
-    },
-    {
         "indicator": "parabolic_sar",
         "month": {
             "params": {}
@@ -597,8 +462,8 @@
         "indicator": "rsi",
         "month": {
             "params": {
-                "sell": 60,
-                "buy": 40
+                "sell": 65,
+                "buy": 35
             }
         },
         "week": {
@@ -608,67 +473,40 @@
             }
         },
         "day": {
+            "params": {
+                "sell": 73,
+                "buy": 27
+            }
+        },
+        "four_hour": {
+            "params": {
+                "sell": 75,
+                "buy": 25
+            }
+        },
+        "hour": {
             "params": {
                 "sell": 80,
                 "buy": 20
             }
         },
-        "four_hour": {
-            "params": {
-                "sell": 70,
-                "buy": 30
-            }
-        },
-        "hour": {
-            "params": {
-                "sell": 70,
-                "buy": 30
-            }
-        },
         "fifteen_minute": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 85,
+                "buy": 15
             }
         },
         "minute": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 90,
+                "buy": 10
             }
         },
         "second": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 90,
+                "buy": 10
             }
-        }
-    },
-    {
-        "indicator": "tsi",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
         }
     },
     {
@@ -701,28 +539,52 @@
     {
         "indicator": "sr",
         "month": {
-            "params": {}
+            "params": {
+              "sell" : 92
+              "buy" : 10
+            }
         },
         "week": {
-            "params": {}
+            "params": {
+              "sell" : 80
+              "buy" : 20
+            }
         },
         "day": {
-            "params": {}
+            "params": {
+              "sell" : 85
+              "buy" : 15
+            }
         },
         "four_hour": {
-            "params": {}
+            "params": {
+              "sell" : 85
+              "buy" : 15
+            }
         },
         "hour": {
-            "params": {}
+            "params": {
+              "sell" : 85
+              "buy" : 15
+            }
         },
         "fifteen_minute": {
-            "params": {}
+            "params": {
+              "sell" : 85
+              "buy" : 15
+            }
         },
         "minute": {
-            "params": {}
+            "params": {
+              "sell" : 94
+              "buy" : 5
+            }
         },
         "second": {
-            "params": {}
+            "params": {
+              "sell" : 95
+              "buy" : 5
+            }
         }
     },
     {
@@ -833,85 +695,4 @@
             "params": {}
         }
     },
-    {
-        "indicator": "dr",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
-        }
-    },
-    {
-        "indicator": "dlr",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
-        }
-    },
-    {
-        "indicator": "cr",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        },
-        "second": {
-            "params": {}
-        }
-    }
 ]
