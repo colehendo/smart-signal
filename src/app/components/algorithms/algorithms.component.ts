@@ -23,25 +23,71 @@ export class AlgorithmsComponent implements OnInit {
   private graph_params = new HttpParams();
 
   public chartOptions: Highcharts.Options = {
-    series: [{
+    rangeSelector: {
+      selected: 0
+  },
+
+  title: {
+      text: 'USD to EUR exchange rate'
+  },
+
+  tooltip: {
+      // style: {
+      //     width: '200px'
+      // },
+      valueDecimals: 4,
+      shared: true
+  },
+
+  yAxis: {
+      title: {
+          text: 'Exchange rate'
+      }
+  },
+
+  series: [{
+      name: 'USD to EUR',
       data: [],
-      type: 'candlestick'
-    }],
-    title:{
-      text:"BTC Day"
-    }
+      type: 'line',
+      id: 'dataseries'
+
+  // the event marker flags
+  }, 
+  {
+      type: 'flags',
+      data: [],
+      onSeries: 'dataseries',
+      shape: 'circlepin',
+      width: 16
+  }
+]
   };
 
   public Highcharts: typeof Highcharts = Highcharts;
   public socket;
-  public candles: any;
   public updateFlag: boolean = false;
 
 
 
   ngOnInit() {
     // this.chartOptions.series[0]['data'] = newData;
+
     
+  }
+
+  get_data() {
+    
+    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(['day', 'week']));
+    this.indicatorsService.get_data(this.graph_params).subscribe(data => {
+      console.log('graph data:')
+      console.log(data);
+      let newData = [];
+      _.forEach(data[1]['tf_data'], (item) => {
+        newData.push([item.t, item.c]);
+      });
+      this.chartOptions.series[0]['data'] = newData;
+      this.updateFlag = true;
+    });
   }
 
   combos() {
@@ -115,15 +161,36 @@ export class AlgorithmsComponent implements OnInit {
 
     this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
     this.indicatorsService.get_data(this.graph_params).subscribe(data => {
+      this.updateFlag = false;
       console.log('graph data:')
       console.log(data);
+      let newData = [];
+      _.forEach(data[0]['tf_data'], (item) => {
+        newData.push([item.t, item.c]);
+      });
+      this.chartOptions.series[0]['data'] = newData;
+      this.updateFlag = true;
     });
+
     this.payload.push(all_timeframes);
 
     this.alg_params = this.alg_params.append('vals', JSON.stringify(this.payload));
     this.indicatorsService.indicators(this.alg_params).subscribe(data => {
+      this.updateFlag = false;
       console.log('alg data:')
       console.log(data);
+      let newData = [];
+      _.forEach(data, (item) => {
+        if (!!item.sig) {
+          newData.push({
+            x: item.time,
+            title: item.sig,
+            text: `Amount: ${item.amt}`
+          });
+        }
+      });
+      this.chartOptions.series[1]['data'] = newData;
+      this.updateFlag = true;
     });
     this.payload = [];
   }
