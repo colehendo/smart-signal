@@ -32,9 +32,9 @@ export class AlgorithmsComponent implements OnInit {
   },
 
   tooltip: {
-      // style: {
-      //     width: '200px'
-      // },
+      style: {
+          width: 200
+      },
       valueDecimals: 4,
       shared: true
   },
@@ -103,6 +103,8 @@ export class AlgorithmsComponent implements OnInit {
   public payload = [];
   public timeframe = 'day';
   testParams() {
+    this.chartOptions.series[0]['data'] = []
+    this.chartOptions.series[1]['data'] = []
     _.forEach(indicatorData, (item) => {
       if (item.indicator === 'rsi') {
         if (this.timeframe === 'month') {
@@ -165,8 +167,13 @@ export class AlgorithmsComponent implements OnInit {
       console.log('graph data:')
       console.log(data);
       let newData = [];
-      _.forEach(data[0]['tf_data'], (item) => {
-        newData.push([item.t, item.c]);
+      _.forEach(data, (timeframe) => {
+        console.log(timeframe)
+        if (timeframe['timeframe'] === this.timeframe) {
+          _.forEach(timeframe['tf_data'], (item) => {
+            newData.push([item.t, item.c]);
+          });
+        }
       });
       this.chartOptions.series[0]['data'] = newData;
       this.updateFlag = true;

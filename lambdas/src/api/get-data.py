@@ -125,9 +125,10 @@ def call_dynamo(symbol, table, timestamp, ttl, gap, datapoints):
     table = dynamodb.Table(table)
     try:
         # Scan the table for all datapoints
-        results = table.query(
-            KeyConditionExpression = Key('s').eq(symbol) & Key('t').gt((timestamp + ttl) - (gap * datapoints))
-        )
+        # results = table.query(
+        #     KeyConditionExpression = Key('s').eq(symbol) & Key('t').gt((timestamp + ttl) - (gap * datapoints))
+        # )
+        results = table.scan()
     except ClientError as e:
         print(e.response['Error']['Code'])
         print(e.response['ResponseMetadata']['HTTPStatusCode'])
