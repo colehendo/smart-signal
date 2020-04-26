@@ -71,7 +71,9 @@ export class AlgorithmsComponent implements OnInit {
 
   ngOnInit() {
     // this.chartOptions.series[0]['data'] = newData;
-
+    console.log(window.location.href)
+    let test = window.location.href
+    console.log(test.split('4200/'))
     
   }
 
@@ -107,6 +109,7 @@ export class AlgorithmsComponent implements OnInit {
     this.chartOptions.series[0]['data'] = []
     this.chartOptions.series[1]['data'] = []
     _.forEach(indicatorData, (item) => {
+      // console.log(item.$[this.timeframe].params)
       if (item.indicator === 'rsi') {
         if (this.timeframe === 'month') {
           this.payload.push({
