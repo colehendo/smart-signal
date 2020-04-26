@@ -1,13 +1,73 @@
-<body id="outsideDiv">
+<!-- <body id="outsideDiv">
     <a routerLink="/home">Smart Signal</a>
     <div id="navButtonContainer">
-        <button routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button> <!--Linking assets page here -->
+        <button routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button> 
         <button routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
-        <button routerLink="/algorithms" routerLinkActive="active">Algorithms</button>
+        <button routerLink="/algorithms" routerLinkActive="active" class="btn btn-success">Algorithms</button>
         <button routerLink="/news" routerLinkActive="active" class="btn btn-success">News</button>
         <button routerLink="/about" routerLinkActive="active" class="btn btn-success">About</button>
         <button id="logOutButton" routerLink="/" class="btn btn-success">Log Out</button>
-        <!-- <div ngbDropdown class="d-inline-block">
+    </div>
+</body> -->
+
+<!-- <nav class="navbar navbar-right navbar-expand-sm nav-style" id="outsideDiv">
+
+    <a routerLink="/home" class="navbar-brand">Smart Signal</a>
+    
+
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <button routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button>
+      </li>
+      <li class="nav-item">
+        <button routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
+      </li>
+      <li class="nav-item">
+        <button routerLink="/algorithms" routerLinkActive="active" class="btn btn-success">Algorithms</button>
+      </li>
+    </ul>
+  </nav> -->
+
+  <nav class="navbar navbar-expand-lg navbar-dark nav-style">
+    <div class="d-flex flex-grow-1">
+        <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
+        <a routerLink="/home">Smart Signal</a>
+        <div class="w-100 text-right">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7" (click)="isMenuCollapse = !isMenuCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+    <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7" [ngClass]="{'collapse': isMenuCollapse}"  (click)="isMenuCollapse = !isMenuCollapse" >
+        <ul class="navbar-nav ml-auto flex-nowrap">
+            <li class="nav-item">
+                <button routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button>
+            </li>
+            <li class="nav-item">
+                <button routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
+            </li>
+            <li class="nav-item">
+                <button routerLink="/algorithms" routerLinkActive="active" class="btn btn-success">Algorithms</button>
+            </li>
+            <li class="nav-item">
+                <button routerLink="/news" routerLinkActive="active" class="btn btn-success">News</button>
+            </li>
+            <li class="nav-item">
+                <button routerLink="/about" routerLinkActive="active" class="btn btn-success">About</button>
+            </li>
+            <li class="nav-item">
+                <button id="logOutButton" routerLink="/" class="btn btn-success">Logout</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
+
+
+
+<!-- <div ngbDropdown class="d-inline-block">
             <button class="btn btn-success" id="dropdownForm1" ngbDropdownToggle>Sign In</button>
             <div ngbDropdownMenu aria-labelledby="dropdownForm1">
               <form class="px-4 py-3">
@@ -32,5 +92,3 @@
               <button ngbDropdownItem>Forgot password?</button>
             </div>
           </div> -->
-    </div>
-</body>

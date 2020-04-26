@@ -1,4 +1,4 @@
-<button (click)="timeframe = 'month'">Month</button>
+<!-- <button (click)="timeframe = 'month'">Month</button>
 <button (click)="timeframe = 'week'">Week</button>
 <button (click)="timeframe = 'day'">Day</button>
 <button (click)="timeframe = 'four_hour'">Four Hour</button>
@@ -8,9 +8,9 @@
 <button (click)="testParams()">Send</button>
 <br><br>
 <button (click)="get_data()">get data</button>
-<br><br>
+<br><br> -->
 
-<button (click)="combos()">Combos</button>
+<!-- <button (click)="combos()">Combos</button> -->
 
 <highcharts-chart 
     [Highcharts]="Highcharts"
@@ -18,3 +18,23 @@
     [(update)]="updateFlag"
     style="width: 100%; height: 400px; display: block;"
 ></highcharts-chart>
+
+<div class="row">
+    <div class="col">
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-outline-success" id="dropdownBasic1" ngbDropdownToggle>Time Frame</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button ngbDropdownItem>Action - 1</button>
+          <button ngbDropdownItem (click)="timeframe = 'month'" class="btn btn-success">Month</button>
+          <button ngbDropdownItem (click)="timeframe = 'week'" class="btn btn-success">Week</button>
+          <button ngbDropdownItem (click)="timeframe = 'day'" class="btn btn-success">Day</button>
+          <button ngbDropdownItem (click)="timeframe = 'four_hour'" class="btn btn-success">Four Hour</button>
+          <button ngbDropdownItem (click)="timeframe = 'hour'" class="btn btn-success">Hour</button>
+          <button ngbDropdownItem (click)="timeframe = 'fifteen_minute'" class="btn btn-success">Fifteen Minute</button>
+          <button ngbDropdownItem (click)="timeframe = 'minute'" class="btn btn-success">Minute</button>
+        </div>
+      </div>
+      <button class="btn btn-success" (click)="testParams()">Send</button>
+      <button class="btn btn-success" (click)="combos()">Combos</button>
+    </div>
+</div>
