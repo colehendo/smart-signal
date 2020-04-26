@@ -1,11 +1,36 @@
 <body id="outsideDiv">
     <a routerLink="/home">Smart Signal</a>
     <div id="navButtonContainer">
-        <button routerLink="/assets" routerLinkActive="active">Assets</button> <!--Linking assets page here -->
+        <button routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button> <!--Linking assets page here -->
+        <button routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
         <button routerLink="/algorithms" routerLinkActive="active">Algorithms</button>
-        <button routerLink="/account" routerLinkActive="active">Account</button>
-        <button routerLink="/news" routerLinkActive="active">News</button>
-        <button routerLink="/about" routerLinkActive="active">About</button>
-        <button id="logOutButton" routerLink="/">Log Out</button>
+        <button routerLink="/news" routerLinkActive="active" class="btn btn-success">News</button>
+        <button routerLink="/about" routerLinkActive="active" class="btn btn-success">About</button>
+        <button id="logOutButton" routerLink="/" class="btn btn-success">Log Out</button>
+        <!-- <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-success" id="dropdownForm1" ngbDropdownToggle>Sign In</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownForm1">
+              <form class="px-4 py-3">
+                <div class="form-group">
+                  <label for="exampleDropdownFormEmail1">Email address</label>
+                  <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                  <label for="exampleDropdownFormPassword1">Password</label>
+                  <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                  <label class="form-check-label" for="dropdownCheck">
+                    Remember me
+                  </label>
+                </div>
+                <button type="submit" class="btn btn-success">Sign in</button>
+              </form>
+              <div class="dropdown-divider"></div>
+              <button ngbDropdownItem>New around here? Sign up</button>
+              <button ngbDropdownItem>Forgot password?</button>
+            </div>
+          </div> -->
     </div>
 </body>

@@ -1,1 +1,76 @@
-<p>news works!</p>
+<body>
+  <div class="fixed_size">
+  <ngb-carousel *ngIf="images" >
+    <ng-template ngbSlide >
+      <div class="picsum-img-wrapper fixed_size" >
+        <img [src]="images[0]" alt="Random first slide" >
+      </div>
+      <div class="carousel-caption">
+        <h3>BREAKING NEWS</h3>
+        <p>Bitcoin dumping amidst corona pandemic</p>
+      </div>
+    </ng-template>
+    <ng-template ngbSlide>
+      <div class="picsum-img-wrapper fixed_size">
+        <img [src]="images[1]" alt="Random second slide" >
+      </div>
+      <div class="carousel-caption">
+        <h3>Second slide label</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+    </ng-template>
+    <ng-template ngbSlide>
+      <div class="picsum-img-wrapper fixed_size">
+        <img [src]="images[2]" alt="Random third slide" >
+      </div>
+      <div class="carousel-caption">
+        <h3>Third slide label</h3>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+  <label for="typeahead-focus">Search for news:</label>
+<input
+  id="typeahead-focus"
+  type="text"
+  class="form-control"
+  [(ngModel)]="model"
+  [ngbTypeahead]="search"
+  (focus)="focus$.next($any($event).target.value)"
+  (click)="click$.next($any($event).target.value)"
+  #instance="ngbTypeahead"
+/>
+<hr>
+<button  class="btn btn-success" type="button">Search</button>
+</div>
+<div class="container" style="margin-top:5%;">
+  <div class="row">
+    <div class="col">
+      <h1>News from social media</h1>
+    <div class="card" style="width: 100%;height:150px;">
+  <img class="card-img-top" src="https://i2.cdn.turner.com/money/dam/assets/130501114146-first-tweet-barack-obama-640x360.jpg" alt="Card image cap">
+  <div class="testinout">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+  </div>
+</div>
+    </div>
+    <div class="col">
+      <h1>Articles</h1>
+      <div class="card" style="width: 100%; height:150px;">
+      <img class="card-img-top" src="https://i.cdn.turner.com/money/infographic/technology/what-is-bitcoin/images/bitcoin-top.gif" alt="Card image cap">
+      <div class="testinout">
+      <div class="card-body testinout">
+        <h5 class="card-title testinout">Card title</h5>
+        <p class="card-text testinout">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+  </div>
+</body>
