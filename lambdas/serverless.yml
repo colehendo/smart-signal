@@ -41,18 +41,18 @@ resources:
     #     Ref: TriggerAlgorithms
 
 functions:
-  connect:
+  connectWebsocket:
     handler: src/api/websocket.connect
     events:
      - websocket:
         route: $connect
      - websocket:
         route: $disconnect
-  getPrices:
-    handler: src/api/websocket.get_prices
+  getWebsocketPrices:
+    handler: src/api/websocket.get_websocket_prices
     events:
      - websocket:
-        route: getPrices
+        route: getWebsocketPrices
 
   btc-populate:
     handler: src/populate/btc-populate.populate
@@ -60,7 +60,20 @@ functions:
     environment:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
 
-  rsi:
+  getData:
+    handler: src/api/get-data.get_data
+    events:
+      - http:
+          path: get-data
+          method: get
+      - http:
+          path: get-data
+          method: options
+          integration: lambda
+          cors:
+            origin: "*"
+
+  indicators:
     handler: src/indicators/indicators.calculate
     events:
       - http:
@@ -75,6 +88,21 @@ functions:
           #       strength_adjust: true
       - http:
           path: indicators
+          method: options
+          integration: lambda
+          cors:
+            origin: "*"
+
+  combinations:
+    handler: src/indicators/combinations.handler
+    memorySize: 3008
+    timeout: 30
+    events:
+      - http:
+          path: combinations
+          method: get
+      - http:
+          path: combinations
           method: options
           integration: lambda
           cors:

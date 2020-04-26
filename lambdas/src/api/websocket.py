@@ -36,7 +36,7 @@ def connect(event, context):
             "body": json.dumps("Unrecognized eventType.")
         }
 
-def get_prices(event, context):
+def get_websocket_prices(event, context):
     print("in prices")
     print(event)
     connectionID = event["requestContext"].get("connectionId")

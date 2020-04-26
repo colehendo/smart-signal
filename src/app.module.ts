@@ -18,6 +18,7 @@ import { GraphComponent } from './app/shared/components/graph/graph.component'; 
 import { HighchartsChartModule } from 'highcharts-angular';
 import { LandingPageComponent } from './app/components/landing-page/landing-page.component';
 import { PageNotFoundComponent } from './app/components/page-not-found/page-not-found.component';
+import { AlgorithmsComponent } from './app/components/algorithms/algorithms.component';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -37,7 +38,8 @@ import { FormsModule } from '@angular/forms'
     AboutComponent,
     NewsComponent,
     LandingPageComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    AlgorithmsComponent,
   ],
   imports: [
     BrowserModule,

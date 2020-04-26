@@ -44,7 +44,7 @@ export class GraphComponent implements OnInit {
     this.socket = new ReconnectingWebSocket("wss://rix9fti73l.execute-api.us-east-1.amazonaws.com/prod");
 
     this.socket.onopen = (event) => {
-      let data = {"action": "getPrices"};
+      let data = {"action": "getWebsocketPrices"};
       this.socket.send(JSON.stringify(data));
     };
 
