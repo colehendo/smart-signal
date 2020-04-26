@@ -1,6 +1,9 @@
 import time
 from decimal import Decimal
 import simplejson as json
+from itertools import combinations
+from multiprocessing import Process, Pipe
+
 import pandas as pd
 import ta
 
@@ -9,18 +12,41 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
+<<<<<<< HEAD
 curr_time = int(time.time())
 year_time = 31536000
 month_time = 2628000
 week_time = 604800
 day_time = 86400
 
+=======
+#### SECTION FOR TESTING ALL COMBINATIONS ####
+
+all_indicators = []
+combo_results = []
+
+month_candles = []
+week_candles = []
+day_candles = []
+four_hour_candles = []
+hour_candles = []
+fifteen_minute_candles = []
+minute_candles = []
+
+month_ttl = 0
+week_ttl = 0
+day_ttl = 157680000
+four_hour_ttl = 15768000
+hour_ttl = 2628000
+fifteen_minute_ttl = 604800
+minute_ttl = 86400
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
 
 def calculate(event, context):
     if (event['queryStringParameters'] == None):
         return {
             "statusCode": 502,
-            "body": "No parameters given",
+            "body": json.dumps("No parameters given"),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
@@ -32,14 +58,14 @@ def calculate(event, context):
     if not data:
         return {
             "statusCode": 502,
-            "body": "No data given",
+            "body": json.dumps("No data given"),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
         }
 
     # Remove the array of timeframes from the data
-    timeframes = data[len(data) - 1]
+    timeframes = data[-1]
     del data[-1]
 
     if not data:
@@ -51,11 +77,23 @@ def calculate(event, context):
             }
         }
 
+    timeframe_data = []
     all_signals = []
     final_signals = []
 
+    print('timeframes: ', timeframes)
+
+    global month_candles
+    global week_candles
+    global day_candles
+    global four_hour_candles
+    global hour_candles
+    global fifteen_minute_candles
+    global minute_candles
+
     # Condense all signals of all indicators for each timeframe given
     # into a single array, and append that array to the main array
+<<<<<<< HEAD
     if ('month' in timeframes):
         signals = condense_timeframe(data, get_data('BTC_month'), 'month', 0)
         if signals:
@@ -93,13 +131,29 @@ def calculate(event, context):
                 "Access-Control-Allow-Origin": "*"
             }
         }
+=======
+    if ('month' in timeframes): month_candles = get_data('BTC_month', month_ttl)
+    if ('week' in timeframes): week_candles = get_data('BTC_week', week_ttl)
+    if ('day' in timeframes): day_candles = get_data('BTC_day', day_ttl)
+    if ('four_hour' in timeframes): four_hour_candles = get_data('BTC_four_hour', four_hour_ttl)
+    if ('hour' in timeframes): hour_candles = get_data('BTC_hour', hour_ttl)
+    if ('fifteen_minute' in timeframes): fifteen_minute_candles = get_data('BTC_fifteen_minute', fifteen_minute_ttl)
+    if ('minute' in timeframes): minute_candles = get_data('BTC_minute', minute_ttl)
 
-    a_s_length = len(all_signals)
+    for indicator in data:
+        result = run_indicator(indicator)
+        print('result: ', result)
+        if result:
+            timeframe_data.append(result[0])
+            for data in result[1]:
+                all_signals.append(data)
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
 
-    if (a_s_length == 1):
+
+    if not all_signals:
         return {
             "statusCode": 200,
-            "body": json.dumps(one_tf(all_signals[0])),
+            "body": json.dumps("No signals"),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
@@ -108,13 +162,13 @@ def calculate(event, context):
     else:
         return {
             "statusCode": 200,
-            "body": json.dumps(multi_tf(all_signals, a_s_length)),
+            "body": json.dumps(reduce_tf(all_signals, timeframe_data)),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
         }
 
-def get_data(table):
+def get_data(table, ttl):
     dynamo_table = dynamodb.Table(table)
     try:
         # Scan the table for all datapoints
@@ -127,18 +181,38 @@ def get_data(table):
         if 'Items' in results:
             # Turn the returned object into a JSON string,
             # and pass it to pandas to make it readable for TA
+            for i in range(len(results['Items'])):
+                results['Items'][i]['t'] = results['Items'][i]['t'] - ttl
+            print(json.dumps(results['Items']))
             return json.dumps(results['Items'])
         else:
             return []
 
+<<<<<<< HEAD
 def condense_timeframe(data, candles, timeframe, ttl):
     # Error catching for get_data
+=======
+def run_indicator(indicator):
+    timeframe = indicator['timeframe']
+    if indicator['timeframe'] == 'month': candles = month_candles
+    elif indicator['timeframe'] == 'week': candles = week_candles
+    elif indicator['timeframe'] == 'day': candles = day_candles
+    elif indicator['timeframe'] == 'four_hour': candles = four_hour_candles
+    elif indicator['timeframe'] == 'hour': candles = hour_candles
+    elif indicator['timeframe'] == 'fifteen_minute': candles = fifteen_minute_candles
+    elif indicator['timeframe'] == 'minute': candles = minute_candles
+
+    print(candles)
+
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
     if not candles:
+        print('not candle... :(')
         return []
     else:
         candles = pd.read_json(candles)
         # candles = ta.utils.dropna(candles)
 
+<<<<<<< HEAD
     timeframe_data = []
     timeframe_signals = []
 
@@ -191,18 +265,27 @@ def condense_timeframe(data, candles, timeframe, ttl):
                             'time': int(candles['t'][i]) - ttl,
                             'price': int(candles['c'][i])
                         })
+=======
+    print(candles)
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
 
-                        strength = 0
-                        break
+    indicator_data = match_indicator(indicator['indicator'], indicator['params'], candles, timeframe)
 
-                    else:
-                        strength += timeframe_data[j][i]['str']
+    print(indicator_data)
+    if indicator_data:
+        return ([{
+            'indicator': indicator['indicator'],
+            'tf': timeframe,
+            'sig': 'hold',
+            'str': 0,
+            'start': candles['t'][0]
+        },
+        indicator_data])
 
-    return timeframe_signals
 
-# Function called if singal timeframe given
-def one_tf(all_signals):
+def reduce_tf(all_signals, tf_signals):
     final_signals = []
+    tf_sig_len = len(tf_signals)
 
     balance = 100000
     prev_buy = 0
@@ -219,6 +302,7 @@ def one_tf(all_signals):
     total_roi = 0
     total_roi_count = 0
 
+<<<<<<< HEAD
     # Run a loop over the signals given.
     # Remove all hold signals.
     # Calculate ROI for any sell that comes after a buy.
@@ -349,11 +433,39 @@ def multi_tf(all_signals, a_s_length):
                     # print('price: ', all_signals[tf][a_s_record[tf][0]]['price'], ' transaction: ', transaction)
                     # print(all_signals[tf][a_s_record[tf][0]])
                     if (signal == 'buy'):
+=======
+    overall_sig = "hold"
+
+    for signal in all_signals:
+        current_sig = signal['sig']
+        current_tf = signal['tf']
+        if current_sig != overall_sig:
+            str_count = 0
+            str_total = 0
+            for i in range(tf_sig_len):
+                if current_tf == tf_signals[i]['tf'] and signal['indicator'] == tf_signals[i]['indicator']:
+                    if current_sig != tf_signals[i]['sig']:
+                        tf_signals[i]['sig'] = current_sig
+                        tf_signals[i]['str'] = signal['str']
+                        str_total += signal['str']
+                        str_count += 1
+                else:
+                    if current_sig != tf_signals[i]['sig'] and signal['time'] >= tf_signals[i]['start']:
+                        break
+                    elif tf_signals[i]['str'] != 0:
+                        str_total += tf_signals[i]['str']
+                        str_count += 1
+
+                if i == (tf_sig_len - 1):
+                    overall_sig = current_sig
+                    transaction = (round(((str_total / str_count) * Decimal(signal['price'])), 10))
+                    if (current_sig == 'buy'):
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
                         balance = round((balance - transaction), 2)
                         prev_buy = transaction
                         final_signals.append({
-                            'sig': signal,
-                            'time': timestamp,
+                            'sig': 'buy',
+                            'time': signal['time'],
                             'amt': transaction
                         })
 
@@ -361,8 +473,9 @@ def multi_tf(all_signals, a_s_length):
                         balance = round((balance + transaction), 2)
                         # Calculate total roi, roi over past year, month, week, and day
                         if (prev_buy != 0):
-                            roi = (((transaction - prev_buy) / prev_buy) * 100)
+                            roi = round((((transaction - prev_buy) / prev_buy) * 100), 6)
                             total_roi += roi
+<<<<<<< HEAD
                             total_roi_count += 1
                             if ((curr_time - timestamp) < year_time):
                                 year_roi_count += 1
@@ -380,13 +493,17 @@ def multi_tf(all_signals, a_s_length):
                                             day_roi_count += 1
                                             if (day_roi_count > 0):
                                                 day_roi += roi
+=======
+                            roi_count += 1
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
 
                         final_signals.append({
-                            'sig': signal,
-                            'time': timestamp,
+                            'sig': 'sell',
+                            'time': signal['time'],
                             'amt': transaction,
                             'roi': roi
                         })
+<<<<<<< HEAD
                     a_s_record[0][0] += 1
                     tf = 1
                     signal = all_signals[0][a_s_record[0][0]]['sig']
@@ -519,14 +636,26 @@ def multi_tf(all_signals, a_s_length):
             'year_roi': round(year_roi / year_roi_count, 6)
         })
     if (total_roi_count > 0):
+=======
+    
+    if (roi_count == 0):
+        final_signals.append({
+            'bal': balance,
+            'avg_roi': 0
+        })
+    else:
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
         final_signals.append({
             'avg_roi': round(total_roi / total_roi_count, 6)
         })
+
+    print('final signals: ', final_signals)
 
     return final_signals
 
 # A simple function to call the indicators.
 # This may be better done with a struct
+<<<<<<< HEAD
 def match_indicator(indicator, params, candles):
     adi(params, candles)
     cmf(params, candles)
@@ -555,6 +684,15 @@ def match_indicator(indicator, params, candles):
     if indicator in all_indicators:
         print(indicator)
         return all_indicators[indicator](params, candles)
+=======
+def match_indicator(indicator, params, candles, timeframe):
+    if (indicator == 'rsi'):
+        return rsi(params, candles, timeframe)
+    elif (indicator == 'macd'):
+        return macd(candles)
+    elif (indicator == 'bb'):
+        return bb(candles)
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
     else:
         return []
 
@@ -655,6 +793,7 @@ def atr(params, candles):
     print('Average True Range: ', atr)
 
 # Bollinger Bands
+<<<<<<< HEAD
 # Pretty accurate
 def bb(params, candles):
     bb = ta.volatility.BollingerBands(close = candles["c"], n=20, ndev=2)
@@ -678,6 +817,31 @@ def bb(params, candles):
 #
 #
 #
+=======
+def bb(data):
+    signals = []
+
+    for i in range(len(data)):
+        if (data['c'][i] < 7000):
+            signals.append({'sig': 'buy', 'str': Decimal(.5)})
+        elif (data['c'][i] > 8500):
+            signals.append({'sig': 'sell', 'str': Decimal(.5)})
+        else:
+            signals.append({'sig': 'hold', 'str': 0})
+
+    return signals
+
+# Donchian Channel
+def dc():
+    print('dc')
+
+# Keltner Channel
+def kc():
+    print('kc')
+
+
+
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
 # TREND
 #
 # Average Directional Movement Index
@@ -713,6 +877,7 @@ def macd(params, candles):
     macd_signal = all_macd.macd_signal()
     print('macd_signal: ', macd_signal)
 
+<<<<<<< HEAD
 # Mass Index
 # good
 def mi(params, candles):
@@ -737,6 +902,13 @@ def psar(params, candles):
         elif trend == "down" and current_psar < curr_price:
             psar_signals.append({'sig': 'buy', 'str': 100})
             trend = "up"
+=======
+    for i in range(len(data)):
+        if (data['c'][i] < 6500):
+            signals.append({'sig': 'buy', 'str': Decimal(.5)})
+        elif (data['c'][i] > 8000):
+            signals.append({'sig': 'sell', 'str': Decimal(.5)})
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
         else:
             if current_psar > curr_price:
                 trend = "down"
@@ -803,18 +975,27 @@ def roc(params, candles):
     # print(' Rate of Change: ', roc)
 
 # Relative Strength Index
+<<<<<<< HEAD
 def rsi(params, candles):
     print('rsi!!!!')
     # Get the past `timeframe` rsi values in a dataframe
     rsi_total = ta.momentum.rsi(close = candles["c"], n = 14, fillna = True)
     # print('params: ', params)
     # print(' rsi: ', rsi_total)
+=======
+def rsi(params, candles, timeframe):
+    # Get the past `timeframe` rsi values in a dataframe
+    rsi_total = ta.momentum.rsi(close = candles["c"], n = 14, fillna = True)
+    # print('params: ', params)
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
 
     signals = []
+    last_signal = 'hold'
 
-    for i in range(0, len(rsi_total)):
+    for i in range(len(rsi_total)):
         current_rsi = rsi_total.iloc[i]
         if (current_rsi < 100) and (current_rsi > 0):
+<<<<<<< HEAD
             if (current_rsi < params['buy']):
                 # print('buy: ', i, ': ', current_rsi)
                 signals.append({'sig': 'buy', 'str': round(Decimal((100 - current_rsi - 10) / 100), 10)})
@@ -825,7 +1006,65 @@ def rsi(params, candles):
                 signals.append({'sig': 'hold', 'str': 0})
         else:
             signals.append({'sig': 'hold', 'str': 0})
+=======
+            if (current_rsi < params['buy'] and last_signal != 'buy'):
+                last_signal = 'buy'
+                signals.append({
+                    'indicator': 'rsi',
+                    'sig': 'buy',
+                    'price': float(candles['c'][i]),
+                    'time': int(candles['t'][i]),
+                    'tf': timeframe,
+                    'str': round(Decimal((100 - current_rsi - 10) / 100), 10)
+                })
+            elif (current_rsi > params['sell'] and last_signal != 'sell'):
+                last_signal = 'sell'
+                signals.append({
+                    'indicator': 'rsi',
+                    'sig': 'sell',
+                    'price': float(candles['c'][i]),
+                    'time': int(candles['t'][i]),
+                    'tf': timeframe,
+                    'str': round(Decimal((current_rsi - 10) / 100), 10)
+                })
 
+    return signals
+
+
+def rsi_test(params, candles, timeframe):
+    # Get the past `timeframe` rsi values in a dataframe
+    rsi_total = ta.momentum.rsi(close = candles["c"], n = 14, fillna = True)
+    # print('params: ', params)
+
+    signals = []
+    last_signal = 'hold'
+
+    for i in range(len(rsi_total)):
+        current_rsi = rsi_total.iloc[i]
+        if (current_rsi < 100) and (current_rsi > 0):
+            if (current_rsi < params['buy'] and last_signal != 'buy'):
+                last_signal = 'buy'
+                signals.append({
+                    'indicator': 'rsi',
+                    'sig': 'buy',
+                    'price': float(candles['c'][i]),
+                    'time': int(candles['t'][i]),
+                    'tf': timeframe,
+                    'str': round(Decimal((100 - current_rsi - 10) / 100), 10)
+                })
+            elif (current_rsi > params['sell'] and last_signal != 'sell'):
+                last_signal = 'sell'
+                signals.append({
+                    'indicator': 'rsi',
+                    'sig': 'sell',
+                    'price': float(candles['c'][i]),
+                    'time': int(candles['t'][i]),
+                    'tf': timeframe,
+                    'str': round(Decimal((current_rsi - 10) / 100), 10)
+                })
+>>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
+
+    print('rsi: ', signals)
     return signals
 
 # Stochastic Oscillator

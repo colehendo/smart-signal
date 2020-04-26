@@ -16,6 +16,9 @@ import { AssetExpansionPanelComponent } from './app/shared/components/asset-expa
 import { MaterialModule } from './app/shared/modules/material.module';
 import { GraphComponent } from './app/shared/components/graph/graph.component'; //Added from here down
 import { HighchartsChartModule } from 'highcharts-angular';
+import { LandingPageComponent } from './app/components/landing-page/landing-page.component';
+import { PageNotFoundComponent } from './app/components/page-not-found/page-not-found.component';
+import { AlgorithmsComponent } from './app/components/algorithms/algorithms.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { HighchartsChartModule } from 'highcharts-angular';
     AssetsComponent,
     AccountComponent,
     AboutComponent,
-    NewsComponent //Added graph component to declaration
+    NewsComponent,
+    LandingPageComponent,
+    PageNotFoundComponent,
+    AlgorithmsComponent,
   ],
   imports: [
     BrowserModule,
