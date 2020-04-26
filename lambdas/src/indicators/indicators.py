@@ -571,26 +571,37 @@ def rsi(params, candles, timeframe):
 
 # Stochastic Oscillator
 #sr_sig correlates to the %K line on tradingview
-def sr(params, candles):
+def sr(params, candles, timeframe):
     all_sr = ta.momentum.StochasticOscillator(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, d_n = 3, fillna = False)
     print('HERE IS Stochastic Oscillator!!!!')
     sr_sig = all_sr.stoch_signal()
     print('sr_sig: ', sr_sig)
 
+    last_signal = 'hold'
     signals = []
     for i in range(0, len(all_sr.stoch_signal())):
         curr_sr = all_sr.stoch_signal().iloc[i]
         if (curr_sr < 100) and (curr_sr > 0):
-            if (curr_sr < params['buy']):
+            if (curr_sr < params['buy'] and last_signal != 'buy'):
                 # print('buy: ', i, ': ', curr_sr)
-                signals.append({'sig': 'buy', 'str': round(Decimal((100 - curr_sr - 10) / 100), 10)})
+                signals.append({
+                    'indicator': 'sr',
+                    'sig': 'buy',
+                    'price': float(candles['c'][i]),
+                    'time': int(candles['t'][i]),
+                    'tf': timeframe,
+                    'str': round(Decimal((100 - curr_sr - 10) / 100), 10)
+                })
             elif (curr_sr > params['sell']):
                 # print('sell: ', i, ': ', curr_sr)
-                signals.append({'sig': 'sell', 'str': round(Decimal((curr_sr - 10) / 100), 10)})
-            else:
-                signals.append({'sig': 'hold', 'str': 0})
-        else:
-            signals.append({'sig': 'hold', 'str': 0})
+                signals.append({
+                    'indicator': 'sr',
+                    'sig': 'sell',
+                    'price': float(candles['c'][i]),
+                    'time': int(candles['t'][i]),
+                    'tf': timeframe,
+                    'str': round(Decimal((100 - curr_sr - 10) / 100), 10)
+                })
 
     return signals
 
