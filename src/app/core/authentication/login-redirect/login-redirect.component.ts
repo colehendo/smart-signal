@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-redirect',
@@ -7,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginRedirectComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit() {
-    
+    let code = window.location.href.split('code=')[1]
+    localStorage.setItem('authCode', code);
+    this.router.navigate(['/home']);
   }
 
 }

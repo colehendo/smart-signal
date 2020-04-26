@@ -6,7 +6,7 @@
         <button routerLink="/algorithms" routerLinkActive="active">Algorithms</button>
         <button routerLink="/news" routerLinkActive="active" class="btn btn-success">News</button>
         <button routerLink="/about" routerLinkActive="active" class="btn btn-success">About</button>
-        <button id="logOutButton" routerLink="/" class="btn btn-success">Log Out</button>
+        <button id="logOutButton" (click)="logout()" class="btn btn-success">Log Out</button>
         <!-- <div ngbDropdown class="d-inline-block">
             <button class="btn btn-success" id="dropdownForm1" ngbDropdownToggle>Sign In</button>
             <div ngbDropdownMenu aria-labelledby="dropdownForm1">
