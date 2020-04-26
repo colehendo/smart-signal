@@ -93,9 +93,10 @@ export class AlgorithmsComponent implements OnInit {
   combos() {
     console.log(indicatorData)
     let params = new HttpParams();
-    params = params.append('data', JSON.stringify(indicatorData));
+    params = params.set('data', JSON.stringify(indicatorData));
+    console.log(params)
     this.indicatorsService.combinations(params).subscribe(data => {
-      console.log('graph data:')
+      console.log('combo data:')
       console.log(data);
     });
   }
@@ -182,6 +183,7 @@ export class AlgorithmsComponent implements OnInit {
     this.payload.push(all_timeframes);
 
     this.alg_params = this.alg_params.append('vals', JSON.stringify(this.payload));
+    console.log(this.alg_params)
     this.indicatorsService.indicators(this.alg_params).subscribe(data => {
       this.updateFlag = false;
       console.log('alg data:')

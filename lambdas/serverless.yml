@@ -93,14 +93,16 @@ functions:
           cors:
             origin: "*"
 
-  testCombos:
-    handler: src/indicators/indicators.test_combos
+  combinations:
+    handler: src/indicators/combinations.handler
+    memorySize: 3008
+    timeout: 30
     events:
       - http:
-          path: test-combos
+          path: combinations
           method: get
       - http:
-          path: test-combos
+          path: combinations
           method: options
           integration: lambda
           cors:

@@ -18,17 +18,47 @@
                 "sell": 80,
                 "buy": 20
             }
+        }
+    },
+    {
+        "indicator": "bb",
+        "month": {
+            "params": {
+                "sell": 60,
+                "buy": 40
+            }
         },
-        "four_hour": {
+        "week": {
             "params": {
                 "sell": 70,
                 "buy": 30
             }
         },
-        "hour": {
+        "day": {
+            "params": {
+                "sell": 80,
+                "buy": 20
+            }
+        }
+    },
+    {
+        "indicator": "macd",
+        "month": {
+            "params": {
+                "sell": 60,
+                "buy": 40
+            }
+        },
+        "week": {
             "params": {
                 "sell": 70,
                 "buy": 30
+            }
+        },
+        "day": {
+            "params": {
+                "sell": 80,
+                "buy": 20
             }
         }
     }
