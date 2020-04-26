@@ -22,7 +22,8 @@ import { AlgorithmsComponent } from './app/components/algorithms/algorithms.comp
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
+import { LoginRedirectComponent } from './app/core/authentication/login-redirect/login-redirect.component'
 
 
 
@@ -40,6 +41,7 @@ import { FormsModule } from '@angular/forms'
     LandingPageComponent,
     PageNotFoundComponent,
     AlgorithmsComponent,
+    LoginRedirectComponent,
   ],
   imports: [
     BrowserModule,

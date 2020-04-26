@@ -7,12 +7,14 @@ import { AboutComponent } from './app/components/about/about.component';
 import { AlgorithmsComponent } from './app/components/algorithms/algorithms.component';
 import { NewsComponent } from './app/components/news/news.component';
 import { LandingPageComponent } from './app/components/landing-page/landing-page.component';
+import { LoginRedirectComponent } from './app/core/authentication/login-redirect/login-redirect.component';
 import { PageNotFoundComponent } from './app/components/page-not-found/page-not-found.component';
 
 
 
 const routes: Routes = [
 	{ path: '', component: LandingPageComponent },
+	{ path: 'redirect', component: LoginRedirectComponent },
 	{ path: 'about', component: AboutComponent },
 	{ path: 'account', component: AccountComponent },
 	{ path: 'algorithms', component: AlgorithmsComponent },
