@@ -1,3 +1,29 @@
 h1{
 	color:black;
 }
+body{
+	background-color: rgb(76, 76, 75  );
+	height:100%;
+}
+.jumbotron{
+	background-color: #7c7c7c;
+}
+.white-text{
+	color:white;
+}
+.big-text{
+	font-size: large;
+}
+.special{
+	width:75%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5%;
+}
+
+table{
+	background-color: #7c7c7c;
+}
+th,tr,td,thead,tbody{
+	border-color: greenyellow;
+}

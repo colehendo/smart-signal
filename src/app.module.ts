@@ -21,6 +21,10 @@ import { PageNotFoundComponent } from './app/components/page-not-found/page-not-
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
+import { FormsModule } from '@angular/forms'
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +45,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     // MaterialModule,
     HighchartsChartModule,
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
