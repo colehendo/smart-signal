@@ -60,8 +60,6 @@ functions:
     environment:
       statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
 
-<<<<<<< HEAD
-=======
   getData:
     handler: src/api/get-data.get_data
     events:
@@ -75,7 +73,6 @@ functions:
           cors:
             origin: "*"
 
->>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
   indicators:
     handler: src/indicators/indicators.calculate
     events:

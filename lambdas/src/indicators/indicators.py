@@ -12,14 +12,6 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
-<<<<<<< HEAD
-curr_time = int(time.time())
-year_time = 31536000
-month_time = 2628000
-week_time = 604800
-day_time = 86400
-
-=======
 #### SECTION FOR TESTING ALL COMBINATIONS ####
 
 all_indicators = []
@@ -40,7 +32,6 @@ four_hour_ttl = 15768000
 hour_ttl = 2628000
 fifteen_minute_ttl = 604800
 minute_ttl = 86400
->>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
 
 def calculate(event, context):
     if (event['queryStringParameters'] == None):
@@ -637,7 +628,7 @@ def multi_tf(all_signals, a_s_length):
         })
     if (total_roi_count > 0):
 =======
-    
+
     if (roi_count == 0):
         final_signals.append({
             'bal': balance,
