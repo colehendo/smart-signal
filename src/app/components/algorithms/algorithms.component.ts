@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
+import { switchMap } from 'rxjs/operators';
 
 import { IndicatorsService } from '../../core/http/indicators.service';
 import  *  as  data  from  '../../shared/modules/indicators.json';
@@ -114,7 +115,6 @@ export class AlgorithmsComponent implements OnInit {
     this.chartOptions.series[1]['data'] = []
     _.forEach(indicatorData, (item) => {
       if (item.indicator === this.indicator) {
-        console.log(`thing: ${item.indicator}`)
         let params = {}
         if (this.timeframe === 'month') { params = item.month.params; }
         else if (this.timeframe === 'week') { params = item.week.params; }
@@ -139,30 +139,23 @@ export class AlgorithmsComponent implements OnInit {
         all_timeframes.push(item.timeframe);
       }
     });
-
-    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
-    this.indicatorsService.get_data(this.graph_params).subscribe(data => {
-      this.updateFlag = false;
-      console.log('graph data:')
-      console.log(data);
-      let newData = [];
-      _.forEach(data, (timeframe) => {
-        console.log(timeframe)
-        if (timeframe['timeframe'] === this.timeframe) {
-          _.forEach(timeframe['tf_data'], (item) => {
-            newData.push([item.t, item.c]);
-          });
-        }
-      });
-      this.chartOptions.series[0]['data'] = newData;
-      this.updateFlag = true;
-    });
-
     this.payload.push(all_timeframes);
 
-    this.alg_params = this.alg_params.append('vals', JSON.stringify(this.payload));
-    console.log(this.alg_params)
-    this.indicatorsService.indicators(this.alg_params).subscribe(data => {
+    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
+    this.updateFlag = false;
+    this.indicatorsService.get_data(this.graph_params).pipe(
+      switchMap(data => {
+        let newData = [];
+        _.forEach(data, (timeframe) => {
+          if (timeframe['timeframe'] === this.timeframe) {
+            _.forEach(timeframe['tf_data'], (item) => {
+              newData.push([item.t, item.c]);
+            });
+          }
+        });
+        this.chartOptions.series[0]['data'] = newData;
+        return this.indicatorsService.indicators(this.alg_params)
+      })).subscribe(data => {
       this.updateFlag = false;
       console.log('alg data:')
       console.log(data);
@@ -177,8 +170,8 @@ export class AlgorithmsComponent implements OnInit {
         }
       });
       this.chartOptions.series[1]['data'] = newData;
-      this.updateFlag = true;
     });
+    this.updateFlag = true;
     this.payload = [];
   }
 
