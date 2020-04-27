@@ -480,7 +480,7 @@
         }
     },
     {
-        "indicator": "parabolic_sar",
+        "indicator": "psar",
         "month": {
             "params": {}
         },
