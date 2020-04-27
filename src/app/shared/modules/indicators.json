@@ -624,43 +624,43 @@
         "indicator": "sr",
         "month": {
             "params": {
-              "sell": 70
+              "sell": 70,
               "buy": 30
             }
         },
         "week": {
             "params": {
-              "sell": 80
+              "sell": 80,
               "buy": 20
             }
         },
         "day": {
             "params": {
-              "sell": 85
+              "sell": 85,
               "buy": 15
             }
         },
         "four_hour": {
             "params": {
-              "sell": 90
+              "sell": 90,
               "buy": 10
             }
         },
         "hour": {
             "params": {
-              "sell": 90
+              "sell": 90,
               "buy": 10
             }
         },
         "fifteen_minute": {
             "params": {
-              "sell": 95
+              "sell": 95,
               "buy": 5
             }
         },
         "minute": {
             "params": {
-              "sell": 95
+              "sell": 95,
               "buy": 5
             }
         }
