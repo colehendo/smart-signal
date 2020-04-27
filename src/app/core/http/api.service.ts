@@ -5,15 +5,15 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class IndicatorsService {
+export class ApiService {
 
   constructor(private http: HttpClient) {}
 
 
   public baseUrl = 'https://rwd7t69k41.execute-api.us-east-1.amazonaws.com/prod';
 
-  indicators(params: HttpParams): Observable<any> {
-    return this.http.get<object>(`${this.baseUrl}/indicators`, {params: params});
+  algorithms(params: HttpParams): Observable<any> {
+    return this.http.get<object>(`${this.baseUrl}/algorithms`, {params: params});
   }
 
   get_data(params: HttpParams): Observable<any> {

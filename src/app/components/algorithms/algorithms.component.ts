@@ -3,11 +3,11 @@ import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 import { switchMap } from 'rxjs/operators';
 
-import { IndicatorsService } from '../../core/http/indicators.service';
+import { ApiService } from '../../core/http/api.service';
 import  *  as  data  from  '../../shared/modules/indicators.json';
 const indicatorData: any =  (data  as  any).default;
 
-import  *  as  testData  from  '../../shared/modules/indicators.json';
+import  *  as  testData  from  '../../shared/modules/test-indicators.json';
 const testIndicatorData: any =  (testData  as  any).default;
 
 import * as Highcharts from 'highcharts/highstock';
@@ -21,7 +21,7 @@ HighchartsMore(Highcharts);
 })
 export class AlgorithmsComponent implements OnInit {
 
-  constructor(private indicatorsService: IndicatorsService) { }
+  constructor(private apiService: ApiService) { }
 
   private alg_params = new HttpParams();
   private graph_params = new HttpParams();
@@ -84,7 +84,7 @@ export class AlgorithmsComponent implements OnInit {
   get_data() {
     
     this.graph_params = this.graph_params.append('timeframes', JSON.stringify(['day', 'week']));
-    this.indicatorsService.get_data(this.graph_params).subscribe(data => {
+    this.apiService.get_data(this.graph_params).subscribe(data => {
       console.log('graph data:')
       console.log(data);
       let newData = [];
@@ -101,7 +101,7 @@ export class AlgorithmsComponent implements OnInit {
     let params = new HttpParams();
     params = params.set('data', JSON.stringify(testIndicatorData));
     console.log(params)
-    this.indicatorsService.combinations(params).subscribe(data => {
+    this.apiService.combinations(params).subscribe(data => {
       console.log('combo data:')
       console.log(data);
     });
@@ -143,7 +143,7 @@ export class AlgorithmsComponent implements OnInit {
 
     this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
     this.updateFlag = false;
-    this.indicatorsService.get_data(this.graph_params).pipe(
+    this.apiService.get_data(this.graph_params).pipe(
       switchMap(data => {
         let newData = [];
         _.forEach(data, (timeframe) => {
@@ -154,7 +154,7 @@ export class AlgorithmsComponent implements OnInit {
           }
         });
         this.chartOptions.series[0]['data'] = newData;
-        return this.indicatorsService.indicators(this.alg_params)
+        return this.apiService.algorithms(this.alg_params)
       })).subscribe(data => {
       this.updateFlag = false;
       console.log('alg data:')

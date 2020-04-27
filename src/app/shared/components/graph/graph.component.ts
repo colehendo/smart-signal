@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { btc_week } from '../../modules/btc_week';
-import { btc_month } from '../../modules/btc_month';
 
 import * as _ from 'lodash';
 import * as Highcharts from 'highcharts/highstock';
