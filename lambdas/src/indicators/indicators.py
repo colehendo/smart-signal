@@ -197,7 +197,7 @@ def reduce_tf(all_signals, tf_signals):
 
                 if i == (tf_sig_len - 1):
                     overall_sig = current_sig
-                    transaction = (round(((str_total / str_count) * Decimal(signal['price'])), 10))
+                    transaction = (round(( Decimal(str_total / str_count) * Decimal(signal['price'])), 10))
                     if (current_sig == 'buy'):
                         balance = round((balance - transaction), 2)
                         prev_buy = transaction
@@ -238,7 +238,7 @@ def reduce_tf(all_signals, tf_signals):
 def match_indicator(indicator, params, candles, timeframe):
     if indicator in all_indicators:
         print(indicator)
-        return all_indicators[indicator](params, candles)
+        return all_indicators[indicator](params, candles, timeframe)
     else:
         return []
 
@@ -339,7 +339,6 @@ def atr(params, candles):
     print('Average True Range: ', atr)
 
 # Bollinger Bands
-<<<<<<< HEAD
 # Pretty accurate
 def bb(params, candles):
     bb = ta.volatility.BollingerBands(close = candles["c"], n=20, ndev=2)
@@ -363,7 +362,6 @@ def bb(params, candles):
 #
 #
 #
-=======
 def bb(data):
     signals = []
 
@@ -387,7 +385,6 @@ def kc():
 
 
 
->>>>>>> 7158c62c1893642d6548ffd63cadd4a6b757c877
 # TREND
 #
 # Average Directional Movement Index
@@ -412,7 +409,8 @@ def cci(params, candles):
 
 
 # Moving Average Convergence Divergence
-# histogram and signal values match up, but the "macd signal one is not matching up well...this one represents the macd fast line on tradingview"
+# histogram and signal values match up, but the "macd signal one is not matching up well...
+# this one represents the macd fast line on tradingview"
 def macd(params, candles):
     all_macd = ta.trend.MACD(close = candles["c"], n_slow = 26, n_fast = 12, n_sign = 9, fillna = False)
     print('MACD')
@@ -442,8 +440,9 @@ def psar(params, candles, timeframe):
     ##make sure to account for last signal
     for i in range(len(psar)):
         current_psar = psar.iloc[i]
-        curr_price = candles["c"][i];
+        curr_price = candles["c"][i]
         if trend == "up" and current_psar > curr_price and last_signal != 'sell':
+            #print("appending a sell")
             last_signal = 'sell'
             psar_signals.append({
             'indicator': 'psar',
@@ -455,6 +454,7 @@ def psar(params, candles, timeframe):
             })
             trend = "down"
         elif trend == "down" and current_psar < curr_price and last_signal != 'buy':
+            #print("appending a buy")
             last_signal = 'buy'
             psar_signals.append({
             'indicator': 'psar',
@@ -473,8 +473,9 @@ def psar(params, candles, timeframe):
             else:
                 trend = "flat"
 
+    print("printing psar signals")
     for i in range(0, len(psar_signals)):
-        print(psar_signals[i][0])
+        print(psar_signals[i])
 
     return psar_signals
 
@@ -564,6 +565,9 @@ def rsi(params, candles, timeframe):
                     'str': round(Decimal((current_rsi - 10) / 100), 10)
                 })
 
+    for i in range(len(signals)):
+        print(signals[i])
+
     return signals
 
 
@@ -583,7 +587,7 @@ def sr(params, candles, timeframe):
         curr_sr = all_sr.stoch_signal().iloc[i]
         if (curr_sr < 100) and (curr_sr > 0):
             if (curr_sr < params['buy'] and last_signal != 'buy'):
-                # print('buy: ', i, ': ', curr_sr)
+                last_signal = 'buy'
                 signals.append({
                     'indicator': 'sr',
                     'sig': 'buy',
@@ -592,8 +596,8 @@ def sr(params, candles, timeframe):
                     'tf': timeframe,
                     'str': round(Decimal((100 - curr_sr - 10) / 100), 10)
                 })
-            elif (curr_sr > params['sell']):
-                # print('sell: ', i, ': ', curr_sr)
+            elif (curr_sr > params['sell'] and last_signal != 'sell'):
+                last_signal = 'sell'
                 signals.append({
                     'indicator': 'sr',
                     'sig': 'sell',
@@ -603,10 +607,14 @@ def sr(params, candles, timeframe):
                     'str': round(Decimal((100 - curr_sr - 10) / 100), 10)
                 })
 
+    print("printing stochOscillator signals")
+    for i in range(len(signals)):
+        print(signals[i])
+
     return signals
 
 
-#U ltimate Oscillator
+#Ultimate Oscillator
 # gucci
 def uo(params, candles):
     uo = ta.momentum.uo(high = candles["h"], low = candles["l"], close = candles["c"], s = 7, m = 14, len = 28, ws = 4.0, wm = 2.0, wl = 1.0, fillna = False)
@@ -622,28 +630,28 @@ def wr(params, candles):
 
 
 all_indicators = {
-    "adi": adi,
+    "adi": adi, #v
     "adx": adx,
     "ao": ao,
     "atr": atr,
-    "bb": bb,
+    "bb": bb, #kinda written not tested
     "cci": cci,
-    "cmf": cmf,
-    "eom": eom,
-    "fi": fi,
+    "cmf": cmf, #v
+    "eom": eom, #v
+    "fi": fi, #v
     "kama": kama,
-    "macd": macd,
-    "mfi": mfi,
+    "macd": macd, #need to tweak
+    "mfi": mfi, #v broken
     "mi": mi,
-    "nvi": nvi,
-    "obv": obv,
-    "psar": psar,
+    "nvi": nvi, #v
+    "obv": obv, #v
+    "psar": psar, #written not tested
     "roc": roc,
-    "rsi": rsi,
-    "seom": seom,
-    "sr": sr,
+    "rsi": rsi, #done
+    "seom": seom, #v
+    "sr": sr, #written not tested
     "uo": uo,
     "vi": vi,
-    "vpt": vpt,
+    "vpt": vpt, #v
     "wr": wr
 }
