@@ -3,8 +3,11 @@ import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 
 import { IndicatorsService } from '../../core/http/indicators.service';
-import  *  as  data  from  '../../shared/modules/test-indicators.json';
+import  *  as  data  from  '../../shared/modules/indicators.json';
 const indicatorData: any =  (data  as  any).default;
+
+import  *  as  testData  from  '../../shared/modules/indicators.json';
+const testIndicatorData: any =  (testData  as  any).default;
 
 import * as Highcharts from 'highcharts/highstock';
 import HighchartsMore from 'highcharts/highcharts-more';
@@ -93,9 +96,9 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   combos() {
-    console.log(indicatorData)
+    console.log(testIndicatorData)
     let params = new HttpParams();
-    params = params.set('data', JSON.stringify(indicatorData));
+    params = params.set('data', JSON.stringify(testIndicatorData));
     console.log(params)
     this.indicatorsService.combinations(params).subscribe(data => {
       console.log('combo data:')
@@ -105,55 +108,27 @@ export class AlgorithmsComponent implements OnInit {
 
   public payload = [];
   public timeframe = 'day';
+  public indicator = 'rsi';
   testParams() {
     this.chartOptions.series[0]['data'] = []
     this.chartOptions.series[1]['data'] = []
     _.forEach(indicatorData, (item) => {
-      // console.log(item.$[this.timeframe].params)
-      if (item.indicator === 'rsi') {
-        if (this.timeframe === 'month') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'month',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'week') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'week',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'day') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'day',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'four_hour') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'four_hour',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'hour') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'hour',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'fifteen_minute') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'fifteen_minute',
-            params: item.month.params
-          });
-        } else {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'minute',
-            params: item.month.params
-          });
-        }
+      if (item.indicator === this.indicator) {
+        console.log(`thing: ${item.indicator}`)
+        let params = {}
+        if (this.timeframe === 'month') { params = item.month.params; }
+        else if (this.timeframe === 'week') { params = item.week.params; }
+        else if (this.timeframe === 'day') { params = item.day.params; }
+        else if (this.timeframe === 'four_hour') { params = item.four_hour.params; }
+        else if (this.timeframe === 'hour') { params = item.hour.params; }
+        else if (this.timeframe === 'fifteen_minute') { params = item.fifteen_minute.params; }
+        else if (this.timeframe === 'minute') { params = item.minute.params; }
+
+        this.payload.push({
+          indicator: item.indicator,
+          timeframe: this.timeframe,
+          params: params
+        });
       }
     });
 
