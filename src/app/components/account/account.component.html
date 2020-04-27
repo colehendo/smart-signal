@@ -1,71 +1,35 @@
-<!-- <h1>Current Section : [{{currentSection}}]</h1>
-
-
-<h2>Menu</h2>
-<div (click)="scrollTo('section1')">Section 1 
-  <ng-container *ngIf="currentSection==='section1'">O</ng-container>
-</div>
-<div (click)="scrollTo('section2')">Section 2 
-  <ng-container *ngIf="currentSection==='section2'">O</ng-container>
-</div>
-<div (click)="scrollTo('section3')">Section 3
-  <ng-container *ngIf="currentSection==='section3'">O</ng-container>
-</div>
-<div (click)="scrollTo('section4')">Section 4 
-  <ng-container *ngIf="currentSection==='section4'">O</ng-container>
-</div>
-<br/>
-
-
-<div id="parentDiv" scrollSpy [spiedTags]="['DIV']" (sectionChange)="onSectionChange($event)" style="height:150px;overflow-y: scroll;">
-  <div id="section1">
-    <h2 style="margin:0">Section 1</h2>
-    <lorem-ipsum></lorem-ipsum>
-  </div>
-  <div id="section2">
-    <h1>Section 2</h1>
-    <lorem-ipsum></lorem-ipsum>
-  </div>
-  <div id="section3">
-    <h1>Section 3</h1>
-    <lorem-ipsum></lorem-ipsum>
-  </div>
-  <div id="section4">
-    <h1>Section 4</h1>
-    <lorem-ipsum></lorem-ipsum>
-  </div>
-</div>
-<br/> -->
-<nav id="navbar-example3" class="navbar navbar-light bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <nav class="nav nav-pills flex-column">
-      <a class="nav-link" href="#item-1">Item 1</a>
-      <nav class="nav nav-pills flex-column">
-        <a class="nav-link ml-3 my-1" href="#item-1-1">Item 1-1</a>
-        <a class="nav-link ml-3 my-1" href="#item-1-2">Item 1-2</a>
-      </nav>
-      <a class="nav-link" href="#item-2">Item2</a>
-      <a class="nav-link" href="#item-3">Item3</a>
-      <nav class="nav nav-pills flex-column">
-        <a class="nav-link ml-3 my-1" href="#item-3-1">Item 3-1</a>
-        <a class="nav-link ml-3 my-1" href="#item-3-2">Item 3-2</a>
-      </nav>
-    </nav>
-  </nav>
-  
-  <div data-spy="scroll" data-target="#navbar-example3" data-offset="0">
-    <h4 id="item-1">Item 1</h4>
-    <p>...</p>
-    <h5 id="item-1-1">Item 1-1</h5>
-    <p>...</p>
-    <h5 id="item-1-2">Item 2-2</h5>
-    <p>...</p>
-    <h4 id="item-2">Item 2</h4>
-    <p>...</p>
-    <h4 id="item-3">Item 3</h4>
-    <p>...</p>
-    <h5 id="item-3-1">Item 3-1</h5>
-    <p>...</p>
-    <h5 id="item-3-2">Item 3-2</h5>
-    <p>...</p>
-  </div>
+<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" style="background-color: red !important; color:green">
+  <ngb-panel title="Simple" style="background-color: red !important; color:green">
+    <ng-template ngbPanelContent style="background-color: red !important; color:green">
+      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
+      aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+      sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+      craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+      occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+      labore sustainable VHS.
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel style="background-color: aqua;">
+    <ng-template ngbPanelTitle>
+      <span>&#9733; <b>Fancy</b> title &#9733;</span>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
+      aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+      sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+      craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+      occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+      labore sustainable VHS.
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel title="Disabled" [disabled]="false">
+    <ng-template ngbPanelContent style="background-color: aqua;">
+      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
+      aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+      sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+      craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+      occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+      labore sustainable VHS.
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>

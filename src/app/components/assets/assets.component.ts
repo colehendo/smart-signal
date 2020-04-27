@@ -8,14 +8,14 @@ interface Country {
 
 const COUNTRIES: Country[] = [
   {
-    name: 'Russia',
-    flag: 'f/f3/Flag_of_Russia.svg',
+    name: 'Bitcoin',
+    flag: 'https://svgsilh.com/svg/722073.svg',
     area: 17075200,
     population: 146989754
   },
   {
-    name: 'Canada',
-    flag: 'c/cf/Flag_of_Canada.svg',
+    name: 'Ethereum',
+    flag: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Ethereum_logo.svg',
     area: 9976140,
     population: 36624199
   },
