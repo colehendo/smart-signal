@@ -73,7 +73,7 @@ export class AlgorithmsComponent implements OnInit {
     // this.chartOptions.series[0]['data'] = newData;
     console.log(window.location.href)
     let test = window.location.href
-    console.log(test.split('4200/'))
+    console.log(test.split('code='))
     
   }
 
