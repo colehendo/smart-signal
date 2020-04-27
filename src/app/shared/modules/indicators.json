@@ -480,7 +480,7 @@
         }
     },
     {
-        "indicator": "parabolic_sar",
+        "indicator": "psar",
         "month": {
             "params": {}
         },
@@ -623,25 +623,46 @@
     {
         "indicator": "sr",
         "month": {
-            "params": {}
+            "params": {
+              "sell": 70
+              "buy": 30
+            }
         },
         "week": {
-            "params": {}
+            "params": {
+              "sell": 80
+              "buy": 20
+            }
         },
         "day": {
-            "params": {}
+            "params": {
+              "sell": 85
+              "buy": 15
+            }
         },
         "four_hour": {
-            "params": {}
+            "params": {
+              "sell": 90
+              "buy": 10
+            }
         },
         "hour": {
-            "params": {}
+            "params": {
+              "sell": 90
+              "buy": 10
+            }
         },
         "fifteen_minute": {
-            "params": {}
+            "params": {
+              "sell": 95
+              "buy": 5
+            }
         },
         "minute": {
-            "params": {}
+            "params": {
+              "sell": 95
+              "buy": 5
+            }
         }
     },
     {
