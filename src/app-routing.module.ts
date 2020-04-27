@@ -7,18 +7,44 @@ import { AboutComponent } from './app/components/about/about.component';
 import { AlgorithmsComponent } from './app/components/algorithms/algorithms.component';
 import { NewsComponent } from './app/components/news/news.component';
 import { LandingPageComponent } from './app/components/landing-page/landing-page.component';
+import { LoginRedirectComponent } from './app/core/authentication/login-redirect/login-redirect.component';
 import { PageNotFoundComponent } from './app/components/page-not-found/page-not-found.component';
 
-
+import { RoleGuard } from './app/core/guards/role.guard';
 
 const routes: Routes = [
 	{ path: '', component: LandingPageComponent },
-	{ path: 'about', component: AboutComponent },
-	{ path: 'account', component: AccountComponent },
-	{ path: 'algorithms', component: AlgorithmsComponent },
-	{ path: 'assets', component: AssetsComponent },
-	{ path: 'home', component: HomeComponent },
-	{ path: 'news', component: NewsComponent },
+	{ path: 'redirect', component: LoginRedirectComponent },
+	{
+		path: 'about',
+		component: AboutComponent,
+		canActivate: [ RoleGuard ],
+	},
+	{
+		path: 'account',
+		component: AccountComponent,
+		canActivate: [ RoleGuard ],
+	},
+	{
+		path: 'algorithms',
+		component: AlgorithmsComponent,
+		canActivate: [ RoleGuard ],
+	},
+	{
+		path: 'assets',
+		component: AssetsComponent,
+		canActivate: [ RoleGuard ],
+	},
+	{
+		path: 'home',
+		component: HomeComponent,
+		canActivate: [ RoleGuard ],
+	},
+	{
+		path: 'news',
+		component: NewsComponent,
+		canActivate: [ RoleGuard ],
+	},
   	{ path: '**', component: PageNotFoundComponent }
 ];
 

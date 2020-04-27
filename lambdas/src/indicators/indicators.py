@@ -42,7 +42,6 @@ def calculate(event, context):
                 "Access-Control-Allow-Origin": "*"
             }
         }
-    print(event['queryStringParameters'])
 
     # Load the payload into a usable format
     data = json.loads(event['queryStringParameters']['vals'])
@@ -73,8 +72,6 @@ def calculate(event, context):
     all_signals = []
     final_signals = []
 
-    print('timeframes: ', timeframes)
-
     global month_candles
     global week_candles
     global day_candles
@@ -95,7 +92,6 @@ def calculate(event, context):
 
     for indicator in data:
         result = run_indicator(indicator)
-        print('result: ', result)
         if result:
             timeframe_data.append(result[0])
             for data in result[1]:
@@ -135,7 +131,6 @@ def get_data(table, ttl):
             # and pass it to pandas to make it readable for TA
             for i in range(len(results['Items'])):
                 results['Items'][i]['t'] = results['Items'][i]['t'] - ttl
-            print(json.dumps(results['Items']))
             return json.dumps(results['Items'])
         else:
             return []
@@ -150,19 +145,13 @@ def run_indicator(indicator):
     elif indicator['timeframe'] == 'fifteen_minute': candles = fifteen_minute_candles
     elif indicator['timeframe'] == 'minute': candles = minute_candles
 
-    print(candles)
-
     if not candles:
-        print('not candle... :(')
         return []
     else:
         candles = pd.read_json(candles)
 
-    print(candles)
-
     indicator_data = match_indicator(indicator['indicator'], indicator['params'], candles, timeframe)
 
-    print(indicator_data)
     if indicator_data:
         return ([{
             'indicator': indicator['indicator'],
@@ -242,8 +231,6 @@ def reduce_tf(all_signals, tf_signals):
             'bal': balance,
             'avg_roi': round(total_roi / roi_count, 6)
         })
-
-    print('final signals: ', final_signals)
 
     return final_signals
 
