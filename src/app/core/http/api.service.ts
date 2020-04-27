@@ -13,6 +13,7 @@ export class ApiService {
   public baseUrl = 'https://rwd7t69k41.execute-api.us-east-1.amazonaws.com/prod';
 
   algorithms(params: HttpParams): Observable<any> {
+    console.log(params)
     return this.http.get<object>(`${this.baseUrl}/algorithms`, {params: params});
   }
 

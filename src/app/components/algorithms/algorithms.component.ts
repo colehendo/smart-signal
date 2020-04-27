@@ -154,7 +154,7 @@ export class AlgorithmsComponent implements OnInit {
           }
         });
         this.chartOptions.series[0]['data'] = newData;
-        return this.apiService.algorithms(this.alg_params)
+        return this.apiService.algorithms(this.payload)
       })).subscribe(data => {
       this.updateFlag = false;
       console.log('alg data:')
