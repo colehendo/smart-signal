@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
-import { IndicatorsService } from '../../core/http/indicators.service';
+import { ApiService } from '../../core/http/api.service';
 import  *  as  data  from  '../../shared/modules/indicators.json';
 const indicatorData: any =  (data  as  any).default;
 
@@ -13,7 +13,7 @@ const indicatorData: any =  (data  as  any).default;
 
 export class HomeComponent implements OnInit {
 
-  constructor(private indicatorsService: IndicatorsService) { }
+  constructor(private apiService: ApiService) { }
 
   private params = new HttpParams();
 
@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit {
     this.payload.push(all_timeframes);
 
     this.params = this.params.append('vals', JSON.stringify(this.payload));
-    this.indicatorsService.indicators(this.params).subscribe(data => console.log(data));
+    this.apiService.algorithms(this.params).subscribe(data => console.log(data));
     this.payload = [];
   }
 
@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit {
 
   testApi() {
     this.params = this.params.append('vals', JSON.stringify(this.test_payload));
-    this.indicatorsService.indicators(this.params).subscribe(data => console.log(data));
+    this.apiService.algorithms(this.params).subscribe(data => console.log(data));
   }
 
 }

@@ -1,6 +1,7 @@
 import time
 from decimal import Decimal
 import simplejson as json
+from importlib import import_module
 from itertools import combinations
 from multiprocessing import Process, Pipe
 
@@ -11,8 +12,6 @@ import boto3
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
-
-#### SECTION FOR TESTING ALL COMBINATIONS ####
 
 all_indicators = []
 combo_results = []
@@ -25,13 +24,35 @@ hour_candles_for_combos = []
 fifteen_minute_candles_for_combos = []
 minute_candles_for_combos = []
 
+timestamp = int(time.time())
+
 month_ttl = 0
+month_gap = 2628000
+month_datapoints = 0
+
 week_ttl = 0
+week_gap = 604800
+week_datapoints = 0
+
 day_ttl = 157680000
+day_gap = 86400
+day_datapoints = 1825
+
 four_hour_ttl = 15768000
+four_hour_gap = 14400
+four_hour_datapoints = 1095
+
 hour_ttl = 2628000
+hour_gap = 3600
+hour_datapoints = 730
+
 fifteen_minute_ttl = 604800
+fifteen_minute_gap = 900
+fifteen_minute_datapoints = 672
+
 minute_ttl = 86400
+minute_gap = 60
+minute_datapoints = 1440
 
 def handler(event, context):
     if (event['queryStringParameters'] == None):
@@ -109,19 +130,19 @@ def handler(event, context):
             })
 
     global month_candles_for_combos
-    month_candles_for_combos = get_data('BTC_month', month_ttl)
+    month_candles_for_combos = get_data('BTC_month', month_ttl, month_gap, month_datapoints)
     global week_candles_for_combos
-    week_candles_for_combos = get_data('BTC_week', week_ttl)
+    week_candles_for_combos = get_data('BTC_week', week_ttl, week_gap, week_datapoints)
     global day_candles_for_combos
-    day_candles_for_combos = get_data('BTC_day', day_ttl)
+    day_candles_for_combos = get_data('BTC_day', day_ttl, day_gap, day_datapoints)
     global four_hour_candles_for_combos
-    four_hour_candles_for_combos = get_data('BTC_four_hour', four_hour_ttl)
+    four_hour_candles_for_combos = get_data('BTC_four_hour', four_hour_ttl, four_hour_gap, four_hour_datapoints)
     global hour_candles_for_combos
-    hour_candles_for_combos = get_data('BTC_hour', hour_ttl)
+    hour_candles_for_combos = get_data('BTC_hour', hour_ttl, hour_gap, hour_datapoints) 
     global fifteen_minute_candles_for_combos
-    fifteen_minute_candles_for_combos = get_data('BTC_fifteen_minute', fifteen_minute_ttl)
+    fifteen_minute_candles_for_combos = get_data('BTC_fifteen_minute', fifteen_minute_ttl, fifteen_minute_gap, fifteen_minute_datapoints)
     global minute_candles_for_combos
-    minute_candles_for_combos = get_data('BTC_minute', minute_ttl)
+    minute_candles_for_combos = get_data('BTC_minute', minute_ttl, minute_gap, minute_datapoints)
 
     processes = []
     parent_connections = []
@@ -335,11 +356,16 @@ def run_combinations(combination, connection):
         connection.send([])
 
 
-def get_data(table, ttl):
+def get_data(table, ttl, gap, datapoints):
     dynamo_table = dynamodb.Table(table)
     try:
         # Scan the table for all datapoints
-        results = dynamo_table.scan()
+        if datapoints > 0:
+            results = dynamo_table.query(
+                KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + ttl) - (gap * datapoints))
+            )
+        else:
+            results = dynamo_table.scan()
     except ClientError as e:
         print(e.response['Error']['Code'])
         print(e.response['ResponseMetadata']['HTTPStatusCode'])
@@ -503,99 +529,4 @@ def any_tf(all_signals, tf_signals):
 # A simple function to call the indicators.
 # This may be better done with a struct
 def match_indicator(indicator, params, candles, timeframe):
-    if (indicator == 'rsi'):
-        return rsi(params, candles, timeframe)
-    elif (indicator == 'macd'):
-        return macd(candles, timeframe)
-    elif (indicator == 'bb'):
-        return bb(candles, timeframe)
-    else:
-        return []
-
-# Bollinger Bands
-def bb(candles, timeframe):
-    signals = []
-    last_signal = 'hold'
-
-    for i in range(len(candles)):
-        if (candles['c'][i] < 7000 and last_signal != 'buy'):
-            signals.append({
-                'indicator': 'bb',
-                'sig': 'buy',
-                'price': float(candles['c'][i]),
-                'time': int(candles['t'][i]),
-                'tf': timeframe,
-                'str': Decimal(.5)
-            })
-        elif (candles['c'][i] > 8500 and last_signal != 'sell'):
-            signals.append({
-                'indicator': 'bb',
-                'sig': 'sell',
-                'price': float(candles['c'][i]),
-                'time': int(candles['t'][i]),
-                'tf': timeframe,
-                'str': Decimal(.5)
-            })
-
-    return signals
-
-# Moving Average Convergence Divergence
-def macd(candles, timeframe):
-    signals = []
-    last_signal = 'hold'
-
-    for i in range(len(candles)):
-        if (candles['c'][i] < 6500 and last_signal != 'buy'):
-            signals.append({
-                'indicator': 'macd',
-                'sig': 'buy',
-                'price': float(candles['c'][i]),
-                'time': int(candles['t'][i]),
-                'tf': timeframe,
-                'str': Decimal(.5)
-            })
-        elif (candles['c'][i] > 8000 and last_signal != 'sell'):
-            signals.append({
-                'indicator': 'macd',
-                'sig': 'sell',
-                'price': float(candles['c'][i]),
-                'time': int(candles['t'][i]),
-                'tf': timeframe,
-                'str': Decimal(.5)
-            })
-
-    return signals
-
-def rsi(params, candles, timeframe):
-    # Get the past `timeframe` rsi values in a dataframe
-    rsi_total = ta.momentum.rsi(close = candles["c"], n = 14, fillna = True)
-    # print('params: ', params)
-
-    signals = []
-    last_signal = 'hold'
-
-    for i in range(len(rsi_total)):
-        current_rsi = rsi_total.iloc[i]
-        if (current_rsi < 100) and (current_rsi > 0):
-            if (current_rsi < params['buy'] and last_signal != 'buy'):
-                last_signal = 'buy'
-                signals.append({
-                    'indicator': 'rsi',
-                    'sig': 'buy',
-                    'price': float(candles['c'][i]),
-                    'time': int(candles['t'][i]),
-                    'tf': timeframe,
-                    'str': round(Decimal((100 - current_rsi - 10) / 100), 10)
-                })
-            elif (current_rsi > params['sell'] and last_signal != 'sell'):
-                last_signal = 'sell'
-                signals.append({
-                    'indicator': 'rsi',
-                    'sig': 'sell',
-                    'price': float(candles['c'][i]),
-                    'time': int(candles['t'][i]),
-                    'tf': timeframe,
-                    'str': round(Decimal((current_rsi - 10) / 100), 10)
-                })
-
-    return signals
+    return import_module("src.algorithms.indicators." + indicator).run(params, candles, timeframe)

@@ -73,28 +73,21 @@ functions:
           cors:
             origin: "*"
 
-  indicators:
-    handler: src/indicators/indicators.calculate
+  algorithms:
+    handler: src/algorithms/algorithms.calculate
     events:
       - http:
-          path: indicators
+          path: algorithms
           method: get
-          # request:
-          #   parameters:
-          #     querystrings:
-          #       timeframe: true
-          #       sell_val: true
-          #       buy_val: true
-          #       strength_adjust: true
       - http:
-          path: indicators
+          path: algorithms
           method: options
           integration: lambda
           cors:
             origin: "*"
 
   combinations:
-    handler: src/indicators/combinations.handler
+    handler: src/algorithms/combinations.handler
     memorySize: 3008
     timeout: 30
     events:
@@ -107,14 +100,6 @@ functions:
           integration: lambda
           cors:
             origin: "*"
-
-  # algorithms:
-  #   handler: src/algorithms/algorithms.calculate
-  #   timeout: 60
-  #   events:
-  #    - schedule: rate(1 hour)
-    # environment:
-    #   statemachine_arn: ${self:resources.Outputs.TriggerAlgorithms.Value}
 
 stepFunctions:
   stateMachines:
