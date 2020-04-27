@@ -33,31 +33,31 @@ def get_data(event, context):
 
     month_ttl = 0
     month_gap = 2628000
-    month_datapoints = 100
+    month_datapoints = 0
     
     week_ttl = 0
     week_gap = 604800
-    week_datapoints = 100
+    week_datapoints = 0
 
     day_ttl = 157680000
     day_gap = 86400
-    day_datapoints = 100
+    day_datapoints = 1825
 
     four_hour_ttl = 15768000
     four_hour_gap = 14400
-    four_hour_datapoints = 100
+    four_hour_datapoints = 1095
 
     hour_ttl = 2628000
     hour_gap = 3600
-    hour_datapoints = 100
+    hour_datapoints = 730
 
     fifteen_minute_ttl = 604800
     fifteen_minute_gap = 900
-    fifteen_minute_datapoints = 100
+    fifteen_minute_datapoints = 672
 
     minute_ttl = 86400
     minute_gap = 60
-    minute_datapoints = 100
+    minute_datapoints = 1440
 
     if (('month' in timeframes) or (largest_tf_found)):
         data.append({
@@ -125,10 +125,12 @@ def call_dynamo(symbol, table, timestamp, ttl, gap, datapoints):
     table = dynamodb.Table(table)
     try:
         # Scan the table for all datapoints
-        # results = table.query(
-        #     KeyConditionExpression = Key('s').eq(symbol) & Key('t').gt((timestamp + ttl) - (gap * datapoints))
-        # )
-        results = table.scan()
+        if datapoints > 0:
+            results = table.query(
+                KeyConditionExpression = Key('s').eq(symbol) & Key('t').gt((timestamp + ttl) - (gap * datapoints))
+            )
+        else:
+            results = table.scan()
     except ClientError as e:
         print(e.response['Error']['Code'])
         print(e.response['ResponseMetadata']['HTTPStatusCode'])

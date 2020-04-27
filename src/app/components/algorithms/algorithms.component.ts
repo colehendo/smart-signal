@@ -142,6 +142,7 @@ export class AlgorithmsComponent implements OnInit {
     this.payload.push(all_timeframes);
 
     this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
+    this.alg_params = this.alg_params.append('vals', JSON.stringify(this.payload));
     this.updateFlag = false;
     this.apiService.get_data(this.graph_params).pipe(
       switchMap(data => {
@@ -154,25 +155,25 @@ export class AlgorithmsComponent implements OnInit {
           }
         });
         this.chartOptions.series[0]['data'] = newData;
-        return this.apiService.algorithms(this.payload)
+        return this.apiService.algorithms(this.alg_params)
       })).subscribe(data => {
-      this.updateFlag = false;
-      console.log('alg data:')
-      console.log(data);
-      let newData = [];
-      _.forEach(data, (item) => {
-        if (!!item.sig) {
-          newData.push({
-            x: item.time,
-            title: item.sig,
-            text: `Amount: ${item.amt}`
-          });
-        }
-      });
-      this.chartOptions.series[1]['data'] = newData;
+        this.updateFlag = false;
+        console.log('alg data:')
+        console.log(data);
+        let newData = [];
+        _.forEach(data, (item) => {
+          if (!!item.sig) {
+            newData.push({
+              x: item.time,
+              title: item.sig,
+              text: `Amount: ${item.amt}`
+            });
+          }
+        });
+        this.chartOptions.series[1]['data'] = newData;
+        this.updateFlag = true;
+        this.payload = [];
     });
-    this.updateFlag = true;
-    this.payload = [];
   }
 
 }

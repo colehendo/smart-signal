@@ -1,4 +1,5 @@
 import ta
+from decimal import Decimal
 
 # Relative Strength Index
 def run(params, candles, timeframe):

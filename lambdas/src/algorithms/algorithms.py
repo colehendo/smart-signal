@@ -2,7 +2,6 @@ import time
 from decimal import Decimal
 import simplejson as json
 from importlib import import_module
-from itertools import combinations
 from multiprocessing import Process, Pipe
 
 import pandas as pd
@@ -10,8 +9,6 @@ import boto3
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
-
-#### SECTION FOR TESTING ALL COMBINATIONS ####
 
 all_indicators = []
 combo_results = []
@@ -24,13 +21,35 @@ hour_candles = []
 fifteen_minute_candles = []
 minute_candles = []
 
+timestamp = int(time.time())
+
 month_ttl = 0
+month_gap = 2628000
+month_datapoints = 0
+
 week_ttl = 0
+week_gap = 604800
+week_datapoints = 0
+
 day_ttl = 157680000
+day_gap = 86400
+day_datapoints = 1825
+
 four_hour_ttl = 15768000
+four_hour_gap = 14400
+four_hour_datapoints = 1095
+
 hour_ttl = 2628000
+hour_gap = 3600
+hour_datapoints = 730
+
 fifteen_minute_ttl = 604800
+fifteen_minute_gap = 900
+fifteen_minute_datapoints = 672
+
 minute_ttl = 86400
+minute_gap = 60
+minute_datapoints = 1440
 
 def calculate(event, context):
     if (event['queryStringParameters'] == None):
@@ -81,13 +100,13 @@ def calculate(event, context):
 
     # Condense all signals of all indicators for each timeframe given
     # into a single array, and append that array to the main array
-    if ('month' in timeframes): month_candles = get_data('BTC_month', month_ttl)
-    if ('week' in timeframes): week_candles = get_data('BTC_week', week_ttl)
-    if ('day' in timeframes): day_candles = get_data('BTC_day', day_ttl)
-    if ('four_hour' in timeframes): four_hour_candles = get_data('BTC_four_hour', four_hour_ttl)
-    if ('hour' in timeframes): hour_candles = get_data('BTC_hour', hour_ttl)
-    if ('fifteen_minute' in timeframes): fifteen_minute_candles = get_data('BTC_fifteen_minute', fifteen_minute_ttl)
-    if ('minute' in timeframes): minute_candles = get_data('BTC_minute', minute_ttl)
+    if ('month' in timeframes): month_candles = get_data('BTC_month', month_ttl, month_gap, month_datapoints)
+    if ('week' in timeframes): week_candles = get_data('BTC_week', week_ttl, week_gap, week_datapoints)
+    if ('day' in timeframes): day_candles = get_data('BTC_day', day_ttl, day_gap, day_datapoints)
+    if ('four_hour' in timeframes): four_hour_candles = get_data('BTC_four_hour', four_hour_ttl, four_hour_gap, four_hour_datapoints)
+    if ('hour' in timeframes): hour_candles = get_data('BTC_hour', hour_ttl, hour_gap, hour_datapoints)
+    if ('fifteen_minute' in timeframes): fifteen_minute_candles = get_data('BTC_fifteen_minute', fifteen_minute_ttl, fifteen_minute_gap, fifteen_minute_datapoints)
+    if ('minute' in timeframes): minute_candles = get_data('BTC_minute', minute_ttl, minute_gap, minute_datapoints)
 
     for indicator in data:
         result = run_indicator(indicator)
@@ -115,11 +134,16 @@ def calculate(event, context):
             }
         }
 
-def get_data(table, ttl):
+def get_data(table, ttl, gap, datapoints):
     dynamo_table = dynamodb.Table(table)
     try:
         # Scan the table for all datapoints
-        results = dynamo_table.scan()
+        if datapoints > 0:
+            results = dynamo_table.query(
+                KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + ttl) - (gap * datapoints))
+            )
+        else:
+            results = dynamo_table.scan()
     except ClientError as e:
         print(e.response['Error']['Code'])
         print(e.response['ResponseMetadata']['HTTPStatusCode'])
@@ -236,4 +260,4 @@ def reduce_tf(all_signals, tf_signals):
 # A simple function to call the indicators.
 # This may be better done with a struct
 def match_indicator(indicator, params, candles, timeframe):
-    return import_module(indicator).run(params, candles, timeframe)
+    return import_module("src.algorithms.indicators." + indicator).run(params, candles, timeframe)
