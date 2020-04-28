@@ -69,10 +69,10 @@ export class AboutComponent implements OnInit {
   ngOnInit() {
     let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
     this.apiService.getSingleTable(graph_params).subscribe(data => {
-      console.log('graph data:')
-      console.log(data);
+      this.updateFlag = false;
       let newData = [];
-      _.forEach(data[1]['tf_data'], (item) => {
+      _.forEach(data[0]['tf_data'], (item) => {
+        console.log(item)
         newData.push([item.t, item.c]);
       });
       this.chartOptions.series[0]['data'] = newData;

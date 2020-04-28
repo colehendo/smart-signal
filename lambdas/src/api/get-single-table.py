@@ -11,15 +11,15 @@ def get_single_table(event, context):
     if (event['queryStringParameters'] == None):
         return {
             "statusCode": 502,
-            "body": "No parameters given",
+            "body": json.dumps("No parameters given"),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
         }
-    if (event['queryStringParameters']['timeframes'] == None):
+    if (event['queryStringParameters']['table'] == None):
         return {
             "statusCode": 502,
-            "body": "No data given",
+            "body": json.dumps("No data given"),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
