@@ -134,6 +134,7 @@ def calculate(event, context):
             }
         }
 
+
 def get_data(table, ttl, gap, datapoints):
     dynamo_table = dynamodb.Table(table)
     try:
@@ -184,6 +185,11 @@ def run_indicator(indicator):
             'start': candles['t'][0]
         },
         indicator_data])
+
+
+# A simple function to call the indicators.
+def match_indicator(indicator, params, candles, timeframe):
+    return import_module("src.algorithms.indicators." + indicator).run(params, candles, timeframe)
 
 
 def reduce_tf(all_signals, tf_signals):
@@ -256,8 +262,3 @@ def reduce_tf(all_signals, tf_signals):
         })
 
     return final_signals
-
-# A simple function to call the indicators.
-# This may be better done with a struct
-def match_indicator(indicator, params, candles, timeframe):
-    return import_module("src.algorithms.indicators." + indicator).run(params, candles, timeframe)
