@@ -44,19 +44,25 @@
                 <button routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button>
             </li>
             <li class="nav-item">
-                <button routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
+              <button [hidden]="!isLoggedIn" routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
             </li>
             <li class="nav-item">
-                <button routerLink="/algorithms" routerLinkActive="active" class="btn btn-success">Algorithms</button>
+              <button [hidden]="!isLoggedIn" routerLink="/algorithms" routerLinkActive="active" class="btn btn-success">Algorithms</button>
             </li>
             <li class="nav-item">
-                <button routerLink="/news" routerLinkActive="active" class="btn btn-success">News</button>
+              <button routerLink="/news" routerLinkActive="active" class="btn btn-success">News</button>
             </li>
             <li class="nav-item">
-                <button routerLink="/about" routerLinkActive="active" class="btn btn-success">About</button>
+              <button [hidden]="!isLoggedIn" routerLink="/" routerLinkActive="active" class="btn btn-success">About</button>
             </li>
             <li class="nav-item">
-                <button id="logOutButton" (click)="logout()" class="btn btn-success">Logout</button>
+                <button [hidden]="!isLoggedIn" id="logOutButton" (click)="logout()" class="btn btn-success ss">Log Out</button>
+            </li>
+            <li class="nav-item">
+              <button [hidden]="isLoggedIn" id="logOutButton" (click)="login()" class="btn btn-success">Log In</button>
+            </li>
+            <li class="nav-item">
+              <button [hidden]="isLoggedIn" id="logOutButton" (click)="signup()" class="btn btn-success">Sign Up</button>
             </li>
         </ul>
     </div>
@@ -68,6 +74,18 @@
 
 
 <!-- <div ngbDropdown class="d-inline-block">
+<body id="outsideDiv">
+    <a (click)="home()">Smart Signal</a>
+    <div id="navButtonContainer">
+        <button [hidden]="!isLoggedIn" routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button> 
+        <button [hidden]="!isLoggedIn" routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
+        <button [hidden]="!isLoggedIn" routerLink="/algorithms" routerLinkActive="active">Algorithms</button>
+        <button routerLink="/news" routerLinkActive="active" class="btn btn-success">News</button>
+        <button [hidden]="!isLoggedIn" routerLink="/" routerLinkActive="active" class="btn btn-success">About</button>
+        <button [hidden]="!isLoggedIn" id="logOutButton" (click)="logout()" class="btn btn-success">Log Out</button>
+        <button [hidden]="isLoggedIn" id="logOutButton" (click)="login()" class="btn btn-success">Log In</button>
+        <button [hidden]="isLoggedIn" id="logOutButton" (click)="signup()" class="btn btn-success">Sign Up</button>
+        <div ngbDropdown class="d-inline-block">
             <button class="btn btn-success" id="dropdownForm1" ngbDropdownToggle>Sign In</button>
             <div ngbDropdownMenu aria-labelledby="dropdownForm1">
               <form class="px-4 py-3">

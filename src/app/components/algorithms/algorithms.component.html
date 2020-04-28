@@ -1,15 +1,6 @@
-<button (click)="indicator = 'sr'">REWRITE INDICATOR IN HTML (algorithms, line 1)</button>
+<button (click)="indicator = 'rsi'">REWRITE INDICATOR IN HTML (algorithms, line 1)</button>
 <br><br>
-<button (click)="timeframe = 'month'">Month</button>
-<button (click)="timeframe = 'week'">Week</button>
-<button (click)="timeframe = 'day'">Day</button>
-<button (click)="timeframe = 'four_hour'">Four Hour</button>
-<button (click)="timeframe = 'hour'">Hour</button>
-<button (click)="timeframe = 'fifteen_minute'">Fifteen Minute</button>
-<button (click)="timeframe = 'minute'">Minute</button>
-<button (click)="testParams()">Send</button>
-<br><br>
-<button (click)="get_data()">get data</button>
+<button class="btn btn-success" (click)="get_data()">get data</button>
 <br><br> -->
 
 <!-- <button (click)="combos()">Combos</button> -->
@@ -24,9 +15,8 @@
 <div class="row">
     <div class="col">
       <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-outline-success" id="dropdownBasic1" ngbDropdownToggle>Time Frame</button>
+        <button class="btn btn-success" id="dropdownBasic1" ngbDropdownToggle>Time Frame</button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem>Action - 1</button>
           <button ngbDropdownItem (click)="timeframe = 'month'" class="btn btn-success">Month</button>
           <button ngbDropdownItem (click)="timeframe = 'week'" class="btn btn-success">Week</button>
           <button ngbDropdownItem (click)="timeframe = 'day'" class="btn btn-success">Day</button>

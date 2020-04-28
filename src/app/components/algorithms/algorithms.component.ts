@@ -3,11 +3,11 @@ import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 import { switchMap } from 'rxjs/operators';
 
-import { IndicatorsService } from '../../core/http/indicators.service';
+import { ApiService } from '../../core/http/api.service';
 import  *  as  data  from  '../../shared/modules/indicators.json';
 const indicatorData: any =  (data  as  any).default;
 
-import  *  as  testData  from  '../../shared/modules/indicators.json';
+import  *  as  testData  from  '../../shared/modules/test-indicators.json';
 const testIndicatorData: any =  (testData  as  any).default;
 
 import * as Highcharts from 'highcharts/highstock';
@@ -21,10 +21,7 @@ HighchartsMore(Highcharts);
 })
 export class AlgorithmsComponent implements OnInit {
 
-  constructor(private indicatorsService: IndicatorsService) { }
-
-  private alg_params = new HttpParams();
-  private graph_params = new HttpParams();
+  constructor(private apiService: ApiService) { }
 
   public chartOptions: Highcharts.Options = {
     rangeSelector: {
@@ -62,7 +59,7 @@ export class AlgorithmsComponent implements OnInit {
       data: [],
       onSeries: 'dataseries',
       shape: 'circlepin',
-      width: 16
+      width: 20
   }
 ]
   };
@@ -71,20 +68,11 @@ export class AlgorithmsComponent implements OnInit {
   public socket;
   public updateFlag: boolean = false;
 
-
-
-  ngOnInit() {
-    // this.chartOptions.series[0]['data'] = newData;
-    console.log(window.location.href)
-    let test = window.location.href
-    console.log(test.split('code='))
-    
-  }
+  ngOnInit() { }
 
   get_data() {
-    
-    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(['day', 'week']));
-    this.indicatorsService.get_data(this.graph_params).subscribe(data => {
+    let graph_params = new HttpParams().set('timeframes', JSON.stringify(['day', 'week']));
+    this.apiService.get_data(graph_params).subscribe(data => {
       console.log('graph data:')
       console.log(data);
       let newData = [];
@@ -98,10 +86,9 @@ export class AlgorithmsComponent implements OnInit {
 
   combos() {
     console.log(testIndicatorData)
-    let params = new HttpParams();
-    params = params.set('data', JSON.stringify(testIndicatorData));
-    console.log(params)
-    this.indicatorsService.combinations(params).subscribe(data => {
+    let combo_params = new HttpParams().set('data', JSON.stringify(testIndicatorData));
+    console.log(combo_params)
+    this.apiService.combinations(combo_params).subscribe(data => {
       console.log('combo data:')
       console.log(data);
     });
@@ -141,9 +128,10 @@ export class AlgorithmsComponent implements OnInit {
     });
     this.payload.push(all_timeframes);
 
-    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
+    let graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
+    let alg_params = new HttpParams().set('vals', JSON.stringify(this.payload));
     this.updateFlag = false;
-    this.indicatorsService.get_data(this.graph_params).pipe(
+    this.apiService.get_data(graph_params).pipe(
       switchMap(data => {
         let newData = [];
         _.forEach(data, (timeframe) => {
@@ -154,25 +142,24 @@ export class AlgorithmsComponent implements OnInit {
           }
         });
         this.chartOptions.series[0]['data'] = newData;
-        return this.indicatorsService.indicators(this.alg_params)
+        return this.apiService.algorithms(alg_params)
       })).subscribe(data => {
-      this.updateFlag = false;
-      console.log('alg data:')
-      console.log(data);
-      let newData = [];
-      _.forEach(data, (item) => {
-        if (!!item.sig) {
-          newData.push({
-            x: item.time,
-            title: item.sig,
-            text: `Amount: ${item.amt}`
-          });
-        }
-      });
-      this.chartOptions.series[1]['data'] = newData;
+        console.log('alg data:')
+        console.log(data);
+        let newData = [];
+        _.forEach(data, (item) => {
+          if (!!item.sig) {
+            newData.push({
+              x: new Date(item.time),
+              title: item.sig.toUpperCase(),
+              text: `Amount: $${item.amt.toFixed(2)}`
+            });
+          }
+        });
+        this.chartOptions.series[1]['data'] = newData;
+        this.updateFlag = true;
+        this.payload = [];
     });
-    this.updateFlag = true;
-    this.payload = [];
   }
 
 }

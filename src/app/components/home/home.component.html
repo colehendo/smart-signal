@@ -10,18 +10,18 @@
 <br><br> -->
 <button (click)="testApi()" class="btn btn-success">Test run</button>
 <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
-    <button class="btn btn-success mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Toggle dropdown</button>
-    <div ngbDropdownMenu aria-labelledby="dropdownManual">
-      <button (click)="timeframe = 'month'" ngbDropdownItem>Month</button>
-      <button ngbDropdownItem (click)="timeframe = 'week'">Week</button>
-      <button ngbDropdownItem (click)="timeframe = 'day'">Day</button>
-      <button ngbDropdownItem (click)="timeframe = 'four_hour'">Four Hour</button>
-      <button ngbDropdownItem (click)="timeframe = 'hour'">Hour</button>
-      <button ngbDropdownItem (click)="timeframe = 'hour'">Hour</button>
-      <button ngbDropdownItem (click)="timeframe = 'fifteen_minute'">Fifteen Minute</button>
-      <button ngbDropdownItem (click)="timeframe = 'minute'">Minute</button>
-    </div>
+  <button class="btn btn-success mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Toggle dropdown</button>
+  <div ngbDropdownMenu aria-labelledby="dropdownManual">
+    <button (click)="timeframe = 'month'" ngbDropdownItem>Month</button>
+    <button ngbDropdownItem (click)="timeframe = 'week'">Week</button>
+    <button ngbDropdownItem (click)="timeframe = 'day'">Day</button>
+    <button ngbDropdownItem (click)="timeframe = 'four_hour'">Four Hour</button>
+    <button ngbDropdownItem (click)="timeframe = 'hour'">Hour</button>
+    <button ngbDropdownItem (click)="timeframe = 'hour'">Hour</button>
+    <button ngbDropdownItem (click)="timeframe = 'fifteen_minute'">Fifteen Minute</button>
+    <button ngbDropdownItem (click)="timeframe = 'minute'">Minute</button>
   </div>
+</div>
 
   
   <button (click)="testParams()" class="btn btn-success">Send</button> 

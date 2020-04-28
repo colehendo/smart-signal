@@ -39,38 +39,55 @@ def connect(event, context):
 def get_websocket_prices(event, context):
     print("in prices")
     print(event)
+    print(event['body'])
+    params = json.loads(event['body'])
     connectionID = event["requestContext"].get("connectionId")
 
-    symbol = 'BTC'
+    symbol = params["symbol"]
+    print('symbol: ', symbol)
+    table = dynamodb.Table(params["table"])
+    ttl = params["ttl"]
+    gap = params["gap"]
+    datapoints = params["datapoints"]
+
     timestamp = int(time.time())
-    ttl = 157680000
-    gap = 86400
-    timeframe = 100
-    table = 'BTC_day'
 
-    # Get the most recent data
-    table = dynamodb.Table(table)
-    response = table.query(
-            KeyConditionExpression = Key('s').eq(symbol) & Key('t').gt((timestamp + ttl) - (gap * timeframe))
-        )
-    print(response)
-    items = response.get("Items", [])
-    print(items)
+    try:
+        # Scan the table for all datapoints
+        if datapoints > 0:
+            results = table.query(
+                KeyConditionExpression = Key('s').eq(symbol) & Key('t').gt((timestamp + ttl) - (gap * datapoints))
+            )
+        else:
+            results = table.scan()
+    except ClientError as e:
+        print(e.response['Error']['Code'])
+        print(e.response['ResponseMetadata']['HTTPStatusCode'])
+        print(e.response['Error']['Message'])
+    else:
+        if 'Items' in results:
+            # Make equal to current time
+            for item in results['Items']:
+                item['t'] = item['t'] - ttl
 
-    # Extract the relevant data and order chronologically
-    prices = [{"h": x["h"], "l": x["l"], "o": x["o"], "c": x["c"]}
-            for x in items]
+            # Extract the relevant data and order chronologically
+            prices = [{'t': item['t'], 'h': item['h'], 'l': item['l'], 'o': item['o'], 'c': item['c']}
+                    for item in results['Items']]
+            print('prices 1: ', prices)
 
-    print(prices)
+            # Send them to the client who asked for it
+            data = {"prices": prices}
+            _send_to_connection(connectionID, data, event)
+            return {
+                "statusCode": 200,
+                "body": json.dumps("Sent prices.")
+            }
 
-    # Send them to the client who asked for it
-    data = {"prices": prices}
-    _send_to_connection(connectionID, data, event)
-
-    return {
-        "statusCode": 200,
-        "body": json.dumps("Sent prices.")
-    }
+        else:
+            return {
+                "statusCode": 502,
+                "body": json.dumps("No data returned.")
+            }
 
 
 def _send_to_connection(connection_id, data, event):
