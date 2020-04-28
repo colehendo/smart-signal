@@ -9,7 +9,8 @@ def run(params, candles, timeframe):
     last_signal = 'hold'
     top = 0
     bottom = 10000000
-    top_index, bottom_index = 0
+    top_index = 0
+    bottom_index = 0
 
     for i in range(len(rsi_total)):
         current_rsi = rsi_total.iloc[i]
@@ -62,12 +63,12 @@ def run(params, candles, timeframe):
                     })
                 elif last_signal == 'sell':
                     # if our current price is higher than the current top,
-                    # but we have a lower rsi (rsi double bottom signal)
+                    # but we have a lower rsi (rsi double top signal)
                     if curr_price > top and current_rsi < rsi_total.iloc[top_index]:
                         last_signal = 'sell'
                         signals.append({
                             'indicator': 'rsi_div',
-                            'sig': 'buy',
+                            'sig': 'sell',
                             'price': float(candles['c'][i]),
                             'time': int(candles['t'][i]),
                             'tf': timeframe,
