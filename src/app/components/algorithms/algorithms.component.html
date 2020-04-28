@@ -1,6 +1,18 @@
 <button (click)="indicator = 'adx'">REWRITE INDICATOR IN HTML (algorithms, line 1)</button>
 <br><br> -->
 
+<input
+  id="typeahead-focus"
+  type="text"
+  class="form-control"
+  placeholder="Select Algorithm:"
+  [(ngModel)]="model"
+  [ngbTypeahead]="search"
+  (focus)="focus$.next($any($event).target.value)"
+  (click)="click$.next($any($event).target.value)"
+  #instance="ngbTypeahead"
+/>
+
 <!-- <button (click)="combos()">Combos</button> -->
 
 <highcharts-chart
