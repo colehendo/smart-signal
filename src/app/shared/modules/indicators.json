@@ -290,25 +290,46 @@
     {
         "indicator": "adx",
         "month": {
-            "params": {}
+            "params": {
+              "strong" = 25
+              "weak" = 40
+            }
         },
         "week": {
-            "params": {}
+            "params": {
+              "strong" = 25
+              "weak" = 40
+            }
         },
         "day": {
-            "params": {}
+            "params": {
+              "strong" = 25
+              "weak" = 45
+            }
         },
         "four_hour": {
-            "params": {}
+            "params": {
+              "strong" = 25
+              "weak" = 50
+            }
         },
         "hour": {
-            "params": {}
+            "params": {
+              "strong" = 25
+              "weak" = 50
+            }
         },
         "fifteen_minute": {
-            "params": {}
+            "params": {
+              "strong" = 25
+              "weak" = 50
+            }
         },
         "minute": {
-            "params": {}
+            "params": {
+              "strong" = 25
+              "weak" = 50
+            }
         }
     },
     {
