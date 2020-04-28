@@ -291,44 +291,44 @@
         "indicator": "adx",
         "month": {
             "params": {
-              "strong" = 25
-              "weak" = 40
+              "strong": 25,
+              "weak": 40
             }
         },
         "week": {
             "params": {
-              "strong" = 25
-              "weak" = 40
+              "strong": 25,
+              "weak": 40
             }
         },
         "day": {
             "params": {
-              "strong" = 25
-              "weak" = 45
+              "strong": 25,
+              "weak": 45
             }
         },
         "four_hour": {
             "params": {
-              "strong" = 25
-              "weak" = 50
+              "strong": 25,
+              "weak": 50
             }
         },
         "hour": {
             "params": {
-              "strong" = 25
-              "weak" = 50
+              "strong": 25,
+              "weak": 50
             }
         },
         "fifteen_minute": {
             "params": {
-              "strong" = 25
-              "weak" = 50
+              "strong": 25,
+              "weak": 50
             }
         },
         "minute": {
             "params": {
-              "strong" = 25
-              "weak" = 50
+              "strong": 25,
+              "weak": 50
             }
         }
     },
