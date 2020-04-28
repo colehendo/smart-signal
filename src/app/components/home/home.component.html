@@ -8,7 +8,7 @@
 <button (click)="timeframe = 'minute'">Minute</button>
 <button (click)="testParams()">Send</button>
 <br><br> -->
-<button (click)="testApi()">Test run</button>
+<button (click)="testApi()" class="btn btn-success">Test run</button>
 <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
     <button class="btn btn-success mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Toggle dropdown</button>
     <div ngbDropdownMenu aria-labelledby="dropdownManual">
@@ -24,7 +24,7 @@
   </div>
 
   
-  <button (click)="testParams()">Send</button> 
+  <button (click)="testParams()" class="btn btn-success">Send</button> 
 <!-- <ng-container *ngFor="let coin of cryptocurrencies">
     <app-asset-expansion-panel [id]="coin.id" [price]="coin.price" [change]="coin.change" [volume]="coin.volume"></app-asset-expansion-panel>
 </ng-container> -->

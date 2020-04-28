@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
+import { switchMap } from 'rxjs/operators';
 
 import { IndicatorsService } from '../../core/http/indicators.service';
-import  *  as  data  from  '../../shared/modules/test-indicators.json';
+import  *  as  data  from  '../../shared/modules/indicators.json';
 const indicatorData: any =  (data  as  any).default;
+
+import  *  as  testData  from  '../../shared/modules/indicators.json';
+const testIndicatorData: any =  (testData  as  any).default;
 
 import * as Highcharts from 'highcharts/highstock';
 import HighchartsMore from 'highcharts/highcharts-more';
@@ -93,9 +97,9 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   combos() {
-    console.log(indicatorData)
+    console.log(testIndicatorData)
     let params = new HttpParams();
-    params = params.set('data', JSON.stringify(indicatorData));
+    params = params.set('data', JSON.stringify(testIndicatorData));
     console.log(params)
     this.indicatorsService.combinations(params).subscribe(data => {
       console.log('combo data:')
@@ -105,55 +109,26 @@ export class AlgorithmsComponent implements OnInit {
 
   public payload = [];
   public timeframe = 'day';
+  public indicator = 'rsi';
   testParams() {
     this.chartOptions.series[0]['data'] = []
     this.chartOptions.series[1]['data'] = []
     _.forEach(indicatorData, (item) => {
-      // console.log(item.$[this.timeframe].params)
-      if (item.indicator === 'rsi') {
-        if (this.timeframe === 'month') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'month',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'week') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'week',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'day') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'day',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'four_hour') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'four_hour',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'hour') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'hour',
-            params: item.month.params
-          });
-        } else if (this.timeframe === 'fifteen_minute') {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'fifteen_minute',
-            params: item.month.params
-          });
-        } else {
-          this.payload.push({
-            indicator: item.indicator,
-            timeframe: 'minute',
-            params: item.month.params
-          });
-        }
+      if (item.indicator === this.indicator) {
+        let params = {}
+        if (this.timeframe === 'month') { params = item.month.params; }
+        else if (this.timeframe === 'week') { params = item.week.params; }
+        else if (this.timeframe === 'day') { params = item.day.params; }
+        else if (this.timeframe === 'four_hour') { params = item.four_hour.params; }
+        else if (this.timeframe === 'hour') { params = item.hour.params; }
+        else if (this.timeframe === 'fifteen_minute') { params = item.fifteen_minute.params; }
+        else if (this.timeframe === 'minute') { params = item.minute.params; }
+
+        this.payload.push({
+          indicator: item.indicator,
+          timeframe: this.timeframe,
+          params: params
+        });
       }
     });
 
@@ -164,30 +139,23 @@ export class AlgorithmsComponent implements OnInit {
         all_timeframes.push(item.timeframe);
       }
     });
-
-    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
-    this.indicatorsService.get_data(this.graph_params).subscribe(data => {
-      this.updateFlag = false;
-      console.log('graph data:')
-      console.log(data);
-      let newData = [];
-      _.forEach(data, (timeframe) => {
-        console.log(timeframe)
-        if (timeframe['timeframe'] === this.timeframe) {
-          _.forEach(timeframe['tf_data'], (item) => {
-            newData.push([item.t, item.c]);
-          });
-        }
-      });
-      this.chartOptions.series[0]['data'] = newData;
-      this.updateFlag = true;
-    });
-
     this.payload.push(all_timeframes);
 
-    this.alg_params = this.alg_params.append('vals', JSON.stringify(this.payload));
-    console.log(this.alg_params)
-    this.indicatorsService.indicators(this.alg_params).subscribe(data => {
+    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
+    this.updateFlag = false;
+    this.indicatorsService.get_data(this.graph_params).pipe(
+      switchMap(data => {
+        let newData = [];
+        _.forEach(data, (timeframe) => {
+          if (timeframe['timeframe'] === this.timeframe) {
+            _.forEach(timeframe['tf_data'], (item) => {
+              newData.push([item.t, item.c]);
+            });
+          }
+        });
+        this.chartOptions.series[0]['data'] = newData;
+        return this.indicatorsService.indicators(this.alg_params)
+      })).subscribe(data => {
       this.updateFlag = false;
       console.log('alg data:')
       console.log(data);
@@ -202,8 +170,8 @@ export class AlgorithmsComponent implements OnInit {
         }
       });
       this.chartOptions.series[1]['data'] = newData;
-      this.updateFlag = true;
     });
+    this.updateFlag = true;
     this.payload = [];
   }
 
