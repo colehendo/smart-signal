@@ -2,7 +2,10 @@ body {
     background-color: #00D080;
     padding: 1% 1% 1% 1.5%;
 }
-
+.nav-style{
+    background-color: #00D080;
+    padding: 1% 1% 1% 1.5%;
+}
 a {
     font-size: 2em;
 }
@@ -24,4 +27,15 @@ a {
     &:hover {
         background-color: #00985E;
     }
+}
+
+button{
+    margin-left:2px;
+    margin-right:2px;
+    margin-bottom:1px;
+}
+.ss{
+    display: inline-block;
+    white-space: nowrap;
+    color:white !important;
 }

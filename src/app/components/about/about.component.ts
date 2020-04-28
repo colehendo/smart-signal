@@ -14,16 +14,26 @@ HighchartsMore(Highcharts);
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements OnInit {
-  public loginUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/login?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=https://www.smartsignal.watch/redirect"
+  public loginUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/login?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=https://www.smartsignal.watch/redirect";
+  public loggedIn = false;
 
   public Highcharts: typeof Highcharts = Highcharts;
   public updateFlag: boolean = false;
 
   public chartOptions: Highcharts.Options = {
     series: [{
+      name: '',
       data: [],
       type: 'line'
-    }]
+    }],
+    title:{
+      text:''
+    },
+    yAxis: {
+      title: {
+          text: ''
+      }
+  },
   };
 
   public coins: any = [
@@ -52,6 +62,31 @@ export class AboutComponent implements OnInit {
       'symbol': 'BCH',
       'price': 0
     },
+    {
+      'name': 'EOS',
+      'symbol': 'EOS',
+      'price': 0
+    },
+    {
+      'name': 'Tezos',
+      'symbol': 'XTZ',
+      'price': 0
+    },
+    {
+      'name': 'Bitcoin SV',
+      'symbol': 'BSV',
+      'price': 0
+    },
+    {
+      'name': 'Chainlink',
+      'symbol': 'LINK',
+      'price': 0
+    },
+    {
+      'name': 'Dash',
+      'symbol': 'DASH',
+      'price': 0
+    },
   ]
 
   constructor(
@@ -59,6 +94,9 @@ export class AboutComponent implements OnInit {
     private router: Router,
     private apiService: ApiService
   ) {
+    if (localStorage.getItem('authCode')) {
+      this.loggedIn = true;
+    }
     _.forEach(this.coins, (item) => {
       this.http.get<object>(`https://api.coinbase.com/v2/prices/${item.symbol}-USD/spot`).subscribe(data => {
         item.price = data['data']['amount'];
@@ -72,7 +110,6 @@ export class AboutComponent implements OnInit {
       this.updateFlag = false;
       let newData = [];
       _.forEach(data[0]['tf_data'], (item) => {
-        console.log(item)
         newData.push([item.t, item.c]);
       });
       this.chartOptions.series[0]['data'] = newData;
@@ -82,10 +119,14 @@ export class AboutComponent implements OnInit {
     if ((window.location.href).includes("localhost")) {
       this.loginUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/login?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=http://localhost:4200/redirect"
     }
+    let twitter_params = new HttpParams().set('q', JSON.stringify('bitcoin'));
+    this.http.get<object>(`https://api.twitter.com/1.1/search/tweets.json`, {params: twitter_params}).subscribe(data => {
+      console.log(data)
+    })
   }
 
   buy() {
-    if (localStorage.getItem('authCode')) {
+    if (this.loggedIn) {
       this.router.navigate(['/assets']);
     }
     else {

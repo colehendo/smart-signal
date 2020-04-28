@@ -22,8 +22,26 @@ body{
 }
 
 table{
-	background-color: #7c7c7c;
+	background-color: rgb(76, 76, 75 );
 }
 th,tr,td,thead,tbody{
 	border-color: greenyellow;
+	color:white;
+}
+
+::ng-deep ngb-accordion{
+	height:3000px;
+}
+::ng-deep .card-header{
+	background-color: #818181;
+	color:white !important;
+	border-color:white;
+}
+::ng-deep .btn-link{
+	color:white;
+}
+::ng-deep .card{
+	background-color: #818181;
+	color:white;
+	border-color:white;
 }

@@ -1,15 +1,25 @@
-.jumbotron{
-    width:90%;
-    margin-left:auto;
-    margin-right:auto;
-    margin-top:5%;
-    background-color: white;
+.header {
+    color: white;
+    margin-top: 3%;
+    text-align: center;
 }
 
 .miniJumbotron{
-    width:40%;
-    margin-left:auto;
-    margin-right:auto;
-    margin-top:5%;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
     background-color: white;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 5%;
+}
+
+.grid-container-child {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 5%;
 }
