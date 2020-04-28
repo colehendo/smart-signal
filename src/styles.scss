@@ -8,6 +8,14 @@ body {
 
 }
 
+button:focus {
+    outline:0;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
 // button {
 //     border: none;
 //     border-radius: 6px;
