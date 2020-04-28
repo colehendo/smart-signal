@@ -41,7 +41,10 @@
     <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7" [ngClass]="{'collapse': isMenuCollapse}"  (click)="isMenuCollapse = !isMenuCollapse" >
         <ul class="navbar-nav ml-auto flex-nowrap">
             <li class="nav-item">
-                <button routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button>
+                <button [hidden]="!isLoggedIn" routerLink="/home" routerLinkActive="active" class="btn btn-success" type="button">Home</button>
+            </li>
+            <li class="nav-item">
+                <button [hidden]="!isLoggedIn" routerLink="/assets" routerLinkActive="active" class="btn btn-success" type="button">Assets</button>
             </li>
             <li class="nav-item">
               <button [hidden]="!isLoggedIn" routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
@@ -59,10 +62,10 @@
                 <button [hidden]="!isLoggedIn" id="logOutButton" (click)="logout()" class="btn btn-success ss">Log Out</button>
             </li>
             <li class="nav-item">
-              <button [hidden]="isLoggedIn" id="logOutButton" (click)="login()" class="btn btn-success">Log In</button>
+              <button [hidden]="isLoggedIn" id="logOutButton" (click)="login()" class="btn btn-success ss">Log In</button>
             </li>
             <li class="nav-item">
-              <button [hidden]="isLoggedIn" id="logOutButton" (click)="signup()" class="btn btn-success">Sign Up</button>
+              <button [hidden]="isLoggedIn" id="logOutButton" (click)="signup()" class="btn btn-success ss">Sign Up</button>
             </li>
         </ul>
     </div>

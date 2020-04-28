@@ -37,53 +37,60 @@ export class GraphComponent implements OnInit {
 
   public timeframes = [
     {
-      'timeframe': 'Month',
-      'table': 'BTC_month',
-      'ttl': 0,
-      'gap': 2628000,
-      'datapoints': 0
-    },
-    {
-      'timeframe': 'Week',
-      'table': 'BTC_week',
-      'ttl': 0,
-      'gap': 604800,
-      'datapoints': 0
-    },
-    {
-      'timeframe': 'Day',
-      'table': 'BTC_day',
-      'ttl': 157680000,
-      'gap': 86400,
-      'datapoints': 1825
-    },
-    {
-      'timeframe': '4 Hour',
-      'table': 'BTC_four_hour',
-      'ttl': 15768000,
-      'gap': 14400,
-      'datapoints': 1095
-    },
-    {
-      'timeframe': 'Hour',
-      'table': 'BTC_hour',
-      'ttl': 2628000,
-      'gap': 3600,
-      'datapoints': 730
+      'timeframe': 'Minute',
+      'buttonName': '1Min',
+      'table': 'BTC_minute',
+      'ttl': 86400,
+      'gap': 60,
+      'datapoints': 1440
     },
     {
       'timeframe': '15 Minute',
+      'buttonName': '15Min',
       'table': 'BTC_fifteen_minute',
       'ttl': 604800,
       'gap': 900,
       'datapoints': 672
     },
     {
-      'timeframe': 'Minute',
-      'table': 'BTC_minute',
-      'ttl': 86400,
-      'gap': 60,
-      'datapoints': 1440
+      'timeframe': 'Hour',
+      'buttonName': '1H',
+      'table': 'BTC_hour',
+      'ttl': 2628000,
+      'gap': 3600,
+      'datapoints': 730
+    },
+    {
+      'timeframe': '4 Hour',
+      'buttonName': '4H',
+      'table': 'BTC_four_hour',
+      'ttl': 15768000,
+      'gap': 14400,
+      'datapoints': 1095
+    },
+    {
+      'timeframe': 'Day',
+      'buttonName': '1D',
+      'table': 'BTC_day',
+      'ttl': 157680000,
+      'gap': 86400,
+      'datapoints': 1825
+    },
+    {
+      'timeframe': 'Week',
+      'buttonName': '7D',
+      'table': 'BTC_week',
+      'ttl': 0,
+      'gap': 604800,
+      'datapoints': 0
+    },
+    {
+      'timeframe': 'Month',
+      'buttonName': '1Mo',
+      'table': 'BTC_month',
+      'ttl': 0,
+      'gap': 2628000,
+      'datapoints': 0
     },
   ]
 

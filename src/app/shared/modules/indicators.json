@@ -1,5 +1,6 @@
 [
     {
+        "name": "Accumulation/Distribution Index",
         "indicator": "adi",
         "month": {
             "params": {}
@@ -24,6 +25,7 @@
         }
     },
     {
+        "name": "On-Balance Volume",
         "indicator": "obv",
         "month": {
             "params": {}
@@ -48,6 +50,7 @@
         }
     },
     {
+        "name": "Chaikin Money Flow",
         "indicator": "cmf",
         "month": {
             "params": {}
@@ -72,6 +75,7 @@
         }
     },
     {
+        "name": "Force Index",
         "indicator": "fi",
         "month": {
             "params": {}
@@ -96,6 +100,7 @@
         }
     },
     {
+        "name": "Ease of Movement",
         "indicator": "emv",
         "month": {
             "params": {}
@@ -120,6 +125,7 @@
         }
     },
     {
+        "name": "Volume-price Trend",
         "indicator": "vpt",
         "month": {
             "params": {}
@@ -144,6 +150,7 @@
         }
     },
     {
+        "name": "Negative Volume Index",
         "indicator": "nvi",
         "month": {
             "params": {}
@@ -168,6 +175,7 @@
         }
     },
     {
+        "name": "Average True Range",
         "indicator": "atr",
         "month": {
             "params": {}
@@ -192,6 +200,7 @@
         }
     },
     {
+        "name": "Bollinger Bands",
         "indicator": "bb",
         "month": {
             "params": {}
@@ -216,6 +225,7 @@
         }
     },
     {
+        "name": "Keltner Channel",
         "indicator": "kc",
         "month": {
             "params": {}
@@ -240,6 +250,7 @@
         }
     },
     {
+        "name": "Donchian Channel",
         "indicator": "dc",
         "month": {
             "params": {}
@@ -264,6 +275,7 @@
         }
     },
     {
+        "name": "Moving Average Convergence Divergence",
         "indicator": "macd",
         "month": {
             "params": {}
@@ -288,6 +300,7 @@
         }
     },
     {
+        "name": "Average Directional Movement Index",
         "indicator": "adx",
         "month": {
             "params": {
@@ -333,6 +346,7 @@
         }
     },
     {
+        "name": "Vortex Indicator",
         "indicator": "vi",
         "month": {
             "params": {}
@@ -357,6 +371,7 @@
         }
     },
     {
+        "name": "Trix",
         "indicator": "trix",
         "month": {
             "params": {}
@@ -381,6 +396,7 @@
         }
     },
     {
+        "name": "Mass Index",
         "indicator": "mi",
         "month": {
             "params": {}
@@ -405,6 +421,7 @@
         }
     },
     {
+        "name": "Commodity Channel Index",
         "indicator": "cci",
         "month": {
             "params": {}
@@ -429,6 +446,7 @@
         }
     },
     {
+        "name": "Detrended Price Oscillator",
         "indicator": "dpo",
         "month": {
             "params": {}
@@ -453,6 +471,7 @@
         }
     },
     {
+        "name": "KST Oscillator",
         "indicator": "kst",
         "month": {
             "params": {}
@@ -477,6 +496,7 @@
         }
     },
     {
+        "name": "Ichimoku Kinkō Hyō",
         "indicator": "ichimoku",
         "month": {
             "params": {}
@@ -501,6 +521,7 @@
         }
     },
     {
+        "name": "Parabolic Stop And Reverse",
         "indicator": "psar",
         "month": {
             "params": {}
@@ -525,6 +546,7 @@
         }
     },
     {
+        "name": "Money Flow Index",
         "indicator": "mfi",
         "month": {
             "params": {}
@@ -549,6 +571,7 @@
         }
     },
     {
+        "name": "Relative Strength Index",
         "indicator": "rsi",
         "month": {
             "params": {
@@ -594,6 +617,7 @@
         }
     },
     {
+        "name": "True Strength Index",
         "indicator": "tsi",
         "month": {
             "params": {}
@@ -618,6 +642,7 @@
         }
     },
     {
+        "name": "Ultimate Oscillator",
         "indicator": "uo",
         "month": {
             "params": {}
@@ -642,6 +667,7 @@
         }
     },
     {
+        "name": "Stochastic Oscillator",
         "indicator": "sr",
         "month": {
             "params": {
@@ -687,6 +713,7 @@
         }
     },
     {
+        "name": "Williams %R",
         "indicator": "wr",
         "month": {
             "params": {}
@@ -711,6 +738,7 @@
         }
     },
     {
+        "name": "Awesome Oscillator",
         "indicator": "ao",
         "month": {
             "params": {}
@@ -735,6 +763,7 @@
         }
     },
     {
+        "name": "Kaufman's Adaptive Moving Average",
         "indicator": "kama",
         "month": {
             "params": {}
@@ -759,6 +788,7 @@
         }
     },
     {
+        "name": "Rate of Change",
         "indicator": "roc",
         "month": {
             "params": {}
@@ -783,6 +813,7 @@
         }
     },
     {
+        "name": "Daily Return",
         "indicator": "dr",
         "month": {
             "params": {}
@@ -807,6 +838,7 @@
         }
     },
     {
+        "name": "Daily Log Return",
         "indicator": "dlr",
         "month": {
             "params": {}
@@ -831,6 +863,7 @@
         }
     },
     {
+        "name": "Cumulative Return",
         "indicator": "cr",
         "month": {
             "params": {}

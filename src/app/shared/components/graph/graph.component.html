@@ -1,21 +1,20 @@
-<highcharts-chart 
-  [Highcharts]="Highcharts"
-  [options]="chartOptions"
-  [(update)]="updateFlag"
-  style="width: 100%; height: 400px; display: block;"
-></highcharts-chart>
+<div class="jumbotron">
+  <highcharts-chart 
+    [Highcharts]="Highcharts"
+    [options]="chartOptions"
+    [(update)]="updateFlag"
+    style="width: 100%; height: 400px; display: block;"
+  ></highcharts-chart>
 
-<div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
-  <button class="btn btn-success mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Toggle dropdown</button>
-  <div ngbDropdownMenu aria-labelledby="dropdownManual">
-    <button ngbDropdownItem *ngFor="let tf of timeframes" (click)="newWebSocket(tf['timeframe'])">{{ tf['timeframe'] }}</button>
+  <div>
+    <button *ngFor="let tf of timeframes" (click)="newWebSocket(tf['timeframe'])">{{ tf['buttonName'] }}</button>
   </div>
+  <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
+    <button class="btn btn-success mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Toggle dropdown</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownManual">
+      <button ngbDropdownItem *ngFor="let tf of timeframes" (click)="newWebSocket(tf['timeframe'])">{{ tf['timeframe'] }}</button>
+    </div>
+  </div>
+
+  <button (click)="timeframe = 'Week'; setupWebSocket()">Switch to minute</button>
 </div>
-
-<button (click)="timeframe = 'Week'; setupWebSocket()">Switch to minute</button>
-
-<!-- 
-[oneToOne]="oneToOneFlag"
-[runOutsideAngular]="runOutsideAngularFlag" -->
-<!-- [callbackFunction]="chartCallback" -->
-<!-- [constructorType]="chartConstructor" -->
