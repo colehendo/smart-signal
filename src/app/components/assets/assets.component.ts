@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 interface Country {
   name: string;
   flag: string;

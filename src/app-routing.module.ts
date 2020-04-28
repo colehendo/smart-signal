@@ -5,6 +5,7 @@ import { HomeComponent } from './app/components/home/home.component'; //Imported
 import { AccountComponent } from './app/components/account/account.component';
 import { AboutComponent } from './app/components/about/about.component';
 import { AlgorithmsComponent } from './app/components/algorithms/algorithms.component';
+import { LandingPageComponent } from './app/components/landing-page/landing-page.component'
 import { NewsComponent } from './app/components/news/news.component';
 import { LoginRedirectComponent } from './app/core/authentication/login-redirect/login-redirect.component';
 import { PageNotFoundComponent } from './app/components/page-not-found/page-not-found.component';
@@ -12,8 +13,13 @@ import { PageNotFoundComponent } from './app/components/page-not-found/page-not-
 import { RoleGuard } from './app/core/guards/role.guard';
 
 const routes: Routes = [
-	{ path: '', component: AboutComponent },
+	{ path: '', component: LandingPageComponent },
 	{ path: 'redirect', component: LoginRedirectComponent },
+	{
+		path: 'about',
+		component: AboutComponent,
+		canActivate: [ RoleGuard ],
+	},
 	{
 		path: 'account',
 		component: AccountComponent,
