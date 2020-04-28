@@ -5,7 +5,7 @@
         <button [hidden]="!isLoggedIn" routerLink="/account" routerLinkActive="active" class="btn btn-success">Account</button>
         <button [hidden]="!isLoggedIn" routerLink="/algorithms" routerLinkActive="active">Algorithms</button>
         <button routerLink="/news" routerLinkActive="active" class="btn btn-success">News</button>
-        <button [hidden]="!isLoggedIn" routerLink="/" routerLinkActive="active" class="btn btn-success">About</button>
+        <button [hidden]="!isLoggedIn" routerLink="/about" routerLinkActive="active" class="btn btn-success">About</button>
         <button [hidden]="!isLoggedIn" id="logOutButton" (click)="logout()" class="btn btn-success">Log Out</button>
         <button [hidden]="isLoggedIn" id="logOutButton" (click)="login()" class="btn btn-success">Log In</button>
         <button [hidden]="isLoggedIn" id="logOutButton" (click)="signup()" class="btn btn-success">Sign Up</button>

@@ -73,6 +73,19 @@ functions:
           cors:
             origin: "*"
 
+  getSingleTable:
+    handler: src/api/get-single-table.get_single_table
+    events:
+      - http:
+          path: get-single-table
+          method: get
+      - http:
+          path: get-single-table
+          method: options
+          integration: lambda
+          cors:
+            origin: "*"
+
   algorithms:
     handler: src/algorithms/algorithms.calculate
     events:

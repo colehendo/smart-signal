@@ -47,7 +47,7 @@ export class AlgorithmsComponent implements OnInit {
   },
 
   series: [{
-      name: 'USD to EUR',
+      name: 'BTC',
       data: [],
       type: 'line',
       id: 'dataseries'
@@ -70,9 +70,9 @@ export class AlgorithmsComponent implements OnInit {
 
   ngOnInit() { }
 
-  get_data() {
+  getData() {
     let graph_params = new HttpParams().set('timeframes', JSON.stringify(['day', 'week']));
-    this.apiService.get_data(graph_params).subscribe(data => {
+    this.apiService.getData(graph_params).subscribe(data => {
       console.log('graph data:')
       console.log(data);
       let newData = [];
@@ -131,7 +131,7 @@ export class AlgorithmsComponent implements OnInit {
     let graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
     let alg_params = new HttpParams().set('vals', JSON.stringify(this.payload));
     this.updateFlag = false;
-    this.apiService.get_data(graph_params).pipe(
+    this.apiService.getData(graph_params).pipe(
       switchMap(data => {
         let newData = [];
         _.forEach(data, (timeframe) => {
