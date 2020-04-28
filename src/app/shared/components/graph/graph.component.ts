@@ -119,15 +119,15 @@ export class GraphComponent implements OnInit {
       let candles = JSON.parse(message.data).prices;
       if (this.newWebsocket) {
         let newData = [];
-        _.forEach(this.candles, (item) => {
+        _.forEach(candles, (item) => {
           newData.push([item.o, item.h, item.l, item.c]);
         });
-        this.websocketLastTimestamp = candles[-1]['t'];
+        this.websocketLastTimestamp = candles[candles.length - 1]['t'];
         this.chartOptions.series[0]['data'] = newData;
         this.newWebsocket = false;
       }
       else {
-        let latestCandle = candles[-1];
+        let latestCandle = candles[candles.length - 1];
         if (latestCandle['t'] > this.websocketLastTimestamp) {
           this.chartOptions.series[0]['data'].shift();
           this.chartOptions.series[0]['data'].push([latestCandle['o'], latestCandle['h'], latestCandle['l'], latestCandle['c']]);

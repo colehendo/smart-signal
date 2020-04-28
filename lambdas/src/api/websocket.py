@@ -40,14 +40,15 @@ def get_websocket_prices(event, context):
     print("in prices")
     print(event)
     print(event['body'])
+    params = json.loads(event['body'])
     connectionID = event["requestContext"].get("connectionId")
 
-    symbol = event["body"]["symbol"]
+    symbol = params["symbol"]
     print('symbol: ', symbol)
-    table = dynamodb.Table(event["body"]["table"])
-    ttl = event["body"]["ttl"]
-    gap = event["body"]["gap"]
-    datapoints = event["body"]["datapoints"]
+    table = dynamodb.Table(params["table"])
+    ttl = params["ttl"]
+    gap = params["gap"]
+    datapoints = params["datapoints"]
 
     timestamp = int(time.time())
 
@@ -74,9 +75,6 @@ def get_websocket_prices(event, context):
                     for item in results['Items']]
             print('prices 1: ', prices)
 
-            prices.insert(0, 'table')
-            print('prices 2: ', prices)
-
             # Send them to the client who asked for it
             data = {"prices": prices}
             _send_to_connection(connectionID, data, event)
@@ -90,37 +88,6 @@ def get_websocket_prices(event, context):
                 "statusCode": 502,
                 "body": json.dumps("No data returned.")
             }
-
-
-def get_dynamo_table(symbol, table, timestamp, ttl, gap, datapoints):
-    dynamo_table = dynamodb.Table(table)
-
-    try:
-        # Scan the table for all datapoints
-        if datapoints > 0:
-            results = dynamo_table.query(
-                KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + ttl) - (gap * datapoints))
-            )
-        else:
-            results = dynamo_table.scan()
-    except ClientError as e:
-        print(e.response['Error']['Code'])
-        print(e.response['ResponseMetadata']['HTTPStatusCode'])
-        print(e.response['Error']['Message'])
-    else:
-        if 'Items' in results:
-            # Turn the returned object into a JSON string,
-            # and pass it to pandas to make it readable for TA
-            for item in results['Items']:
-                item['t'] = item['t'] - ttl
-
-            prices = [{'t': item['t'], 'h': item['h'], 'l': item['l'], 'o': item['o'], 'c': item['c']}
-                    for item in results['Items']]
-
-            return prices
-
-        else:
-            return []
 
 
 def _send_to_connection(connection_id, data, event):
