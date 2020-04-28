@@ -15,7 +15,7 @@ body{
 	font-size: large;
 }
 .special{
-	width:75%;
+	width:90%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 5%;
@@ -29,8 +29,10 @@ th,tr,td,thead,tbody{
 	color:white;
 }
 
-::ng-deep ngb-accordion{
-	height:3000px;
+::ng-deep ngb-panel{
+	width:90%;
+	margin-left:auto;
+	margin-right:auto;
 }
 ::ng-deep .card-header{
 	background-color: #818181;
