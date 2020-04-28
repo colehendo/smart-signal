@@ -1,11 +1,11 @@
-<button (click)="indicator = 'rsi'">REWRITE INDICATOR IN HTML (algorithms, line 1)</button>
+<button (click)="indicator = 'adx'">REWRITE INDICATOR IN HTML (algorithms, line 1)</button>
 <br><br>
 <button class="btn btn-success" (click)="get_data()">get data</button>
 <br><br> -->
 
 <!-- <button (click)="combos()">Combos</button> -->
 
-<highcharts-chart 
+<highcharts-chart
     [Highcharts]="Highcharts"
     [options]="chartOptions"
     [(update)]="updateFlag"

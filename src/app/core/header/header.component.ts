@@ -38,11 +38,11 @@ export class HeaderComponent implements OnInit {
   }
 
   login() {
-    window.location.href = this.loginUrl
+    window.location.href = this.loginUrl;
   }
 
   signup() {
-    window.location.href = this.signupUrl
+    window.location.href = this.signupUrl;
   }
 
   logout() {

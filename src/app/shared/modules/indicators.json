@@ -290,25 +290,46 @@
     {
         "indicator": "adx",
         "month": {
-            "params": {}
+            "params": {
+              "strong": 25,
+              "weak": 40
+            }
         },
         "week": {
-            "params": {}
+            "params": {
+              "strong": 25,
+              "weak": 40
+            }
         },
         "day": {
-            "params": {}
+            "params": {
+              "strong": 25,
+              "weak": 45
+            }
         },
         "four_hour": {
-            "params": {}
+            "params": {
+              "strong": 25,
+              "weak": 50
+            }
         },
         "hour": {
-            "params": {}
+            "params": {
+              "strong": 25,
+              "weak": 50
+            }
         },
         "fifteen_minute": {
-            "params": {}
+            "params": {
+              "strong": 25,
+              "weak": 50
+            }
         },
         "minute": {
-            "params": {}
+            "params": {
+              "strong": 25,
+              "weak": 50
+            }
         }
     },
     {
@@ -531,8 +552,8 @@
         "indicator": "rsi",
         "month": {
             "params": {
-                "sell": 60,
-                "buy": 40
+                "sell": 65,
+                "buy": 35
             }
         },
         "week": {
@@ -543,32 +564,32 @@
         },
         "day": {
             "params": {
-                "sell": 80,
-                "buy": 20
+                "sell": 75,
+                "buy": 25
             }
         },
         "four_hour": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 75,
+                "buy": 25
             }
         },
         "hour": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 80,
+                "buy": 20
             }
         },
         "fifteen_minute": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 85,
+                "buy": 15
             }
         },
         "minute": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 90,
+                "buy": 10
             }
         }
     },
@@ -623,25 +644,46 @@
     {
         "indicator": "sr",
         "month": {
-            "params": {}
+            "params": {
+              "sell": 70,
+              "buy": 30
+            }
         },
         "week": {
-            "params": {}
+            "params": {
+              "sell": 80,
+              "buy": 20
+            }
         },
         "day": {
-            "params": {}
+            "params": {
+              "sell": 85,
+              "buy": 15
+            }
         },
         "four_hour": {
-            "params": {}
+            "params": {
+              "sell": 90,
+              "buy": 10
+            }
         },
         "hour": {
-            "params": {}
+            "params": {
+              "sell": 90,
+              "buy": 10
+            }
         },
         "fifteen_minute": {
-            "params": {}
+            "params": {
+              "sell": 95,
+              "buy": 5
+            }
         },
         "minute": {
-            "params": {}
+            "params": {
+              "sell": 95,
+              "buy": 5
+            }
         }
     },
     {
