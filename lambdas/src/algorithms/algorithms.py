@@ -226,7 +226,7 @@ def reduce_tf(all_signals, tf_signals):
 
                 if i == (tf_sig_len - 1):
                     overall_sig = current_sig
-                    transaction = (round(((str_total / str_count) * Decimal(signal['price'])), 10))
+                    transaction = (round((Decimal(str_total / str_count) * Decimal(signal['price'])), 10))
                     if (current_sig == 'buy'):
                         balance = round((balance - transaction), 2)
                         prev_buy = transaction
@@ -249,7 +249,7 @@ def reduce_tf(all_signals, tf_signals):
                             'amt': transaction,
                             'roi': roi
                         })
-    
+
     if (roi_count == 0):
         final_signals.append({
             'bal': balance,
