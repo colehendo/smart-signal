@@ -11,7 +11,7 @@ def get_data(event, context):
     if (event['queryStringParameters'] == None):
         return {
             "statusCode": 502,
-            "body": "No parameters given",
+            "body": json.dumps("No parameters given"),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
@@ -19,7 +19,7 @@ def get_data(event, context):
     if (event['queryStringParameters']['timeframes'] == None):
         return {
             "statusCode": 502,
-            "body": "No data given",
+            "body": json.dumps("No data given"),
             "headers": {
                 "Access-Control-Allow-Origin": "*"
             }
