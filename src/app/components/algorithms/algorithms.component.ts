@@ -23,9 +23,6 @@ export class AlgorithmsComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
 
-  private alg_params = new HttpParams();
-  private graph_params = new HttpParams();
-
   public chartOptions: Highcharts.Options = {
     rangeSelector: {
       selected: 0
@@ -62,7 +59,7 @@ export class AlgorithmsComponent implements OnInit {
       data: [],
       onSeries: 'dataseries',
       shape: 'circlepin',
-      width: 16
+      width: 20
   }
 ]
   };
@@ -71,20 +68,11 @@ export class AlgorithmsComponent implements OnInit {
   public socket;
   public updateFlag: boolean = false;
 
-
-
-  ngOnInit() {
-    // this.chartOptions.series[0]['data'] = newData;
-    console.log(window.location.href)
-    let test = window.location.href
-    console.log(test.split('code='))
-    
-  }
+  ngOnInit() { }
 
   get_data() {
-    
-    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(['day', 'week']));
-    this.apiService.get_data(this.graph_params).subscribe(data => {
+    let graph_params = new HttpParams().set('timeframes', JSON.stringify(['day', 'week']));
+    this.apiService.get_data(graph_params).subscribe(data => {
       console.log('graph data:')
       console.log(data);
       let newData = [];
@@ -98,10 +86,9 @@ export class AlgorithmsComponent implements OnInit {
 
   combos() {
     console.log(testIndicatorData)
-    let params = new HttpParams();
-    params = params.set('data', JSON.stringify(testIndicatorData));
-    console.log(params)
-    this.apiService.combinations(params).subscribe(data => {
+    let combo_params = new HttpParams().set('data', JSON.stringify(testIndicatorData));
+    console.log(combo_params)
+    this.apiService.combinations(combo_params).subscribe(data => {
       console.log('combo data:')
       console.log(data);
     });
@@ -141,10 +128,10 @@ export class AlgorithmsComponent implements OnInit {
     });
     this.payload.push(all_timeframes);
 
-    this.graph_params = this.graph_params.append('timeframes', JSON.stringify(all_timeframes));
-    this.alg_params = this.alg_params.append('vals', JSON.stringify(this.payload));
+    let graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
+    let alg_params = new HttpParams().set('vals', JSON.stringify(this.payload));
     this.updateFlag = false;
-    this.apiService.get_data(this.graph_params).pipe(
+    this.apiService.get_data(graph_params).pipe(
       switchMap(data => {
         let newData = [];
         _.forEach(data, (timeframe) => {
@@ -155,18 +142,17 @@ export class AlgorithmsComponent implements OnInit {
           }
         });
         this.chartOptions.series[0]['data'] = newData;
-        return this.apiService.algorithms(this.alg_params)
+        return this.apiService.algorithms(alg_params)
       })).subscribe(data => {
-        this.updateFlag = false;
         console.log('alg data:')
         console.log(data);
         let newData = [];
         _.forEach(data, (item) => {
           if (!!item.sig) {
             newData.push({
-              x: item.time,
-              title: item.sig,
-              text: `Amount: ${item.amt}`
+              x: new Date(item.time),
+              title: item.sig.toUpperCase(),
+              text: `Amount: $${item.amt.toFixed(2)}`
             });
           }
         });
