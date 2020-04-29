@@ -13,7 +13,9 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
-# all_indicators = []
+timestamp = int(time.time())
+balance = 100000
+
 combo_results = []
 
 month_candles = []
@@ -23,9 +25,6 @@ four_hour_candles = []
 hour_candles = []
 fifteen_minute_candles = []
 minute_candles = []
-
-timestamp = int(time.time())
-balance = 100000
 
 month_ttl = 0
 month_gap = 2628000
@@ -67,7 +66,6 @@ def handler(event, context):
 
     # Load the payload into a usable format
     data = json.loads(event['queryStringParameters']['data'])
-    print('data: ', data)
 
     if not data:
         return {
@@ -79,11 +77,9 @@ def handler(event, context):
         }
 
     global balance
-    test = data[-1]
-    print('balance: ', test)
+    balance = data[-1][0]
     del data[-1]
     timeframes = data[-1]
-    print('timeframes: ', timeframes)
     del data[-1]
 
     global month_candles
@@ -110,9 +106,6 @@ def handler(event, context):
         processes.append(Process(target=calculate_combinations, args=(data, (i + 1), child_connection)))
         parent_connections.append(parent_connection)
         processes[-1].start()
-    
-    for j in processes:
-        j.join()
 
     bottom_roi = 0
     global combo_results
@@ -128,6 +121,11 @@ def handler(event, context):
                     combo_results.sort(key = lambda data: data[1][-1]['avg_roi'], reverse = True)
                     del combo_results[-1]
                     bottom_roi = combo_results[-1][1][-1]['avg_roi']
+
+    for j in processes:
+        j.join()
+
+    print('results: ', combo_results)
 
 
     return {
@@ -165,10 +163,7 @@ def get_data(table, ttl, gap, datapoints):
 
 
 def calculate_combinations(data, count, connection):
-    print('data in child: ', data)
-    print('count: ', count)
     combos = list(combinations(data, count))
-    print('combos: ', combos)
     results = []
     processes = []
     parent_connections = []
@@ -179,17 +174,16 @@ def calculate_combinations(data, count, connection):
     #     parent_connections.append(parent_connection)
     #     processes[-1].start()
 
-    # for j in processes:
-    #     j.join()
-
     # for parent_connection in parent_connections:
     #     result = parent_connection.recv()
     #     if result:
     #         if result[1][-1]['avg_roi'] > 10:
     #             results.append(result)
 
+    # for j in processes:
+    #     j.join()
+
     for combination in combos:
-        print('combination in combos: ', combination)
         result = run_combinations(combination)
         if result:
             if result[1][-1]['avg_roi'] > 10:
@@ -214,7 +208,6 @@ def run_combinations(combination):
     # fifteen_minute_indicators = []
     # minute_indicators = []
     for item in combination:
-        print('item in combo: ', item)
         # if item['timeframe'] == 'month': month_indicators.append(item)
         # elif item['timeframe'] == 'week': week_indicators.append(item)
         # elif item['timeframe'] == 'day': day_indicators.append(item)
@@ -341,7 +334,6 @@ def run_combinations(combination):
 
 
 def condense_timeframe(all_data, candles, timeframe):
-    print('timeframe: ', timeframe)
     # Error catching for get_data
     if candles.empty:
         return []
@@ -445,7 +437,7 @@ def reduce_tf(all_signals, tf_signals):
 
                 if i == (tf_sig_len - 1):
                     overall_sig = current_sig
-                    transaction = (round(((str_total / str_count) * Decimal(signal['price'])), 10))
+                    transaction = (round((Decimal(str_total / str_count) * Decimal(signal['price'])), 10))
                     if (current_sig == 'buy'):
                         balance = round((balance - transaction), 2)
                         prev_buy = transaction
