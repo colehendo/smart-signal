@@ -10,8 +10,10 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
+timestamp = int(time.time())
+balance = 100000
+
 all_indicators = []
-combo_results = []
 
 month_candles = []
 week_candles = []
@@ -20,8 +22,6 @@ four_hour_candles = []
 hour_candles = []
 fifteen_minute_candles = []
 minute_candles = []
-
-timestamp = int(time.time())
 
 month_ttl = 0
 month_gap = 2628000
@@ -73,7 +73,10 @@ def calculate(event, context):
             }
         }
 
-    # Remove the array of timeframes from the data
+    # Set the balance and remove the array of timeframes from the data
+    global balance
+    balance = data[-1][0]
+    del data[-1]
     timeframes = data[-1]
     del data[-1]
 
@@ -196,7 +199,7 @@ def reduce_tf(all_signals, tf_signals):
     final_signals = []
     tf_sig_len = len(tf_signals)
 
-    balance = 100000
+    global balance
     prev_buy = 0
     roi = 0
     total_roi = 0
