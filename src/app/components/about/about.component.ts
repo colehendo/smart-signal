@@ -103,6 +103,10 @@ export class AboutComponent implements OnInit {
       })
     });
   }
+  ngAfterViewInit() {
+    // @ts-ignore
+    twttr.widgets.load();
+  }
 
   ngOnInit() {
     let graph_params = new HttpParams().set('table', JSON.stringify(['day']));

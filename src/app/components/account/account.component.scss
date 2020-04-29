@@ -21,9 +21,12 @@ nav{
 	color:white;
 }
 ::ng-deep .card{
-	background-color: #3d3d3d;
+	background-color: #818181;
 	color:white;
 	border-color:white;
+	width:90% !important;
+	margin-right:auto;
+	margin-left:auto; 
 }
 
 ::ng-deep .btn-link:hover {
@@ -33,4 +36,8 @@ nav{
 
 ::ng-deep .btn-link:focus {
 	text-decoration: none;
+}
+
+.mtp{
+	margin-top:5%;
 }

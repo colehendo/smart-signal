@@ -1,4 +1,8 @@
+<div class="header">
+    <h3>Run a selection of algorithms on Bitcoin prices</h3>
+</div>
 <div class="jumbotron">
+    <br>
     <highcharts-chart
         [Highcharts]="Highcharts"
         [options]="chartOptions"
@@ -22,8 +26,8 @@
             </div>
         </div>
     </div>
-    <br>
     <div [hidden]="!algSelected">
+        <br>
         <div>
             <table class="table table-striped">
             <thead>
@@ -47,5 +51,24 @@
 
         <button class="btn btn-success" (click)="runAlgorithms(payload)">Run All Algorithms</button>
         <button class="btn btn-success" (click)="runCombinations(payload)">Run Combinations of Algorithms</button>
+    </div>
+    <div [hidden]="!combinationSent">
+        <br>
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Combination</th>
+                <th scope="col">Return On Investment</th>
+                <th scope="col">Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let combination of combinationResults">
+                <td>{{ combination.name }}</td>
+                <td>{{ combination.roi }}</td>
+                <td>{{ combination.balance }}</td>
+            </tr>
+        </tbody>
+        </table>
     </div>
 </div>

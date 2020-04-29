@@ -7,9 +7,6 @@ import { ApiService } from '../../core/http/api.service';
 import  *  as  data  from  '../../shared/modules/indicators.json';
 const algorithmData: any =  (data  as  any).default;
 
-import  *  as  testData  from  '../../shared/modules/test-indicators.json';
-const testAlgorithmData: any =  (testData  as  any).default;
-
 import * as Highcharts from 'highcharts/highstock';
 import HighchartsMore from 'highcharts/highcharts-more';
 HighchartsMore(Highcharts);
@@ -30,7 +27,7 @@ export class AlgorithmsComponent implements OnInit {
       selected: 0
     },
     title: {
-        text: ''
+        text: `Bitcoin / U.S. Dollar: Day Candles`
     },
     tooltip: {
         style: {
@@ -67,9 +64,11 @@ export class AlgorithmsComponent implements OnInit {
 
   public payload = [];
   public tableData = [];
+  public combinationResults = [];
   public selectedAlgorithm: any = {};
   public algSelected = false;
   public algSelectedFromDropDown = false;
+  public combinationSent = false;
   public chartPayloadSent = false;
   public timeframeOptions = [
     {
@@ -101,6 +100,8 @@ export class AlgorithmsComponent implements OnInit {
       value: 'minute'
     }
   ];
+
+  public balance = 100000;
 
   ngOnInit() {
     let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
@@ -187,6 +188,8 @@ export class AlgorithmsComponent implements OnInit {
     });
 
     algorithm.push(all_timeframes);
+    let algorithmTimeframe = all_timeframes[0].timeframe;
+    console.log(all_timeframes)
 
     let graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
     let alg_params = new HttpParams().set('vals', JSON.stringify(algorithm));
@@ -210,8 +213,16 @@ export class AlgorithmsComponent implements OnInit {
             });
           }
         });
+<<<<<<< HEAD
         console.log(`data: ${JSON.stringify(data)}`)
         console.log(`signals: ${JSON.stringify(newData)}`)
+=======
+        _.forEach(this.timeframeOptions, (timeframe) => {
+          if (algorithmTimeframe === timeframe.value) {
+            this.chartOptions.title.text = `Bitcoin / U.S. Dollar: ${timeframe.name}`;
+          }
+        });
+>>>>>>> 6446e2e286fe8c39ea02b037474d7201908e754a
         this.chartOptions.series[1]['data'] = newData;
         this.updateFlag = true;
     });
@@ -219,6 +230,7 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   runCombinations(algorithm: any) {
+    this.combinationResults = [];
     console.log(algorithm)
     let all_timeframes = [];
 
@@ -229,14 +241,37 @@ export class AlgorithmsComponent implements OnInit {
     });
 
     algorithm.push(all_timeframes);
+    algorithm.push([this.balance]);
 
-    console.log(testAlgorithmData)
     let combo_params = new HttpParams().set('data', JSON.stringify(algorithm));
     console.log(combo_params)
     this.apiService.combinations(combo_params).subscribe(data => {
       console.log('combo data:')
       console.log(data);
+      _.forEach(data, (combo) => {
+        let combinationString = '';
+        _.forEach(combo[0], (algorithm) => {
+          _.forEach(this.algorithmDisplayData, (algorithms) => {
+            if (algorithm.indicator === algorithms.indicator) {
+              _.forEach(this.timeframeOptions, (timeframe) => {
+                if (algorithm.timeframe === timeframe.value) {
+                  combinationString = combinationString.concat(`${algorithms.name} (${timeframe.name}),\n`);
+                }
+              });
+            }
+          });
+        });
+
+        console.log(`pushing for ${combo}`)
+        this.combinationResults.push({
+          name: combinationString,
+          balance: combo[1][combo[1].length - 1]['bal'],
+          roi: combo[1][combo[1].length - 1]['avg_roi']
+        });
+        console.log(this.combinationResults)
+      });
     });
+    this.combinationSent = true;
     algorithm.splice(-1,1);
   }
 

@@ -27,6 +27,7 @@
     "highcharts": "^8.0.2",
     "highcharts-angular": "^2.4.0",
     "lodash": "^4.17.15",
+    "ngx-tweet": "^2.0.3",
     "reconnecting-websocket": "^4.4.0",
     "rxjs": "~6.4.0",
     "scss": "^0.2.4",

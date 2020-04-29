@@ -1,61 +1,63 @@
-<body>
+
   <div class="jumbotron special">
     <h1 class="display-4 white-text">Your balance</h1>
     <!-- <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p> -->
     <hr class="my-4">
     <p class="big-text white-text">$0</p>
-    <a class="btn btn-success btn-lg" href="#" role="button">Learn more</a>
+    <br><br>
+
+    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" style="height:100%">
+      <ngb-panel title="Your Assets" >
+        <ng-template ngbPanelContent >
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Coin</th>
+              <th scope="col">Price</th>
+              <th scope="col">Volume</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let country of countries; index as i">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>
+                <img [src]=" country.flag" class="mr-2" style="width: 20px">
+                {{ country.name }}
+              </td>
+              <td>{{ country.area | number }}</td>
+              <td>{{ country.population | number }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </ngb-panel>
+      <ngb-panel title ="All Assets" style="background-color: aqua;">
+        <ng-template ngbPanelTitle>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Symbol</th>
+              <th scope="col">Coin</th>
+              <th scope="col">Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let coin of coins; index as i">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ coin.symbol }}</td>
+              <td>{{ coin.name }} </td>
+              <td>${{ coin.price }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
   </div>
 
   
 
-  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" style="height:100%">
-    <ngb-panel title="All Assets" style="background-color: red !important; color:green">
-      <ng-template ngbPanelContent style="background-color: red !important; color:green">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Country</th>
-            <th scope="col">Area</th>
-            <th scope="col">Population</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let country of countries; index as i">
-            <th scope="row">{{ i + 1 }}</th>
-            <td>
-              <img [src]=" country.flag" class="mr-2" style="width: 20px">
-              {{ country.name }}
-            </td>
-            <td>{{ country.area | number }}</td>
-            <td>{{ country.population | number }}</td>
-          </tr>
-          </tbody>
-        </table>
-      </ng-template>
-    </ngb-panel>
-    <ngb-panel title ="Your Assets" style="background-color: aqua;">
-      <ng-template ngbPanelTitle>
-      </ng-template>
-      <ng-template ngbPanelContent>
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-        aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-        sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-        craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-        labore sustainable VHS.
-      </ng-template>
-    </ngb-panel>
-    <ngb-panel title="Account Settings" [disabled]="false">
-      <ng-template ngbPanelContent style="background-color: aqua;">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-        aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-        sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-        craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-        labore sustainable VHS.
-      </ng-template>
-    </ngb-panel>
-  </ngb-accordion>
-</body>

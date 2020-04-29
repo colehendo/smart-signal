@@ -25,6 +25,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { LoginRedirectComponent } from './app/core/authentication/login-redirect/login-redirect.component'
 
+import { NgxTweetModule } from "ngx-tweet";
+
 
 
 @NgModule({
@@ -50,7 +52,8 @@ import { LoginRedirectComponent } from './app/core/authentication/login-redirect
     // MaterialModule,
     HighchartsChartModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    NgxTweetModule
   ],
   providers: [],
   bootstrap: [AppComponent]

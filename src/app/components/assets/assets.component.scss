@@ -6,16 +6,17 @@ body{
 	height:100%;
 }
 .jumbotron{
-	background-color: #7c7c7c;
+	background-color: white;
+	color:black;
 }
 .white-text{
-	color:white;
+	color:black;
 }
 .big-text{
 	font-size: large;
 }
 .special{
-	width:75%;
+	width:90%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 5%;
@@ -29,8 +30,10 @@ th,tr,td,thead,tbody{
 	color:white;
 }
 
-::ng-deep ngb-accordion{
-	height:3000px;
+::ng-deep ngb-panel{
+	width:90%;
+	margin-left:auto;
+	margin-right:auto;
 }
 ::ng-deep .card-header{
 	background-color: #818181;
@@ -44,4 +47,7 @@ th,tr,td,thead,tbody{
 	background-color: #818181;
 	color:white;
 	border-color:white;
+	width:90% !important;
+	margin-right:auto;
+	margin-left:auto;
 }
