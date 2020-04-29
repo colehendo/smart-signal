@@ -213,16 +213,11 @@ export class AlgorithmsComponent implements OnInit {
             });
           }
         });
-<<<<<<< HEAD
-        console.log(`data: ${JSON.stringify(data)}`)
-        console.log(`signals: ${JSON.stringify(newData)}`)
-=======
         _.forEach(this.timeframeOptions, (timeframe) => {
           if (algorithmTimeframe === timeframe.value) {
             this.chartOptions.title.text = `Bitcoin / U.S. Dollar: ${timeframe.name}`;
           }
         });
->>>>>>> 6446e2e286fe8c39ea02b037474d7201908e754a
         this.chartOptions.series[1]['data'] = newData;
         this.updateFlag = true;
     });

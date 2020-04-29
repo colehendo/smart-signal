@@ -31,4 +31,4 @@
 #     roc(params, candles)
 #     sr(params, candles) #works but sucks
 #     uo(params, candles)
-#     wr(params, candles) #works but sucks
+#     wr(params, candles) #works and not bad
