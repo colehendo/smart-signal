@@ -217,6 +217,7 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   runCombinations(algorithm: any) {
+    console.log(algorithm)
     let all_timeframes = [];
 
     _.forEach(algorithm, (item) => {

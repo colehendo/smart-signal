@@ -80,58 +80,6 @@ def handler(event, context):
     timeframes = data[-1]
     del data[-1]
 
-    # global all_indicators
-    
-    # for indicator in data:
-    #     if 'month' in indicator:
-    #         all_indicators.append({
-    #             'indicator': indicator['indicator'],
-    #             'timeframe': 'month',
-    #             'params': indicator['month']['params']
-    #         })
-
-    #     if 'week' in indicator:
-    #         all_indicators.append({
-    #             'indicator': indicator['indicator'],
-    #             'timeframe': 'week',
-    #             'params': indicator['week']['params']
-    #         })
-        
-    #     if 'day' in indicator:
-    #         all_indicators.append({
-    #             'indicator': indicator['indicator'],
-    #             'timeframe': 'day',
-    #             'params': indicator['day']['params']
-    #         })
-
-    #     if 'four_hour' in indicator:
-    #         all_indicators.append({
-    #             'indicator': indicator['indicator'],
-    #             'timeframe': 'four_hour',
-    #             'params': indicator['four_hour']['params']
-    #         })
-
-    #     if 'hour' in indicator:
-    #         all_indicators.append({
-    #             'indicator': indicator['indicator'],
-    #             'timeframe': 'hour',
-    #             'params': indicator['hour']['params']
-    #         })
-
-    #     if 'fifteen_minute' in indicator:
-    #         all_indicators.append({
-    #             'indicator': indicator['indicator'],
-    #             'timeframe': 'fifteen_minute',
-    #             'params': indicator['fifteen_minute']['params']
-    #         })
-
-    #     if 'minute' in indicator:
-    #         all_indicators.append({
-    #             'indicator': indicator['indicator'],
-    #             'timeframe': 'minute',
-    #             'params': indicator['minute']['params']
-    #         })
-
     global month_candles
     global week_candles
     global day_candles
@@ -166,9 +114,6 @@ def handler(event, context):
     for parent_connection in parent_connections:
         child_result = parent_connection.recv()[0]
         for result in child_result:
-            # print('result: ', result)
-            # print('len combo results: ', len(combo_results))
-            # print('combo results: ', combo_results)
             if len(combo_results) < 20:
                 combo_results.append(result)
             else:
@@ -177,7 +122,6 @@ def handler(event, context):
                     combo_results.sort(key = lambda data: data[1][-1]['avg_roi'], reverse = True)
                     del combo_results[-1]
                     bottom_roi = combo_results[-1][1][-1]['avg_roi']
-                    # print('bottom roi: ', bottom_roi, ' from data: ', combo_results[-1][1][-1]['avg_roi'])
 
 
     return {
