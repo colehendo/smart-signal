@@ -1,44 +1,51 @@
-<button (click)="indicator = 'macd'">REWRITE INDICATOR IN HTML (algorithms, line 1)</button>
-<br><br>
-<button class="btn btn-success" (click)="get_data()">get data</button>
-<br><br> -->
+<div class="jumbotron">
+    <highcharts-chart
+        [Highcharts]="Highcharts"
+        [options]="chartOptions"
+        [(update)]="updateFlag"
+        style="width: 100%; height: 400px; display: block;"
+    ></highcharts-chart>
 
-<input
-  id="typeahead-focus"
-  type="text"
-  class="form-control"
-  placeholder="Select Algorithm:"
-  [(ngModel)]="model"
-  [ngbTypeahead]="search"
-  (focus)="focus$.next($any($event).target.value)"
-  (click)="click$.next($any($event).target.value)"
-  #instance="ngbTypeahead"
-/>
-
-<!-- <button (click)="combos()">Combos</button> -->
-
-<highcharts-chart
-    [Highcharts]="Highcharts"
-    [options]="chartOptions"
-    [(update)]="updateFlag"
-    style="width: 100%; height: 400px; display: block;"
-></highcharts-chart>
-
-<div class="row">
-    <div class="col">
-      <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-success" id="dropdownBasic1" ngbDropdownToggle>Time Frame</button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem (click)="timeframe = 'month'" class="btn btn-success">Month</button>
-          <button ngbDropdownItem (click)="timeframe = 'week'" class="btn btn-success">Week</button>
-          <button ngbDropdownItem (click)="timeframe = 'day'" class="btn btn-success">Day</button>
-          <button ngbDropdownItem (click)="timeframe = 'four_hour'" class="btn btn-success">Four Hour</button>
-          <button ngbDropdownItem (click)="timeframe = 'hour'" class="btn btn-success">Hour</button>
-          <button ngbDropdownItem (click)="timeframe = 'fifteen_minute'" class="btn btn-success">Fifteen Minute</button>
-          <button ngbDropdownItem (click)="timeframe = 'minute'" class="btn btn-success">Minute</button>
+    <div class="row">
+        <div class="col">
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-success" id="dropdownBasic1" ngbDropdownToggle>Select Algorithm</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let algorithm of algorithmDisplayData" ngbDropdownItem (click)="setAlgorithm(algorithm)" class="btn btn-success">{{ algorithm.name }}</button>
+                </div>
+            </div>
+            <div ngbDropdown class="d-inline-block">
+                <button [hidden]="!algSelectedFromDropDown" class="btn btn-success" id="dropdownBasic1" ngbDropdownToggle>Select Candle Size</button>
+                <div [hidden]="!algSelectedFromDropDown" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let timeframe of timeframeOptions" ngbDropdownItem (click)="appendAlgorithm(timeframe)" class="btn btn-success">{{ timeframe.name }}</button>
+                </div>
+            </div>
         </div>
-      </div>
-      <button class="btn btn-success" (click)="testParams()">Send</button>
-      <button class="btn btn-success" (click)="combos()">Combos</button>
+    </div>
+    <br>
+    <div [hidden]="!algSelected">
+        <div>
+            <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Algorithm</th>
+                    <th scope="col">Candle Size</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let algorithm of tableData">
+                    <td>{{ algorithm.name }}</td>
+                    <td>{{ algorithm.displayTimeframe }}</td>
+                    <td><button (click)="runIndividualAlgorithm(algorithm)">Run</button></td>
+                    <td><button (click)="removeAlgFromTable(algorithm)">Remove</button></td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+
+        <button class="btn btn-success" (click)="runAlgorithms(payload)">Run All Algorithms</button>
+        <button class="btn btn-success" (click)="runCombinations(payload)">Run Combinations of Algorithms</button>
     </div>
 </div>
