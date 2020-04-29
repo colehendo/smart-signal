@@ -581,20 +581,20 @@
         },
         "week": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 75,
+                "buy": 35
             }
         },
         "day": {
             "params": {
-                "sell": 75,
-                "buy": 25
+                "sell": 80,
+                "buy": 20
             }
         },
         "four_hour": {
             "params": {
-                "sell": 75,
-                "buy": 25
+                "sell": 80,
+                "buy": 20
             }
         },
         "hour": {
@@ -716,25 +716,46 @@
         "name": "Williams %R",
         "indicator": "wr",
         "month": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "week": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "day": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "four_hour": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "hour": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "fifteen_minute": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "minute": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         }
     },
     {

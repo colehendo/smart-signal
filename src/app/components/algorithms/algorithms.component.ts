@@ -210,6 +210,8 @@ export class AlgorithmsComponent implements OnInit {
             });
           }
         });
+        console.log(`data: ${JSON.stringify(data)}`)
+        console.log(`signals: ${JSON.stringify(newData)}`)
         this.chartOptions.series[1]['data'] = newData;
         this.updateFlag = true;
     });
