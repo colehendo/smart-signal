@@ -10,7 +10,7 @@ import { LandingPageComponent } from '../../components/landing-page/landing-page
 import { NewsComponent } from '../../components/news/news.component';
 import { LoginRedirectComponent } from '../authentication/login-redirect/login-redirect.component';
 import { PageNotFoundComponent } from '../../components/page-not-found/page-not-found.component';
-import { NavbarService } from '../../services/navbar.service';
+import { NavbarService } from '../../shared/services/navbar.service';
 
 import { RoleGuard } from '../guards/role.guard';
 

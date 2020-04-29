@@ -25,6 +25,7 @@ fifteen_minute_candles = []
 minute_candles = []
 
 timestamp = int(time.time())
+balance = 100000
 
 month_ttl = 0
 month_gap = 2628000
@@ -77,7 +78,12 @@ def handler(event, context):
             }
         }
 
+    global balance
+    test = data[-1]
+    print('balance: ', test)
+    del data[-1]
     timeframes = data[-1]
+    print('timeframes: ', timeframes)
     del data[-1]
 
     global month_candles
@@ -133,8 +139,36 @@ def handler(event, context):
     }
 
 
+def get_data(table, ttl, gap, datapoints):
+    dynamo_table = dynamodb.Table(table)
+    try:
+        # Scan the table for all datapoints
+        if datapoints > 0:
+            results = dynamo_table.query(
+                KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + ttl) - (gap * datapoints))
+            )
+        else:
+            results = dynamo_table.scan()
+    except ClientError as e:
+        print(e.response['Error']['Code'])
+        print(e.response['ResponseMetadata']['HTTPStatusCode'])
+        print(e.response['Error']['Message'])
+    else:
+        if 'Items' in results:
+            # Turn the returned object into a JSON string,
+            # and pass it to pandas to make it readable for TA
+            for i in range(len(results['Items'])):
+                results['Items'][i]['t'] = results['Items'][i]['t'] - ttl
+            return pd.read_json(json.dumps(results['Items']))
+        else:
+            return []
+
+
 def calculate_combinations(data, count, connection):
+    print('data in child: ', data)
+    print('count: ', count)
     combos = list(combinations(data, count))
+    print('combos: ', combos)
     results = []
     processes = []
     parent_connections = []
@@ -155,6 +189,7 @@ def calculate_combinations(data, count, connection):
     #             results.append(result)
 
     for combination in combos:
+        print('combination in combos: ', combination)
         result = run_combinations(combination)
         if result:
             if result[1][-1]['avg_roi'] > 10:
@@ -179,6 +214,7 @@ def run_combinations(combination):
     # fifteen_minute_indicators = []
     # minute_indicators = []
     for item in combination:
+        print('item in combo: ', item)
         # if item['timeframe'] == 'month': month_indicators.append(item)
         # elif item['timeframe'] == 'week': week_indicators.append(item)
         # elif item['timeframe'] == 'day': day_indicators.append(item)
@@ -296,40 +332,16 @@ def run_combinations(combination):
 
     if combination_signals:
         combination_signals.sort(key = lambda signal: signal['time'])
-        return ([combination, any_tf(combination_signals, timeframe_data)])
-        # connection.send([combination, any_tf(combination_signals, timeframe_data)])
+        return ([combination, reduce_tf(combination_signals, timeframe_data)])
+        # connection.send([combination, reduce_tf(combination_signals, timeframe_data)])
 
     else:
         return []
         # connection.send([])
 
 
-def get_data(table, ttl, gap, datapoints):
-    dynamo_table = dynamodb.Table(table)
-    try:
-        # Scan the table for all datapoints
-        if datapoints > 0:
-            results = dynamo_table.query(
-                KeyConditionExpression = Key('s').eq('BTC') & Key('t').gt((timestamp + ttl) - (gap * datapoints))
-            )
-        else:
-            results = dynamo_table.scan()
-    except ClientError as e:
-        print(e.response['Error']['Code'])
-        print(e.response['ResponseMetadata']['HTTPStatusCode'])
-        print(e.response['Error']['Message'])
-    else:
-        if 'Items' in results:
-            # Turn the returned object into a JSON string,
-            # and pass it to pandas to make it readable for TA
-            for i in range(len(results['Items'])):
-                results['Items'][i]['t'] = results['Items'][i]['t'] - ttl
-            return pd.read_json(json.dumps(results['Items']))
-        else:
-            return []
-
-
 def condense_timeframe(all_data, candles, timeframe):
+    print('timeframe: ', timeframe)
     # Error catching for get_data
     if candles.empty:
         return []
@@ -398,11 +410,11 @@ def condense_timeframe(all_data, candles, timeframe):
     return timeframe_signals
 
 
-def any_tf(all_signals, tf_signals):
+def reduce_tf(all_signals, tf_signals):
     final_signals = []
     tf_sig_len = len(tf_signals)
 
-    balance = 100000
+    global balance
     prev_buy = 0
     roi = 0
     total_roi = 0

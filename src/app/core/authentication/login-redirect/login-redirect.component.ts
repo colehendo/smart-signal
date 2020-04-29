@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavbarService } from '../../../services/navbar.service';
+import { NavbarService } from '../../../shared/services/navbar.service';
 
 @Component({
   selector: 'app-login-redirect',
@@ -22,7 +22,7 @@ export class LoginRedirectComponent implements OnInit {
     if ((window.location.href).includes('code=')) {
       let code = window.location.href.split('code=')[1]
       localStorage.setItem('authCode', code);
-      this.navbarService.updateNavAfterAuth();
+      // this.navbarService.updateNavAfterAuth();
       this.navbarService.updateLoginStatus(true);
     }
     this.router.navigate(['/home']);
