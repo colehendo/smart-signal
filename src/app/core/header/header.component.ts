@@ -1,4 +1,4 @@
-import { Component, OnInit, ApplicationRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AssetsComponent } from '../../components/assets/assets.component'; //Had to add this import to prevent error messages
@@ -12,6 +12,8 @@ import { LoginRedirectComponent } from '../authentication/login-redirect/login-r
 import { PageNotFoundComponent } from '../../components/page-not-found/page-not-found.component';
 import { NavbarService } from '../../services/navbar.service';
 
+import { RoleGuard } from '../guards/role.guard';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,77 +22,55 @@ import { NavbarService } from '../../services/navbar.service';
 export class HeaderComponent implements OnInit {
 
   public isLoggedIn = false;
-
-  links: Array<{ text: string, path: string }>;
-
-  constructor(private router: Router, private navbarService: NavbarService) {
-    this.router.config.unshift(
-      { path: 'login', component: LoginRedirectComponent },
-      { path: 'news', component: NewsComponent },
-      { path: 'about', component: AboutComponent },
-      { path: 'account', component: AccountComponent},
-      { path: 'assets', component:AssetsComponent},
-      { path:'algorithms', component:AlgorithmsComponent}
-    );
-  }
-
-  // constructor(
-  //   private router: Router,
-  //   private appRef: ApplicationRef
-  // ) { } 
-  //Cole's code
-
   public loginUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/login?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=https://www.smartsignal.watch/redirect"
   public signupUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/signup?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=https://www.smartsignal.watch/redirect"
 
+  links: Array<{ text: string, path: string }>;
+
+  constructor(
+    private router: Router,
+    private navbarService: NavbarService
+  ) {
+    this.router.config.unshift(
+      // { path: 'login', component: LoginRedirectComponent },
+      { path: 'home', component: HomeComponent, canActivate: [ RoleGuard ] },
+      { path: 'news', component: NewsComponent },
+      { path: 'about', component: AboutComponent, canActivate: [ RoleGuard ] },
+      { path: 'account', component: AccountComponent, canActivate: [ RoleGuard ] },
+      { path: 'assets', component: AssetsComponent, canActivate: [ RoleGuard ] },
+      { path: 'algorithms', component: AlgorithmsComponent, canActivate: [ RoleGuard ] }
+    );
+  }
+
   ngOnInit() {
-    // if (localStorage.getItem('authCode')) {
-    //   this.isLoggedIn = true;
-    // }
-    // if ((window.location.href).includes("localhost")) {
-    //   this.loginUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/login?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=http://localhost:4200/redirect"
-    //   this.signupUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/signup?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=http://localhost:4200/redirect"
-    // }
-    // Cole's code
+    if (localStorage.getItem('authCode')) {
+      this.isLoggedIn = true;
+    }
+    if ((window.location.href).includes("localhost")) {
+      this.loginUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/login?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=http://localhost:4200/redirect"
+      this.signupUrl = "https://smartsignal.auth.us-east-1.amazoncognito.com/signup?client_id=62oatdg8jhsreqbobds4hp9omr&response_type=code&scope=email+openid&redirect_uri=http://localhost:4200/redirect"
+    }
 
     this.links = this.navbarService.getLinks();
     this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
     
   }
-  
 
-  // Cole's code
-  // home() {
-  //   if (this.isLoggedIn) {
-  //     this.router.navigate(['/home']);
-  //   }
-  //   else {
-  //     this.router.navigate(['/']);
-  //   }
-  // }
-
-
-
-  logout() {
-    this.navbarService.updateLoginStatus(false);
-    this.router.navigate(['home']);
+  reroute(path) {
+    console.log(path)
+    if (path === 'login') {
+      window.location.href = this.loginUrl;
+    }
+    else if (path === 'signup') {
+      window.location.href = this.signupUrl;
+    }
+    else if (path === 'logout') {
+      this.navbarService.updateLoginStatus(false);
+      this.router.navigate(['/']);
+    }
+    else {
+      this.router.navigate([`/${path}`])
+    }
   }
-
-
-  //Cole's code
-  // login() {
-  //   window.location.href = this.loginUrl;
-  // }
-
-  // signup() {
-  //   window.location.href = this.signupUrl;
-  // }
-
-  // logout() {
-  //   localStorage.clear();
-  //   this.router.navigate(['/']);
-  // }
-
-  
 
 }
