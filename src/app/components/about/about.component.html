@@ -1,9 +1,8 @@
 <div class="header">
-<div>
   <h1>The simplest algorithmic trading platform</h1>
   <p>Build your portfolio. Let us handle the rest.</p>
+  <button *ngIf="!loggedIn" class="btn-lg" (click)="buy()">Get Started</button>
 </div>
-<button *ngIf="!loggedIn" class="btn-lg" (click)="buy()">Get Started</button>
 
 <div class="jumbotron">
   <div class="grid-container">
