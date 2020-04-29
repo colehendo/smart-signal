@@ -54,6 +54,7 @@ export class AlgorithmsComponent implements OnInit {
 
   // the event marker flags
   }, 
+  },
   {
       type: 'flags',
       data: [],
