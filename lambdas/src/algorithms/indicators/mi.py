@@ -3,7 +3,8 @@ import ta
 # Mass Index, we are using psar to get trend
 # good
 def run(params, candles, timeframe):
-    psar = ta.trend.PSARIndicator(high = candles["h"], low = candles["l"], close = candles["c"], step = 0.02, max_step = 0.2, fillna = False)
+    all_psar = ta.trend.PSARIndicator(high = candles["h"], low = candles["l"], close = candles["c"], step = 0.02, max_step = 0.2, fillna = False)
+    psar = all_psar.psar()
     mi = ta.trend.mass_index(high = candles["h"], low = candles["l"], n = 10, n2 = 10, fillna = False)
     print('Mass Index: ', mi)
     signals = []
@@ -22,7 +23,7 @@ def run(params, candles, timeframe):
 
         # when the mass index is over 27 we are very likely to see a reversal in the trend
         # or we are topping out basically
-        elif curr_mi > 27 and trend = "up" and last_signal != 'sell':
+        elif curr_mi > 27 and current_psar > curr_price and last_signal != 'sell':
             if next_mi <= 26.5:
                 trend = "down"
                 last_signal = "sell"
@@ -34,9 +35,9 @@ def run(params, candles, timeframe):
                 'tf': timeframe,
                 'str': 69
                 })
-        # when the mass index is over 27 we are very likely to see a reversal in the trend
-        # or we are bottoming out
-        elif curr_mi > 27 and trend = "down" and last_signal != 'buy':
+            # when the mass index is over 27 we are very likely to see a reversal in the trend
+            # or we are bottoming out
+        elif curr_mi > 27 and current_psar < curr_price and last_signal != 'buy':
             if next_mi <= 26.5:
                 trend = "up"
                 last_signal = "buy"
@@ -48,17 +49,34 @@ def run(params, candles, timeframe):
                 'tf': timeframe,
                 'str': 69
                 })
-        else: #to get current trend
-            if current_psar > curr_price:
-                trend = "down"
-            elif current_psar < curr_price:
-                trend = "up"
-            else:
-                trend = "flat"
 
 
-    print("printing mass index signals")
-    for i in range(0, len(signals)):
+    print("printing Mass Index signals")
+    pct_change = 0
+    bal = 1000
+    for i in range(len(signals)):
+        if i+1 == len(signals)-1:
+            break
         print(signals[i])
+        curr_price = signals[i]['price']
+        next_price = signals[i+1]['price']
+        if signals[i]['sig'] == 'buy' and signals[i+1]['sig'] == 'sell':
+            print("curr price: ", curr_price)
+            print("next price: ", next_price)
+            diff =  ((next_price - curr_price) / curr_price)
+            print("diff: ", diff)
+            bal = bal + (bal * diff)
+            print("bal: ", bal)
+            pct_change = pct_change + diff
+            print("pct_change: ", pct_change)
+
+
+    myroi = round((((bal - 1000) / 1000) * 100), 2)
+    print("Total roi is: ", myroi, "%")
+    gain = round((bal - 1000), 2)
+    print("Total gain is: $", gain)
+    print("Balance is: $", bal)
+    print("Total pct change is: ", round((pct_change), 2))
+    return signals
 
     return signals
