@@ -23,3 +23,10 @@
     grid-template-rows: 1fr 1fr;
     grid-gap: 5%;
 }
+
+::ng-deep .EmbeddedTweet{
+    height:400px;
+}
+// .row{
+//     height:50%;
+// }

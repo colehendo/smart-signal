@@ -1,1 +1,13 @@
 <p>login-redirect works!</p>
+
+<div *ngIf="isLoggedIn; else loggedOut">
+    Logged in as {{role}}.
+  </div>
+
+  <ng-template #loggedOut>
+    <button class="btn btn-secondary" (click)="loginUser()">Login as User</button>
+    <button class="btn btn-primary" (click)="loginAdmin()">Login as Admin</button>
+    <hr />
+    <p>Don't have an account?</p>
+    <a href="signup" class="btn btn-success">Sign Up</a>
+  </ng-template>

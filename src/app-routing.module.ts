@@ -12,6 +12,8 @@ import { PageNotFoundComponent } from './app/components/page-not-found/page-not-
 
 import { RoleGuard } from './app/core/guards/role.guard';
 
+import { Router } from '@angular/router';
+
 const routes: Routes = [
 	{ path: '', component: LandingPageComponent },
 	{ path: 'redirect', component: LoginRedirectComponent },
@@ -47,10 +49,38 @@ const routes: Routes = [
   	{ path: '**', component: PageNotFoundComponent }
 ];
 
+
 @NgModule({
+
   imports: [
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  entryComponents: [
+    AboutComponent,
+    LoginRedirectComponent,
+    NewsComponent
+  ],
+  declarations:[
+	// LandingPageComponent,
+	// LoginRedirectComponent,
+	// AboutComponent,
+	// AccountComponent,
+	// AlgorithmsComponent,
+	// AssetsComponent,
+	// HomeComponent,
+	// NewsComponent
+  ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule { 
+	links: Array<{ text: string, path: string }>;
+	constructor(private router: Router) {
+		this.router.config.unshift(
+		  { path: 'about', component: AboutComponent },
+		  { path: 'login', component: LoginRedirectComponent },
+		  { path: 'news', component: NewsComponent },
+		);
+	  }
+}
+
+

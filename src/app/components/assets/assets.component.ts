@@ -7,6 +7,8 @@ interface Country {
   population: number;
 }
 
+
+
 const COUNTRIES: Country[] = [
   {
     name: 'Bitcoin',
@@ -20,18 +22,6 @@ const COUNTRIES: Country[] = [
     area: 9976140,
     population: 36624199
   },
-  {
-    name: 'United States',
-    flag: 'a/a4/Flag_of_the_United_States.svg',
-    area: 9629091,
-    population: 324459463
-  },
-  {
-    name: 'China',
-    flag: 'f/fa/Flag_of_the_People%27s_Republic_of_China.svg',
-    area: 9596960,
-    population: 1409517397
-  }
 ];
 @Component({
   selector: 'app-assets',
@@ -41,6 +31,59 @@ const COUNTRIES: Country[] = [
 export class AssetsComponent implements OnInit {
   countries = COUNTRIES;
   images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/900/500`);
+
+  public coins: any = [
+    {
+      'name': 'Bitcoin',
+      'symbol': 'BTC',
+      'price': 0
+    },
+    {
+      'name': 'Ethereum',
+      'symbol': 'ETH',
+      'price': 0
+    },
+    {
+      'name': 'Litecoin',
+      'symbol': 'LTC',
+      'price': 0
+    },
+    {
+      'name': 'XRP',
+      'symbol': 'XRP',
+      'price': 0
+    },
+    {
+      'name': 'Bitcoin Cash',
+      'symbol': 'BCH',
+      'price': 0
+    },
+    {
+      'name': 'EOS',
+      'symbol': 'EOS',
+      'price': 0
+    },
+    {
+      'name': 'Tezos',
+      'symbol': 'XTZ',
+      'price': 0
+    },
+    {
+      'name': 'Bitcoin SV',
+      'symbol': 'BSV',
+      'price': 0
+    },
+    {
+      'name': 'Chainlink',
+      'symbol': 'LINK',
+      'price': 0
+    },
+    {
+      'name': 'Dash',
+      'symbol': 'DASH',
+      'price': 0
+    },
+  ]
   constructor() { }
 
   ngOnInit() {
