@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavbarService } from '../../../services/navbar.service';
+import { NavbarService } from '../../../shared/services/navbar.service';
 
 @Component({
   selector: 'app-login-redirect',
@@ -10,30 +10,21 @@ import { NavbarService } from '../../../services/navbar.service';
 export class LoginRedirectComponent implements OnInit {
 
   isLoggedIn = false;
-  role = '';
  
-  constructor(private navbarService: NavbarService) {
+  constructor(
+    private router: Router,
+    private navbarService: NavbarService
+  ) {
     this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
   }
-  
-  //Cole's original constructor function
-  // constructor(
-  //   private router: Router,
-  // ) { }
 
   ngOnInit() {
-
-    // Cole's original code 
-    
-    // let code = window.location.href.split('code=')[1]
-    // localStorage.setItem('authCode', code);
-    // this.router.navigate(['/home']);
+    if ((window.location.href).includes('code=')) {
+      let code = window.location.href.split('code=')[1]
+      localStorage.setItem('authCode', code);
+      // this.navbarService.updateNavAfterAuth();
+      this.navbarService.updateLoginStatus(true);
+    }
+    this.router.navigate(['/home']);
   }
-
-  loginUser() {
-    this.navbarService.updateNavAfterAuth('user');
-    this.navbarService.updateLoginStatus(true);
-    this.role = 'user';
-  }
-
 }

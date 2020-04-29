@@ -16,7 +16,7 @@ export class RoleGuard implements CanActivate {
       if (localStorage.getItem('authCode')) {
         return true;
       }
-      this.router.navigate(['/']); // or an access denied page?
+      this.router.navigate(['/']);
       return false;
   }
   

@@ -108,6 +108,8 @@ export class AlgorithmsComponent implements OnInit {
     }
   ];
 
+  public balance = 100000;
+
   ngOnInit() {
     _.forEach(this.algorithmDisplayData, (item) => {
       this.catageories.push(item.name);
@@ -250,6 +252,7 @@ export class AlgorithmsComponent implements OnInit {
     });
 
     algorithm.push(all_timeframes);
+    algorithm.push([this.balance]);
 
     let combo_params = new HttpParams().set('data', JSON.stringify(algorithm));
     console.log(combo_params)

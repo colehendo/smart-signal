@@ -10,7 +10,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component'
 import { NewsComponent } from './news/news.component';
 import { LoginRedirectComponent } from '../core/authentication/login-redirect/login-redirect.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { NavbarService } from '../services/navbar.service';
+import { NavbarService } from '../shared/services/navbar.service';
 
 @Component({
   selector: 'app-root',
