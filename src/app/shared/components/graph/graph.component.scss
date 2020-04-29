@@ -1,3 +1,13 @@
-h1{
-	color:black;
+.timeframeButtons {
+	margin-left: 2%;
+	display: flex;
+}
+
+.timeframeButtons p {
+	margin-right: .75%;
+}
+
+.timeframeButtons button {
+	margin-left: .5%;
+	height: 75%;
 }

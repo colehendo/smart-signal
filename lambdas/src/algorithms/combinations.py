@@ -16,13 +16,13 @@ dynamodb = boto3.resource('dynamodb')
 all_indicators = []
 combo_results = []
 
-month_candles_for_combos = []
-week_candles_for_combos = []
-day_candles_for_combos = []
-four_hour_candles_for_combos = []
-hour_candles_for_combos = []
-fifteen_minute_candles_for_combos = []
-minute_candles_for_combos = []
+month_candles = []
+week_candles = []
+day_candles = []
+four_hour_candles = []
+hour_candles = []
+fifteen_minute_candles = []
+minute_candles = []
 
 timestamp = int(time.time())
 
@@ -77,6 +77,9 @@ def handler(event, context):
             }
         }
 
+    timeframes = data[-1]
+    del data[-1]
+
     global all_indicators
     
     for indicator in data:
@@ -129,20 +132,22 @@ def handler(event, context):
                 'params': indicator['minute']['params']
             })
 
-    global month_candles_for_combos
-    month_candles_for_combos = get_data('BTC_month', month_ttl, month_gap, month_datapoints)
-    global week_candles_for_combos
-    week_candles_for_combos = get_data('BTC_week', week_ttl, week_gap, week_datapoints)
-    global day_candles_for_combos
-    day_candles_for_combos = get_data('BTC_day', day_ttl, day_gap, day_datapoints)
-    global four_hour_candles_for_combos
-    four_hour_candles_for_combos = get_data('BTC_four_hour', four_hour_ttl, four_hour_gap, four_hour_datapoints)
-    global hour_candles_for_combos
-    hour_candles_for_combos = get_data('BTC_hour', hour_ttl, hour_gap, hour_datapoints) 
-    global fifteen_minute_candles_for_combos
-    fifteen_minute_candles_for_combos = get_data('BTC_fifteen_minute', fifteen_minute_ttl, fifteen_minute_gap, fifteen_minute_datapoints)
-    global minute_candles_for_combos
-    minute_candles_for_combos = get_data('BTC_minute', minute_ttl, minute_gap, minute_datapoints)
+    global month_candles
+    global week_candles
+    global day_candles
+    global four_hour_candles
+    global hour_candles
+    global fifteen_minute_candles
+    global minute_candles
+
+
+    if ('month' in timeframes): month_candles = get_data('BTC_month', month_ttl, month_gap, month_datapoints)
+    if ('week' in timeframes): week_candles = get_data('BTC_week', week_ttl, week_gap, week_datapoints)
+    if ('day' in timeframes): day_candles = get_data('BTC_day', day_ttl, day_gap, day_datapoints)
+    if ('four_hour' in timeframes): four_hour_candles = get_data('BTC_four_hour', four_hour_ttl, four_hour_gap, four_hour_datapoints)
+    if ('hour' in timeframes): hour_candles = get_data('BTC_hour', hour_ttl, hour_gap, hour_datapoints)
+    if ('fifteen_minute' in timeframes): fifteen_minute_candles = get_data('BTC_fifteen_minute', fifteen_minute_ttl, fifteen_minute_gap, fifteen_minute_datapoints)
+    if ('minute' in timeframes): minute_candles = get_data('BTC_minute', minute_ttl, minute_gap, minute_datapoints)
 
     processes = []
     parent_connections = []

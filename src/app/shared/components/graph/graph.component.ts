@@ -30,7 +30,7 @@ export class GraphComponent implements OnInit {
       type: 'candlestick'
     }],
     title:{
-      text:`BTC ${this.timeframe}`
+      text:`Bitcoin / U.S. Dollar: ${this.timeframe}`
     }
   };
 
