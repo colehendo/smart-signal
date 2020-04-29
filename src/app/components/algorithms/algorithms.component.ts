@@ -187,7 +187,6 @@ export class AlgorithmsComponent implements OnInit {
     });
 
     algorithm.push(all_timeframes);
-    let algorithmTimeframe = all_timeframes[0];
 
     let graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
     let alg_params = new HttpParams().set('vals', JSON.stringify(algorithm));
@@ -217,14 +216,25 @@ export class AlgorithmsComponent implements OnInit {
     algorithm.splice(-1,1);
   }
 
-  combos() {
+  runCombinations(algorithm: any) {
+    let all_timeframes = [];
+
+    _.forEach(algorithm, (item) => {
+      if (!all_timeframes.includes(item.timeframe)) {
+        all_timeframes.push(item.timeframe);
+      }
+    });
+
+    algorithm.push(all_timeframes);
+
     console.log(testAlgorithmData)
-    let combo_params = new HttpParams().set('data', JSON.stringify(testAlgorithmData));
+    let combo_params = new HttpParams().set('data', JSON.stringify(algorithm));
     console.log(combo_params)
     this.apiService.combinations(combo_params).subscribe(data => {
       console.log('combo data:')
       console.log(data);
     });
+    algorithm.splice(-1,1);
   }
 
 }

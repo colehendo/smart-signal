@@ -13,7 +13,7 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 
-all_indicators = []
+# all_indicators = []
 combo_results = []
 
 month_candles = []
@@ -80,57 +80,57 @@ def handler(event, context):
     timeframes = data[-1]
     del data[-1]
 
-    global all_indicators
+    # global all_indicators
     
-    for indicator in data:
-        if 'month' in indicator:
-            all_indicators.append({
-                'indicator': indicator['indicator'],
-                'timeframe': 'month',
-                'params': indicator['month']['params']
-            })
+    # for indicator in data:
+    #     if 'month' in indicator:
+    #         all_indicators.append({
+    #             'indicator': indicator['indicator'],
+    #             'timeframe': 'month',
+    #             'params': indicator['month']['params']
+    #         })
 
-        if 'week' in indicator:
-            all_indicators.append({
-                'indicator': indicator['indicator'],
-                'timeframe': 'week',
-                'params': indicator['week']['params']
-            })
+    #     if 'week' in indicator:
+    #         all_indicators.append({
+    #             'indicator': indicator['indicator'],
+    #             'timeframe': 'week',
+    #             'params': indicator['week']['params']
+    #         })
         
-        if 'day' in indicator:
-            all_indicators.append({
-                'indicator': indicator['indicator'],
-                'timeframe': 'day',
-                'params': indicator['day']['params']
-            })
+    #     if 'day' in indicator:
+    #         all_indicators.append({
+    #             'indicator': indicator['indicator'],
+    #             'timeframe': 'day',
+    #             'params': indicator['day']['params']
+    #         })
 
-        if 'four_hour' in indicator:
-            all_indicators.append({
-                'indicator': indicator['indicator'],
-                'timeframe': 'four_hour',
-                'params': indicator['four_hour']['params']
-            })
+    #     if 'four_hour' in indicator:
+    #         all_indicators.append({
+    #             'indicator': indicator['indicator'],
+    #             'timeframe': 'four_hour',
+    #             'params': indicator['four_hour']['params']
+    #         })
 
-        if 'hour' in indicator:
-            all_indicators.append({
-                'indicator': indicator['indicator'],
-                'timeframe': 'hour',
-                'params': indicator['hour']['params']
-            })
+    #     if 'hour' in indicator:
+    #         all_indicators.append({
+    #             'indicator': indicator['indicator'],
+    #             'timeframe': 'hour',
+    #             'params': indicator['hour']['params']
+    #         })
 
-        if 'fifteen_minute' in indicator:
-            all_indicators.append({
-                'indicator': indicator['indicator'],
-                'timeframe': 'fifteen_minute',
-                'params': indicator['fifteen_minute']['params']
-            })
+    #     if 'fifteen_minute' in indicator:
+    #         all_indicators.append({
+    #             'indicator': indicator['indicator'],
+    #             'timeframe': 'fifteen_minute',
+    #             'params': indicator['fifteen_minute']['params']
+    #         })
 
-        if 'minute' in indicator:
-            all_indicators.append({
-                'indicator': indicator['indicator'],
-                'timeframe': 'minute',
-                'params': indicator['minute']['params']
-            })
+    #     if 'minute' in indicator:
+    #         all_indicators.append({
+    #             'indicator': indicator['indicator'],
+    #             'timeframe': 'minute',
+    #             'params': indicator['minute']['params']
+    #         })
 
     global month_candles
     global week_candles
@@ -139,7 +139,6 @@ def handler(event, context):
     global hour_candles
     global fifteen_minute_candles
     global minute_candles
-
 
     if ('month' in timeframes): month_candles = get_data('BTC_month', month_ttl, month_gap, month_datapoints)
     if ('week' in timeframes): week_candles = get_data('BTC_week', week_ttl, week_gap, week_datapoints)
@@ -152,9 +151,9 @@ def handler(event, context):
     processes = []
     parent_connections = []
 
-    for i in range(len(all_indicators)):
+    for i in range(len(data)):
         parent_connection, child_connection = Pipe()
-        processes.append(Process(target=calculate_combinations, args=((i + 1), child_connection)))
+        processes.append(Process(target=calculate_combinations, args=(data, (i + 1), child_connection)))
         parent_connections.append(parent_connection)
         processes[-1].start()
     
@@ -190,32 +189,32 @@ def handler(event, context):
     }
 
 
-def calculate_combinations(count, connection):
-    combos = list(combinations(all_indicators, count))
+def calculate_combinations(data, count, connection):
+    combos = list(combinations(data, count))
     results = []
     processes = []
     parent_connections = []
 
-    for combination in combos:
-        parent_connection, child_connection = Pipe()
-        processes.append(Process(target=run_combinations, args=(combination, child_connection)))
-        parent_connections.append(parent_connection)
-        processes[-1].start()
-
-    for j in processes:
-        j.join()
-
-    for parent_connection in parent_connections:
-        result = parent_connection.recv()
-        if result:
-            if result[1][-1]['avg_roi'] > 10:
-                results.append(result)
-
     # for combination in combos:
-    #     result = run_combinations(combination)
+    #     parent_connection, child_connection = Pipe()
+    #     processes.append(Process(target=run_combinations, args=(combination, child_connection)))
+    #     parent_connections.append(parent_connection)
+    #     processes[-1].start()
+
+    # for j in processes:
+    #     j.join()
+
+    # for parent_connection in parent_connections:
+    #     result = parent_connection.recv()
     #     if result:
     #         if result[1][-1]['avg_roi'] > 10:
     #             results.append(result)
+
+    for combination in combos:
+        result = run_combinations(combination)
+        if result:
+            if result[1][-1]['avg_roi'] > 10:
+                results.append(result)
 
     results.sort(key = lambda data: data[1][-1]['avg_roi'], reverse = True)
     if len(results) > 20:
@@ -223,8 +222,8 @@ def calculate_combinations(count, connection):
     connection.send([results])
 
 
+def run_combinations(combination):
 # def run_combinations(combination, connection):
-def run_combinations(combination, connection):
     timeframe_data = []
 
     combination_signals = []
@@ -246,13 +245,13 @@ def run_combinations(combination, connection):
 
         timeframe = item['timeframe']
         indicator = item['indicator']
-        if timeframe == 'month': candles = month_candles_for_combos
-        elif timeframe == 'week': candles = week_candles_for_combos
-        elif timeframe == 'day': candles = day_candles_for_combos
-        elif timeframe == 'four_hour': candles = four_hour_candles_for_combos
-        elif timeframe == 'hour': candles = hour_candles_for_combos
-        elif timeframe == 'fifteen_minute': candles = fifteen_minute_candles_for_combos
-        elif timeframe == 'minute': candles = minute_candles_for_combos
+        if timeframe == 'month': candles = month_candles
+        elif timeframe == 'week': candles = week_candles
+        elif timeframe == 'day': candles = day_candles
+        elif timeframe == 'four_hour': candles = four_hour_candles
+        elif timeframe == 'hour': candles = hour_candles
+        elif timeframe == 'fifteen_minute': candles = fifteen_minute_candles
+        elif timeframe == 'minute': candles = minute_candles
 
         indicator_data = match_indicator(indicator, item['params'], candles, timeframe)
         if indicator_data:
@@ -353,12 +352,12 @@ def run_combinations(combination, connection):
 
     if combination_signals:
         combination_signals.sort(key = lambda signal: signal['time'])
-        # return ([combination, any_tf(combination_signals, timeframe_data)])
-        connection.send([combination, any_tf(combination_signals, timeframe_data)])
+        return ([combination, any_tf(combination_signals, timeframe_data)])
+        # connection.send([combination, any_tf(combination_signals, timeframe_data)])
 
     else:
-        # return []
-        connection.send([])
+        return []
+        # connection.send([])
 
 
 def get_data(table, ttl, gap, datapoints):
