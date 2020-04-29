@@ -9,7 +9,8 @@ def run(params, candles, timeframe):
     last_signal = 'hold'
     top = 0
     bottom = 10000000
-    top_index, bottom_index = 0
+    top_index = 0
+    bottom_index = 0
 
     for i in range(len(rsi_total)):
         current_rsi = rsi_total.iloc[i]
