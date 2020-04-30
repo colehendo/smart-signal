@@ -32,7 +32,7 @@ export class GraphComponent implements OnInit {
       zoomType: 'x'
     },
     title: {
-        text: `Bitcoin / U.S. Dollar: Day Datapoints`
+        text: `Bitcoin (USD): Day Datapoints`
     },
     subtitle: {
         text: document.ontouchstart === undefined ?
@@ -168,7 +168,7 @@ export class GraphComponent implements OnInit {
         newData.push([item.t * 1000, item.c]);
       });
       this.chartOptions.series[0]['data'] = newData;
-      this.chartOptions.title.text = `Bitcoin / U.S. Dollar: ${displayName} Datapoints`;
+      this.chartOptions.title.text = `Bitcoin (USD): ${displayName} Datapoints`;
       this.updateFlag = true;
     });
   }

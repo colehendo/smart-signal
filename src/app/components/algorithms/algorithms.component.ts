@@ -36,7 +36,7 @@ export class AlgorithmsComponent implements OnInit {
       }
     },
     title: {
-        text: `Bitcoin / U.S. Dollar: Day Datapoints`
+        text: `Bitcoin (USD): Day Datapoints`
     },
     xAxis: {
         type: 'datetime',
@@ -53,7 +53,7 @@ export class AlgorithmsComponent implements OnInit {
         }
     },
     tooltip: {
-      pointFormat: 'Price: ${point.y}<br>',
+      pointFormat: 'Price: ${point.y}',
       shared: true
     },
     plotOptions: {
@@ -258,7 +258,7 @@ export class AlgorithmsComponent implements OnInit {
         _.forEach(this.timeframeOptions, (timeframe) => {
           if (all_timeframes.includes(timeframe.value)) {
             console.log('found it')
-            this.chartOptions.title.text = `Bitcoin / U.S. Dollar: ${timeframe.name} Datapoints`;
+            this.chartOptions.title.text = `Bitcoin (USD): ${timeframe.name} Datapoints`;
             this.chartOptions.series[1]['data'] = flags;
             console.log(this.chartOptions.annotations)
             this.updateFlag = true;
