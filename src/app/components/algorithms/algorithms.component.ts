@@ -297,6 +297,10 @@ export class AlgorithmsComponent implements OnInit {
    console.log("Added algorithm ",current_alg)
   }
 
+  current_algorithm(test) {
+    console.log(test)
+  }
+
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();

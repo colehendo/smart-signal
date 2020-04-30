@@ -10,19 +10,20 @@
         style="width: 100%; height: 400px; display: block;"
     ></highcharts-chart>
 
-    <label for="typeahead-focus">Search for news:</label>
+    <!-- <label for="typeahead-focus">Search for news:</label>
     <input
       id="typeahead-focus"
       type="text"
       class="form-control"
-      [(ngModel)]="current_alg"
+      #test
+      (keyup)="current_algorithm(test.value)"
       [ngbTypeahead]="search"
       (focus)="focus$.next($any($event).target.value); test($any($event).target.value)"
       (click)="click$.next($any($event).target.value); test($any($event).target.value)"
       #instance="ngbTypeahead"
     />
     <pre>Model: {{ current_alg | json }}</pre>
-    <button (click)="get_current_alg()">Send Alg</button>
+    <button (click)="get_current_alg()">Send Alg</button> -->
 
     <div class="row">
         <div class="col">
