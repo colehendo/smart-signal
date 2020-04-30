@@ -14,7 +14,7 @@
 #     vpt(params, candles) #volume
 #     mfi(params, candles) #volume
 # trend
-#     atr(params, candles)
+#     atr(params, candles) #broke
 #     bb(params, candles) #fully implemented, pretty ass
 #     dc(params, candles) #hard to implement
 #     kc(params, candles) #hard to implement
@@ -22,7 +22,7 @@
 #     adx(params, candles) #poppin
 #     mi(params, candles) #signals arent pumping
 #     psar(params, candles) #poppin
-#    momentum
+# momentum
 #     macd(params, candles) #works but can be improved
 #     rsi #works, could be better, divergences is broke
 #     vi(params, candles)
