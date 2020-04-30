@@ -136,7 +136,7 @@ export class AlgorithmsComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.algorithmDisplayData.sort((a, b) => a.indicator.localeCompare(b.indicator))
+    this.algorithmDisplayData.sort((a, b) => a.indicator.localeCompare(b.indicator));
 
     let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
     this.apiService.getSingleTable(graph_params).subscribe(data => {
@@ -293,6 +293,7 @@ export class AlgorithmsComponent implements OnInit {
           balance: combo[1][combo[1].length - 1]['bal'],
           roi: combo[1][combo[1].length - 1]['avg_roi']
         });
+        this.combinationResults.sort((a, b) => a.roi + b.roi);
       });
     });
     this.combinationSent = true;
