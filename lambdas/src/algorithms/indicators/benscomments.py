@@ -26,9 +26,9 @@
 #     macd(params, candles) #works but can be improved
 #     rsi #works, could be better, divergences is broke
 #     vi(params, candles)
-#     ao(params, candles) #in progress
+#     ao(params, candles) pretty solid, can probly be improved
 #     kama(params, candles)
-#     roc(params, candles)
+#     roc(params, candles) #works but REALLY sucks, try riding trend
 #     sr(params, candles) #works but sucks
 #     uo(params, candles)
-#     wr(params, candles) #works and is ok
+#     wr(params, candles) #works and is aite
