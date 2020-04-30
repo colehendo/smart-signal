@@ -371,31 +371,6 @@
         }
     },
     {
-        "name": "Trix",
-        "indicator": "trix",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        }
-    },
-    {
         "name": "Mass Index",
         "indicator": "mi",
         "month": {
