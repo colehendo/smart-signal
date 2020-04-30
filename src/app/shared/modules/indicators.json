@@ -683,32 +683,32 @@
         },
         "day": {
             "params": {
-              "sell": 85,
-              "buy": 15
+              "sell": 80,
+              "buy": 20
             }
         },
         "four_hour": {
             "params": {
-              "sell": 90,
-              "buy": 10
+              "sell": 80,
+              "buy": 20
             }
         },
         "hour": {
             "params": {
-              "sell": 90,
-              "buy": 10
+              "sell": 80,
+              "buy": 20
             }
         },
         "fifteen_minute": {
             "params": {
-              "sell": 95,
-              "buy": 5
+              "sell": 80,
+              "buy": 20
             }
         },
         "minute": {
             "params": {
-              "sell": 95,
-              "buy": 5
+              "sell": 90,
+              "buy": 10
             }
         }
     },
