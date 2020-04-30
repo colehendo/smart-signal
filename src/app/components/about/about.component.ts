@@ -21,20 +21,80 @@ export class AboutComponent implements OnInit {
   public updateFlag: boolean = false;
 
   public chartOptions: Highcharts.Options = {
-    series: [{
-      name: '',
-      data: [],
-      type: 'line'
-    }],
-    title:{
-      text:''
+    chart: {
+      zoomType: 'x',
+      panKey: 'shift',
+      scrollablePlotArea: {
+          minWidth: 600
+      }
+    },
+    title: {
+        text: `Bitcoin / U.S. Dollar: Day Datapoints`
+    },
+    // credits: {
+    //     enabled: false
+    // },
+    
+    xAxis: {
+        type: 'datetime',
     },
     yAxis: {
-      title: {
-          text: ''
+        startOnTick: true,
+        endOnTick: false,
+        maxPadding: 0.35,
+        title: {
+            text: 'Price (USD)'
+        },
+        labels: {
+            format: '${value}'
+        }
+    },
+    tooltip: {
+        // headerFormat: 'BTC Price: ${point.y}<br>',
+        shared: true
+    },
+
+    // legend: {
+    //     enabled: false
+    // },
+    plotOptions: {
+      area: {
+          lineColor: '#00D080',
+          fillColor: {
+              linearGradient: {
+                  x1: 0,
+                  y1: 0,
+                  x2: 0,
+                  y2: 2
+              },
+              stops: [
+                  [0, '#00D080'],
+                  [1, '#4C4C4B']
+              ]
+          },
+          marker: {
+              radius: 2
+          },
+          lineWidth: 1,
+          states: {
+              hover: {
+                  lineWidth: 1
+              }
+          },
+          threshold: null
       }
   },
+    series: [
+      {
+        name: 'BTC Price (USD)',
+        data: [],
+        type: 'area',
+        id: 'prices'
+      }
+    ]
   };
+
+  
 
   public coins: any = [
     {
@@ -114,7 +174,7 @@ export class AboutComponent implements OnInit {
       this.updateFlag = false;
       let newData = [];
       _.forEach(data[0]['tf_data'], (item) => {
-        newData.push([item.t, item.c]);
+        newData.push([item.t * 1000, item.c]);
       });
       this.chartOptions.series[0]['data'] = newData;
       this.updateFlag = true;

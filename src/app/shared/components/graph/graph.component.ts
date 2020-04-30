@@ -49,35 +49,28 @@ export class GraphComponent implements OnInit {
             text: 'Price (USD)'
         }
     },
+    tooltip: {
+      pointFormat: 'Price: ${point.y}<br>',
+      shared: true
+    },
     legend: {
         enabled: false
     },
     plotOptions: {
-        area: {
-            lineColor: '#00D080',
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 2
-                },
-                stops: [
-                    [0, '#00D080'],
-                    [1, 'rgb(76, 76, 75 )']
-                ]
-            },
-            marker: {
-                radius: 2
-            },
-            lineWidth: 1,
-            states: {
-                hover: {
-                    lineWidth: 1
-                }
-            },
-            threshold: null
-        }
+      area: {
+        lineColor: '#00D080',
+        fillOpacity: 0, 
+        marker: {
+            radius: 3
+        },
+        lineWidth: 3,
+        states: {
+            hover: {
+                lineWidth: 2
+            }
+        },
+        threshold: null
+      }
     },
     annotations: [],
     series: [{
@@ -91,6 +84,7 @@ export class GraphComponent implements OnInit {
     {
       'timeframe': 'Minute',
       'buttonName': '1Min',
+      'value': 'minute',
       'table': 'BTC_minute',
       'ttl': 86400,
       'gap': 60,
@@ -99,6 +93,7 @@ export class GraphComponent implements OnInit {
     {
       'timeframe': '15 Minute',
       'buttonName': '15Min',
+      'value': 'fifteen_minute',
       'table': 'BTC_fifteen_minute',
       'ttl': 604800,
       'gap': 900,
@@ -107,6 +102,7 @@ export class GraphComponent implements OnInit {
     {
       'timeframe': 'Hour',
       'buttonName': '1H',
+      'value': 'hour',
       'table': 'BTC_hour',
       'ttl': 2628000,
       'gap': 3600,
@@ -115,6 +111,7 @@ export class GraphComponent implements OnInit {
     {
       'timeframe': '4 Hour',
       'buttonName': '4H',
+      'value': 'four_hour',
       'table': 'BTC_four_hour',
       'ttl': 15768000,
       'gap': 14400,
@@ -123,6 +120,7 @@ export class GraphComponent implements OnInit {
     {
       'timeframe': 'Day',
       'buttonName': '1D',
+      'value': 'day',
       'table': 'BTC_day',
       'ttl': 157680000,
       'gap': 86400,
@@ -131,6 +129,7 @@ export class GraphComponent implements OnInit {
     {
       'timeframe': 'Week',
       'buttonName': '7D',
+      'value': 'week',
       'table': 'BTC_week',
       'ttl': 0,
       'gap': 604800,
@@ -139,6 +138,7 @@ export class GraphComponent implements OnInit {
     {
       'timeframe': 'Month',
       'buttonName': '1Mo',
+      'value': 'month',
       'table': 'BTC_month',
       'ttl': 0,
       'gap': 2628000,
@@ -154,15 +154,21 @@ export class GraphComponent implements OnInit {
 
   ngOnInit() {
     // this.socket = new ReconnectingWebSocket("wss://rix9fti73l.execute-api.us-east-1.amazonaws.com/prod");
-    
-    let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
+    this.setGraph('day', 'Day');
+  }
+
+  setGraph(timeframe, displayName) {
+    console.log(timeframe)
+    let graph_params = new HttpParams().set('table', JSON.stringify([timeframe]));
     this.apiService.getSingleTable(graph_params).subscribe(data => {
+      console.log(data)
       this.updateFlag = false;
       let newData = [];
       _.forEach(data[0]['tf_data'], (item) => {
-        newData.push([item.t, item.c]);
+        newData.push([item.t * 1000, item.c]);
       });
       this.chartOptions.series[0]['data'] = newData;
+      this.chartOptions.title.text = `Bitcoin / U.S. Dollar: ${displayName} Datapoints`;
       this.updateFlag = true;
     });
   }

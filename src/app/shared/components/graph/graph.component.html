@@ -8,6 +8,6 @@
 
   <div class="timeframeButtons">
     <p class="tfButtonContents">Candle size: </p>
-    <button class="tfButtonContents"  *ngFor="let tf of timeframes" (click)="newWebSocket(tf['timeframe'])">{{ tf['buttonName'] }}</button>
+    <button class="tfButtonContents"  *ngFor="let tf of timeframes" (click)="setGraph(tf['value'], tf['timeframe'])">{{ tf['buttonName'] }}</button>
   </div>
 </div>
