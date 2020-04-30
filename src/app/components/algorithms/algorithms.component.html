@@ -38,6 +38,7 @@
                     <button *ngFor="let timeframe of timeframeOptions" ngbDropdownItem (click)="appendAlgorithm(timeframe)" class="btn btn-success">{{ timeframe.name }}</button>
                 </div>
             </div>
+            <input placeholder="Balance (default $100,000)" #bal (keyup)="balance = bal.value">
         </div>
     </div>
     <div [hidden]="!algSelected">
@@ -63,8 +64,8 @@
             </table>
         </div>
 
-        <button class="btn btn-success" (click)="runAlgorithms(payload)">Run All Algorithms</button>
-        <button class="btn btn-success" (click)="runCombinations(payload)">Run Combinations of Algorithms</button>
+        <button class="btn btn-success" (click)="algoritmHandler(payload, 'algorithm')">Run All Algorithms</button>
+        <button class="btn btn-success" (click)="algoritmHandler(payload, 'combination')">Run Combinations of Algorithms</button>
     </div>
     <div [hidden]="!combinationSent">
         <br>

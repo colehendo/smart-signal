@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, isEmpty } from 'rxjs/operators';
 
 import { ApiService } from '../../core/http/api.service';
 import  *  as  data  from  '../../shared/modules/indicators.json';
@@ -25,9 +25,12 @@ export class AlgorithmsComponent implements OnInit {
   model: any;
   public catageories = [];
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private appRef: ApplicationRef) { }
 
   public algorithmDisplayData = algorithmData;
+  public combo_params = new HttpParams().set('timeframes', '');
+  public alg_params = new HttpParams().set('data', '');
+  public graph_params = new HttpParams().set('data', '');
 
   public chartOptions: Highcharts.Options = {
     rangeSelector: {
@@ -69,6 +72,7 @@ export class AlgorithmsComponent implements OnInit {
   public socket;
   public updateFlag: boolean = false;
 
+  public balance: any;
   public payload = [];
   public tableData = [];
   public combinationResults = [];
@@ -77,6 +81,7 @@ export class AlgorithmsComponent implements OnInit {
   public algSelectedFromDropDown = false;
   public combinationSent = false;
   public chartPayloadSent = false;
+
   public timeframeOptions = [
     {
       name: '1 Month',
@@ -107,8 +112,6 @@ export class AlgorithmsComponent implements OnInit {
       value: 'minute'
     }
   ];
-
-  public balance = 100000;
 
   ngOnInit() {
     _.forEach(this.algorithmDisplayData, (item) => {
@@ -160,6 +163,7 @@ export class AlgorithmsComponent implements OnInit {
       timeframe: timeframe.value,
       params: params
     });
+    console.log(this.payload)
 
     this.algSelected = true;
     this.algSelectedFromDropDown = false;
@@ -172,7 +176,7 @@ export class AlgorithmsComponent implements OnInit {
       params: algorithm.params
     }]
 
-    this.runAlgorithms(individualPayload);
+    this.algoritmHandler(individualPayload, 'algorithm');
   }
 
   removeAlgFromTable(algorithm) {
@@ -189,14 +193,10 @@ export class AlgorithmsComponent implements OnInit {
     }
   }
 
-  runAlgorithms(algorithm: any) {
-    this.updateFlag = false;
-    this.chartOptions.series[0]['data'] = []
-    this.chartOptions.series[1]['data'] = []
-    this.updateFlag = true;
+  algoritmHandler(algorithm: any, type: string) {
+    (isNaN(this.balance) || !this.balance) ? this.balance = 100000 : this.balance = parseInt(this.balance, 10);
 
     let all_timeframes = [];
-
     _.forEach(algorithm, (item) => {
       if (!all_timeframes.includes(item.timeframe)) {
         all_timeframes.push(item.timeframe);
@@ -204,20 +204,30 @@ export class AlgorithmsComponent implements OnInit {
     });
 
     algorithm.push(all_timeframes);
-    let algorithmTimeframe = all_timeframes[0].timeframe;
-    console.log(all_timeframes)
+    algorithm.push([this.balance]);
 
-    let graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
-    let alg_params = new HttpParams().set('vals', JSON.stringify(algorithm));
+    type === 'algorithm' ? this.runAlgorithms(algorithm, all_timeframes) : this.runCombinations(algorithm);
+  }
+
+  runAlgorithms(algorithm: any, all_timeframes: any) {
     this.updateFlag = false;
-    this.apiService.getData(graph_params).pipe(
+    this.chartOptions.series[0]['data'] = []
+    this.chartOptions.series[1]['data'] = []
+    this.updateFlag = true;
+
+    let algorithmTimeframe = all_timeframes[0].timeframe;
+
+    this.graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
+    this.alg_params = new HttpParams().set('data', JSON.stringify(algorithm));
+    this.updateFlag = false;
+    this.apiService.getData(this.graph_params).pipe(
       switchMap(data => {
         let newData = [];
         _.forEach(data[0]['tf_data'], (item) => {
           newData.push([item.t, item.c]);
         });
         this.chartOptions.series[0]['data'] = newData;
-        return this.apiService.algorithms(alg_params)
+        return this.apiService.algorithms(this.alg_params)
       })).subscribe(data => {
         let newData = [];
         _.forEach(data, (item) => {
@@ -241,25 +251,20 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   runCombinations(algorithm: any) {
-    this.combinationResults = [];
     console.log(algorithm)
-    let all_timeframes = [];
+    console.log(`params: ${this.payload}`)
+    this.combinationResults.length = 0;
+    this.combinationResults = [];
+    this.appRef.tick();
+    console.log(this.combinationResults)
+    let test = [];
 
-    _.forEach(algorithm, (item) => {
-      if (!all_timeframes.includes(item.timeframe)) {
-        all_timeframes.push(item.timeframe);
-      }
-    });
-
-    algorithm.push(all_timeframes);
-    algorithm.push([this.balance]);
-
-    let combo_params = new HttpParams().set('data', JSON.stringify(algorithm));
-    console.log(combo_params)
-    this.apiService.combinations(combo_params).subscribe(data => {
+    this.combo_params = new HttpParams().set('data', JSON.stringify(algorithm));
+    console.log(this.combo_params)
+    this.apiService.combinations(this.combo_params).subscribe(item => {
       console.log('combo data:')
-      console.log(data);
-      _.forEach(data, (combo) => {
+      console.log(item);
+      _.forEach(item, (combo) => {
         let combinationString = '';
         _.forEach(combo[0], (algorithm) => {
           _.forEach(this.algorithmDisplayData, (algorithms) => {
@@ -274,16 +279,19 @@ export class AlgorithmsComponent implements OnInit {
         });
 
         console.log(`pushing for ${combo}`)
-        this.combinationResults.push({
+        test.push({
           name: combinationString,
           balance: combo[1][combo[1].length - 1]['bal'],
           roi: combo[1][combo[1].length - 1]['avg_roi']
         });
         console.log(this.combinationResults)
       });
+      item = [];
+      item.length = 0;
+      console.log(test)
     });
     this.combinationSent = true;
-    algorithm.splice(-1,1);
+    algorithm.splice(-2, 2);
   }
 
   current_alg:string;
