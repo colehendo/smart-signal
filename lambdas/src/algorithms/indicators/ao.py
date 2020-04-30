@@ -16,7 +16,7 @@ def run(params, candles, timeframe):
         #out of bounds
         if i+1 == len(ao)-1:
             break;
-        if i >= 2:
+        elif i >= 2:
         #if we are in uptrend
             if curr_ao > 0:
                 # two down candles in a row means dying trend

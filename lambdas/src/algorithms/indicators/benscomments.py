@@ -15,7 +15,7 @@
 #     mfi(params, candles) #volume
 # trend
 #     atr(params, candles)
-#     bb(params, candles) #hard to implement
+#     bb(params, candles) #fully implemented, pretty ass
 #     dc(params, candles) #hard to implement
 #     kc(params, candles) #hard to implement
 #     cci(params, candles) #hard to implement
@@ -26,9 +26,9 @@
 #     macd(params, candles) #works but can be improved
 #     rsi #works, could be better, divergences is broke
 #     vi(params, candles)
-#     ao(params, candles)
+#     ao(params, candles) #in progress
 #     kama(params, candles)
 #     roc(params, candles)
 #     sr(params, candles) #works but sucks
 #     uo(params, candles)
-#     wr(params, candles) #works and not bad
+#     wr(params, candles) #works and is ok
