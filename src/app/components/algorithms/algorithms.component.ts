@@ -38,10 +38,6 @@ export class AlgorithmsComponent implements OnInit {
     title: {
         text: `Bitcoin / U.S. Dollar: Day Datapoints`
     },
-    // credits: {
-    //     enabled: false
-    // },
-    
     xAxis: {
         type: 'datetime',
     },
@@ -57,35 +53,20 @@ export class AlgorithmsComponent implements OnInit {
         }
     },
     tooltip: {
-        headerFormat: '${point.y}<br>',
-        shared: true
+      pointFormat: 'Price: ${point.y}<br>',
+      shared: true
     },
-
-    // legend: {
-    //     enabled: false
-    // },
     plotOptions: {
       area: {
           lineColor: '#00D080',
-          fillColor: {
-              linearGradient: {
-                  x1: 0,
-                  y1: 0,
-                  x2: 0,
-                  y2: 2
-              },
-              stops: [
-                  [0, '#00D080'],
-                  [1, 'rgb(76, 76, 75 )']
-              ]
-          },
+          fillOpacity: 0, 
           marker: {
-              radius: 2
+              radius: 3
           },
-          lineWidth: 1,
+          lineWidth: 3,
           states: {
               hover: {
-                  lineWidth: 1
+                  lineWidth: 2
               }
           },
           threshold: null
@@ -93,15 +74,17 @@ export class AlgorithmsComponent implements OnInit {
   },
     series: [
       {
+        name: 'BTC Price (USD)',
         data: [],
         type: 'area',
         id: 'prices'
       },
         {
           type: 'flags',
+          name: 'Signals',
           data: [],
           onSeries: 'prices',
-          shape: 'circlepin',
+          shape: 'squarepin',
           width: 16
       }
     ]
@@ -160,7 +143,7 @@ export class AlgorithmsComponent implements OnInit {
       this.updateFlag = false;
       let newData = [];
       _.forEach(data[0]['tf_data'], (item) => {
-        newData.push([item.t, item.c]);
+        newData.push([item.t * 1000, item.c]);
       });
       this.chartOptions.series[0]['data'] = newData;
       this.updateFlag = true;
@@ -255,7 +238,7 @@ export class AlgorithmsComponent implements OnInit {
       switchMap(data => {
         let newData = [];
         _.forEach(data[0]['tf_data'], (item) => {
-          newData.push([item.t, item.c]);
+          newData.push([item.t * 1000, item.c]);
         });
         this.chartOptions.series[0]['data'] = newData;
         return this.apiService.algorithms(this.alg_params)
@@ -266,9 +249,9 @@ export class AlgorithmsComponent implements OnInit {
         _.forEach(data, (item) => {
           if (item.sig) {
             flags.push({
-              x: new Date(item.time),
+              x: new Date(item.time * 1000),
               title: item.sig,
-              text: `Sell $${item.amt.toFixed(2)}`,
+              text: `Transaction: $${item.amt.toFixed(2)}`,
             })
           }
         });
