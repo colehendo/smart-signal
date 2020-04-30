@@ -27,6 +27,8 @@ export class AlgorithmsComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
 
+  public algorithmDropDownText = 'Select Algorithm';
+
   public algorithmDisplayData = algorithmData;
   public combo_params = new HttpParams().set('timeframes', '');
   public alg_params = new HttpParams().set('data', '');
@@ -51,11 +53,23 @@ export class AlgorithmsComponent implements OnInit {
             text: 'Exchange rate'
         }
     },
+    xAxis: { type: 'datetime' },
     series: [{
         name: 'Prices',
         data: [],
         type: 'line',
-        id: 'dataseries'
+        id: 'dataseries',
+        dataGrouping: {
+          units: [
+              [
+                  'week', // unit name
+                  [1] // allowed multiples
+              ], [
+                  'month',
+                  [1, 2, 3, 4, 6]
+              ]
+          ]
+      }
     },
     // the event marker flags
     {
@@ -134,6 +148,8 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   setAlgorithm(algorithm) {
+    console.log(algorithm.name)
+    this.algorithmDropDownText = algorithm.name;
     this.selectedAlgorithm = algorithm;
     this.algSelectedFromDropDown = true;
   }
@@ -163,6 +179,7 @@ export class AlgorithmsComponent implements OnInit {
     });
     console.log(this.payload)
 
+    this.algorithmDropDownText = 'Select Algorithm';
     this.algSelected = true;
     this.algSelectedFromDropDown = false;
   }
@@ -295,26 +312,6 @@ export class AlgorithmsComponent implements OnInit {
   get_current_alg(){
    let current_alg= this.current_alg;
    console.log("Added algorithm ",current_alg)
-  }
-
-  current_algorithm(test) {
-    console.log(test)
-  }
-
-  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
-  focus$ = new Subject<string>();
-  click$ = new Subject<string>();
-
-  search = (text$: Observable<string>) => {
-    console.log(`model: ${this.model}`)
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
-    const inputFocus$ = this.focus$;
-
-    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      map(term => (term === '' ? this.catageories
-        : this.catageories.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
-    );
   }
 
 }
