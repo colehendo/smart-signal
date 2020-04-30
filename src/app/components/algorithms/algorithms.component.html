@@ -10,25 +10,15 @@
         style="width: 100%; height: 400px; display: block;"
     ></highcharts-chart>
 
-    <!-- <label for="typeahead-focus">Search for news:</label>
-    <input
-      id="typeahead-focus"
-      type="text"
-      class="form-control"
-      #test
-      (keyup)="current_algorithm(test.value)"
-      [ngbTypeahead]="search"
-      (focus)="focus$.next($any($event).target.value); test($any($event).target.value)"
-      (click)="click$.next($any($event).target.value); test($any($event).target.value)"
-      #instance="ngbTypeahead"
-    />
-    <pre>Model: {{ current_alg | json }}</pre>
-    <button (click)="get_current_alg()">Send Alg</button> -->
-
+    <div class="row">
+        <div class="col">
+            Balance: <input placeholder="  $100,000" #bal (keyup)="balance = bal.value">
+        </div>
+    </div>
     <div class="row">
         <div class="col">
             <div ngbDropdown class="d-inline-block">
-                <button class="btn btn-success" id="dropdownBasic1" ngbDropdownToggle>Select Algorithm</button>
+                <button class="btn btn-success" id="dropdownBasic1" ngbDropdownToggle>{{ algorithmDropDownText }}</button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                     <button *ngFor="let algorithm of algorithmDisplayData" ngbDropdownItem (click)="setAlgorithm(algorithm)" class="btn btn-success">{{ algorithm.name }}</button>
                 </div>
@@ -39,9 +29,9 @@
                     <button *ngFor="let timeframe of timeframeOptions" ngbDropdownItem (click)="appendAlgorithm(timeframe)" class="btn btn-success">{{ timeframe.name }}</button>
                 </div>
             </div>
-            <input placeholder="Balance (default $100,000)" #bal (keyup)="balance = bal.value">
         </div>
     </div>
+    <br>
     <div [hidden]="!algSelected">
         <br>
         <div>

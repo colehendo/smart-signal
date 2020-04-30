@@ -108,6 +108,8 @@ def handler(event, context):
         parent_connection, child_connection = Pipe()
         processes.append(Process(target=calculate_combinations, args=(data, (i + 1), child_connection)))
         parent_connections.append(parent_connection)
+        print('process: ', processes[-1])
+        print('process len: ', len(processes))
         processes[-1].start()
 
     bottom_roi = 0
@@ -130,6 +132,7 @@ def handler(event, context):
         j.join()
 
     print('data 2: ', data)
+    print('process len: ', len(processes))
     print('processes 2: ', processes)
     print('parent 2: ', parent_connections)
 
@@ -339,10 +342,12 @@ def run_combinations(combination):
         combination_signals.sort(key = lambda signal: signal['time'])
         return ([combination, reduce_tf(combination_signals, timeframe_data)])
         # connection.send([combination, reduce_tf(combination_signals, timeframe_data)])
+        # connection.close()
 
     else:
         return []
         # connection.send([])
+        # connection.close()
 
 
 def condense_timeframe(all_data, candles, timeframe):
