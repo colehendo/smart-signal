@@ -32,6 +32,14 @@ export class GraphComponent implements OnInit {
     title:{
       text: `Bitcoin / U.S. Dollar: ${this.timeframe} Candles`
     },
+    yAxis: {
+      title: {
+          text: 'Price (USD)'
+      }
+    },
+    xAxis: {
+      type: 'datetime'
+    },
     plotOptions: {
       candlestick: {
         color: 'white',

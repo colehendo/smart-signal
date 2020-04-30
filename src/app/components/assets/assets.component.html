@@ -1,10 +1,7 @@
 
   <div class="jumbotron special">
-    <h1 class="display-4 white-text">Your balance</h1>
-    <!-- <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p> -->
+    <h3>Balance: $0</h3>
     <hr class="my-4">
-    <p class="big-text white-text">$0</p>
-    <br><br>
 
     <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" style="height:100%">
       <ngb-panel title="Your Assets" >
@@ -15,18 +12,16 @@
               <th scope="col">#</th>
               <th scope="col">Coin</th>
               <th scope="col">Price</th>
-              <th scope="col">Volume</th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let country of countries; index as i">
+            <tr *ngFor="let asset of assets; index as i">
               <th scope="row">{{ i + 1 }}</th>
               <td>
-                <img [src]=" country.flag" class="mr-2" style="width: 20px">
-                {{ country.name }}
+                <img [src]=" asset.flag" class="mr-2" style="width: 20px">
+                {{ asset.name }}
               </td>
-              <td>{{ country.area | number }}</td>
-              <td>{{ country.population | number }}</td>
+              <td>${{ asset.price | number }}</td>
             </tr>
             </tbody>
           </table>

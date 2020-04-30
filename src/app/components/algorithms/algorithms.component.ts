@@ -50,26 +50,17 @@ export class AlgorithmsComponent implements OnInit {
     },
     yAxis: {
         title: {
-            text: 'Exchange rate'
+            text: 'Price (USD)'
         }
     },
-    xAxis: { type: 'datetime' },
+    xAxis: {
+      type: 'datetime'
+    },
     series: [{
         name: 'Prices',
         data: [],
         type: 'line',
         id: 'dataseries',
-        dataGrouping: {
-          units: [
-              [
-                  'week', // unit name
-                  [1] // allowed multiples
-              ], [
-                  'month',
-                  [1, 2, 3, 4, 6]
-              ]
-          ]
-      }
     },
     // the event marker flags
     {
@@ -230,8 +221,6 @@ export class AlgorithmsComponent implements OnInit {
     this.chartOptions.series[1]['data'] = []
     this.updateFlag = true;
 
-    let algorithmTimeframe = all_timeframes[0].timeframe;
-
     this.graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
     this.alg_params = new HttpParams().set('data', JSON.stringify(algorithm));
     this.updateFlag = false;
@@ -255,12 +244,13 @@ export class AlgorithmsComponent implements OnInit {
           }
         });
         _.forEach(this.timeframeOptions, (timeframe) => {
-          if (algorithmTimeframe === timeframe.value) {
+          if (all_timeframes.includes(timeframe.value)) {
             this.chartOptions.title.text = `Bitcoin / U.S. Dollar: ${timeframe.name}`;
+            this.chartOptions.series[1]['data'] = newData;
+            this.updateFlag = true;
+            return false;
           }
         });
-        this.chartOptions.series[1]['data'] = newData;
-        this.updateFlag = true;
     });
     algorithm.splice(-1,1);
   }

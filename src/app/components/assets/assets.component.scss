@@ -43,6 +43,14 @@ th,tr,td,thead,tbody{
 ::ng-deep .btn-link{
 	color:white;
 }
+::ng-deep .btn-link:hover {
+	text-decoration: none;
+	color: #00D080;
+}
+
+::ng-deep .btn-link:focus {
+	text-decoration: none;
+}
 ::ng-deep .card{
 	background-color: #818181;
 	color:white;

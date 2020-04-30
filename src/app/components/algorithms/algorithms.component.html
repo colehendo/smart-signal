@@ -12,9 +12,10 @@
 
     <div class="row">
         <div class="col">
-            Balance: <input placeholder="  $100,000" #bal (keyup)="balance = bal.value">
+            Test Balance: <input placeholder="100,000" #bal (keyup)="balance = bal.value">
         </div>
     </div>
+    <br>
     <div class="row">
         <div class="col">
             <div ngbDropdown class="d-inline-block">
@@ -31,7 +32,6 @@
             </div>
         </div>
     </div>
-    <br>
     <div [hidden]="!algSelected">
         <br>
         <div>
