@@ -22,13 +22,10 @@ HighchartsMore(Highcharts);
   styleUrls: ['./algorithms.component.scss']
 })
 export class AlgorithmsComponent implements OnInit {
-  model: any;
-  public catageories = [];
 
   constructor(private apiService: ApiService) { }
 
   public algorithmDropDownText = 'Select Algorithm';
-
   public algorithmDisplayData = algorithmData;
   public combo_params = new HttpParams().set('timeframes', '');
   public alg_params = new HttpParams().set('data', '');
@@ -119,10 +116,6 @@ export class AlgorithmsComponent implements OnInit {
   ];
 
   ngOnInit() {
-    _.forEach(this.algorithmDisplayData, (item) => {
-      this.catageories.push(item.name);
-    })
-
     let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
     this.apiService.getSingleTable(graph_params).subscribe(data => {
       this.updateFlag = false;

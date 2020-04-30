@@ -25,27 +25,59 @@ export class GraphComponent implements OnInit {
   public timeframe = 'Minute';
 
   public chartOptions: Highcharts.Options = {
-    series: [{
-      data: [],
-      type: 'candlestick'
-    }],
-    title:{
-      text: `Bitcoin / U.S. Dollar: ${this.timeframe} Candles`
+    chart: {
+      zoomType: 'x'
     },
-    yAxis: {
-      title: {
-          text: 'Price (USD)'
-      }
+    title: {
+        text: `Bitcoin / U.S. Dollar: ${this.timeframe} Candles`
+    },
+    subtitle: {
+        text: document.ontouchstart === undefined ?
+            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
     },
     xAxis: {
-      type: 'datetime'
+        type: 'datetime'
+    },
+    yAxis: {
+        title: {
+            text: 'Price (USD)'
+        }
+    },
+    legend: {
+        enabled: false
     },
     plotOptions: {
-      candlestick: {
-        color: 'white',
-        upColor: 'red'
-      }
+        area: {
+            fillColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 1
+                },
+                stops: [
+                    [0, '#00D080'],
+                    [1, 'rgb(76, 76, 75 )']
+                ]
+            },
+            marker: {
+                radius: 2
+            },
+            lineWidth: 1,
+            states: {
+                hover: {
+                    lineWidth: 1
+                }
+            },
+            threshold: null
+        }
     },
+
+    series: [{
+        type: 'area',
+        name: 'BTC USD',
+        data: []
+    }]
   };
 
 
@@ -145,7 +177,6 @@ export class GraphComponent implements OnInit {
   }
 
   setupWebSocket() {
-    console.log('triggere')
     this.socket.onopen = (event) => {
       console.log('opened')
       _.forEach(this.timeframes, (item) => {
@@ -164,11 +195,9 @@ export class GraphComponent implements OnInit {
     }
 
     this.socket.onmessage = (message) => {
-      console.log('message!')
       this.updateFlag = false;
       let candles = JSON.parse(message.data).prices;
       if (this.newWebsocket) {
-        console.log('new websocket')
         let newData = [];
         _.forEach(candles, (item) => {
           newData.push([item.t, item.o, item.h, item.l, item.c]);
@@ -181,13 +210,11 @@ export class GraphComponent implements OnInit {
       else {
         let latestCandle = candles[candles.length - 1];
         if (latestCandle['t'] > this.websocketLastTimestamp) {
-          console.log('putting new candle in')
           this.chartOptions.series[0]['data'].shift();
           this.chartOptions.series[0]['data'].push([latestCandle['o'], latestCandle['h'], latestCandle['l'], latestCandle['c']]);
           this.websocketLastTimestamp = latestCandle['t']
         }
         else {
-          console.log('updating candle')
           this.chartOptions.series[0]['data'][-1]['o'] = latestCandle['o'];
           this.chartOptions.series[0]['data'][-1]['h'] = latestCandle['h'];
           this.chartOptions.series[0]['data'][-1]['l'] = latestCandle['l'];
