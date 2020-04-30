@@ -1,5 +1,5 @@
 <div class="header">
-  <h1>The simplest algorithmic trading platform</h1>
+  <h1>Algorithmic trading made simple</h1>
   <p>Build your portfolio. Let us handle the rest.</p>
   <button *ngIf="!loggedIn" class="btn-lg" (click)="buy()">Get Started</button>
 </div>
@@ -20,7 +20,7 @@
         <tbody>
         <tr *ngFor="let coin of coins; index as i">
           <th scope="row">{{ i + 1 }}</th>
-          <td>{{ coin.name }}  {{ coin.symbol }}</td>
+          <td>{{ coin.name }}  ({{ coin.symbol }})</td>
           <td>${{ coin.price }}</td>
           <td><button (click)="buy()">Buy</button></td>
         </tr>
@@ -34,7 +34,8 @@
         [(update)]="updateFlag"
         style="width: 100%; height: 50%; display: block;"
       ></highcharts-chart>
-      <ngx-tweet style="height:50%" tweetId="1255124436019294210"></ngx-tweet>
+      <br>
+      <ngx-tweet style="height:50%;" tweetId="1255124436019294210"></ngx-tweet>
     </div>
   </div>
 </div>

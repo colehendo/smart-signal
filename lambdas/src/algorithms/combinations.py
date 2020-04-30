@@ -100,9 +100,6 @@ def handler(event, context):
 
     processes = []
     parent_connections = []
-    print('data: ', data)
-    print('processes: ', processes)
-    print('parent: ', parent_connections)
 
     for i in range(len(data)):
         parent_connection, child_connection = Pipe()
@@ -114,7 +111,6 @@ def handler(event, context):
     global combo_results
 
     for parent_connection in parent_connections:
-        print('heres a connection')
         child_result = parent_connection.recv()[0]
         for result in child_result:
             if len(combo_results) < 20:
@@ -129,15 +125,9 @@ def handler(event, context):
     for j in processes:
         j.join()
 
-    print('data 2: ', data)
-    print('processes 2: ', processes)
-    print('parent 2: ', parent_connections)
 
-    # processes.clear()
-    # parent_connection.clear()
-
-    print('results: ', combo_results)
-
+    processes.clear()
+    parent_connection.clear()
 
     return {
         "statusCode": 200,
@@ -339,10 +329,12 @@ def run_combinations(combination):
         combination_signals.sort(key = lambda signal: signal['time'])
         return ([combination, reduce_tf(combination_signals, timeframe_data)])
         # connection.send([combination, reduce_tf(combination_signals, timeframe_data)])
+        # connection.close()
 
     else:
         return []
         # connection.send([])
+        # connection.close()
 
 
 def condense_timeframe(all_data, candles, timeframe):

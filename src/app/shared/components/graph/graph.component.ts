@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+
+import { ApiService } from '../../../core/http/api.service';
 
 import * as _ from 'lodash';
 import * as Highcharts from 'highcharts/highstock';
@@ -16,28 +19,71 @@ HighchartsMore(Highcharts);
 
 export class GraphComponent implements OnInit {
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   public Highcharts: typeof Highcharts = Highcharts;
 
   public socket;
   public symbol = 'BTC';
-  public timeframe = 'Minute';
+  public timeframe = 'Day';
 
   public chartOptions: Highcharts.Options = {
-    series: [{
-      data: [],
-      type: 'candlestick'
-    }],
-    title:{
-      text: `Bitcoin / U.S. Dollar: ${this.timeframe} Candles`
+    chart: {
+      zoomType: 'x'
+    },
+    title: {
+        text: `Bitcoin / U.S. Dollar: Day Datapoints`
+    },
+    subtitle: {
+        text: document.ontouchstart === undefined ?
+            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+    },
+    xAxis: {
+        type: 'datetime'
+    },
+    yAxis: {
+        labels: {
+            format: '${value}'
+        },
+        title: {
+            text: 'Price (USD)'
+        }
+    },
+    legend: {
+        enabled: false
     },
     plotOptions: {
-      candlestick: {
-        color: 'white',
-        upColor: 'red'
-      }
+        area: {
+            lineColor: '#00D080',
+            fillColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 2
+                },
+                stops: [
+                    [0, '#00D080'],
+                    [1, 'rgb(76, 76, 75 )']
+                ]
+            },
+            marker: {
+                radius: 2
+            },
+            lineWidth: 1,
+            states: {
+                hover: {
+                    lineWidth: 1
+                }
+            },
+            threshold: null
+        }
     },
+    annotations: [],
+    series: [{
+        type: 'area',
+        data: [],
+    }]
   };
 
 
@@ -107,89 +153,94 @@ export class GraphComponent implements OnInit {
 
 
   ngOnInit() {
-    this.socket = new ReconnectingWebSocket("wss://rix9fti73l.execute-api.us-east-1.amazonaws.com/prod");
-    this.setupWebSocket();
-  }
-
-  newWebSocket(timeframe) {
-    console.log(`triggered ${timeframe}`)
-    if (timeframe !== this.timeframe) {
-      console.log('different!')
-      this.timeframe = timeframe;
-      this.newWebsocket = true;
+    // this.socket = new ReconnectingWebSocket("wss://rix9fti73l.execute-api.us-east-1.amazonaws.com/prod");
+    
+    let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
+    this.apiService.getSingleTable(graph_params).subscribe(data => {
       this.updateFlag = false;
-      this.chartOptions.series[0]['data'] = [];
-      this.updateFlag = true;
-      _.forEach(this.timeframes, (item) => {
-        if (item.timeframe === timeframe) {
-          this.socket.send(JSON.stringify({
-            'action': 'getWebsocketPrices',
-            'symbol': this.symbol,
-            'table': item.table,
-            'ttl': item.ttl,
-            'gap': item.gap,
-            'datapoints': item.datapoints
-          }));
-        }
+      let newData = [];
+      _.forEach(data[0]['tf_data'], (item) => {
+        newData.push([item.t, item.c]);
       });
-      this.setupWebSocket();
-    }
+      this.chartOptions.series[0]['data'] = newData;
+      this.updateFlag = true;
+    });
   }
 
-  setupWebSocket() {
-    console.log('triggere')
-    this.socket.onopen = (event) => {
-      console.log('opened')
-      _.forEach(this.timeframes, (item) => {
-        if (item.timeframe === this.timeframe) {
-          console.log(`item: ${item}`)
-          this.socket.send(JSON.stringify({
-            'action': 'getWebsocketPrices',
-            'symbol': this.symbol,
-            'table': item.table,
-            'ttl': item.ttl,
-            'gap': item.gap,
-            'datapoints': item.datapoints
-          }));
-        }
-      });
-    }
+  // newWebSocket(timeframe) {
+  //   console.log(`triggered ${timeframe}`)
+  //   if (timeframe !== this.timeframe) {
+  //     console.log('different!')
+  //     this.timeframe = timeframe;
+  //     this.newWebsocket = true;
+  //     this.updateFlag = false;
+  //     this.chartOptions.series[0]['data'] = [];
+  //     this.updateFlag = true;
+  //     _.forEach(this.timeframes, (item) => {
+  //       if (item.timeframe === timeframe) {
+  //         this.socket.send(JSON.stringify({
+  //           'action': 'getWebsocketPrices',
+  //           'symbol': this.symbol,
+  //           'table': item.table,
+  //           'ttl': item.ttl,
+  //           'gap': item.gap,
+  //           'datapoints': item.datapoints
+  //         }));
+  //       }
+  //     });
+  //     this.setupWebSocket();
+  //   }
+  // }
 
-    this.socket.onmessage = (message) => {
-      console.log('message!')
-      this.updateFlag = false;
-      let candles = JSON.parse(message.data).prices;
-      if (this.newWebsocket) {
-        console.log('new websocket')
-        let newData = [];
-        _.forEach(candles, (item) => {
-          newData.push([item.t, item.o, item.h, item.l, item.c]);
-        });
-        this.websocketLastTimestamp = candles[candles.length - 1]['t'];
-        this.chartOptions.title.text = `BTC ${this.timeframe}`
-        this.chartOptions.series[0]['data'] = newData;
-        this.newWebsocket = false;
-      }
-      else {
-        let latestCandle = candles[candles.length - 1];
-        if (latestCandle['t'] > this.websocketLastTimestamp) {
-          console.log('putting new candle in')
-          this.chartOptions.series[0]['data'].shift();
-          this.chartOptions.series[0]['data'].push([latestCandle['o'], latestCandle['h'], latestCandle['l'], latestCandle['c']]);
-          this.websocketLastTimestamp = latestCandle['t']
-        }
-        else {
-          console.log('updating candle')
-          this.chartOptions.series[0]['data'][-1]['o'] = latestCandle['o'];
-          this.chartOptions.series[0]['data'][-1]['h'] = latestCandle['h'];
-          this.chartOptions.series[0]['data'][-1]['l'] = latestCandle['l'];
-          this.chartOptions.series[0]['data'][-1]['c'] = latestCandle['c'];
-        }
-      }
-      this.updateFlag = true;
-    };
+  // setupWebSocket() {
+  //   this.socket.onopen = (event) => {
+  //     console.log('opened')
+  //     _.forEach(this.timeframes, (item) => {
+  //       if (item.timeframe === this.timeframe) {
+  //         console.log(`item: ${item}`)
+  //         this.socket.send(JSON.stringify({
+  //           'action': 'getWebsocketPrices',
+  //           'symbol': this.symbol,
+  //           'table': item.table,
+  //           'ttl': item.ttl,
+  //           'gap': item.gap,
+  //           'datapoints': item.datapoints
+  //         }));
+  //       }
+  //     });
+  //   }
 
-  }
+  //   this.socket.onmessage = (message) => {
+  //     this.updateFlag = false;
+  //     let candles = JSON.parse(message.data).prices;
+  //     if (this.newWebsocket) {
+  //       let newData = [];
+  //       _.forEach(candles, (item) => {
+  //         newData.push([item.t, item.o, item.h, item.l, item.c]);
+  //       });
+  //       this.websocketLastTimestamp = candles[candles.length - 1]['t'];
+  //       this.chartOptions.title.text = `BTC ${this.timeframe}`
+  //       this.chartOptions.series[0]['data'] = newData;
+  //       this.newWebsocket = false;
+  //     }
+  //     else {
+  //       let latestCandle = candles[candles.length - 1];
+  //       if (latestCandle['t'] > this.websocketLastTimestamp) {
+  //         this.chartOptions.series[0]['data'].shift();
+  //         this.chartOptions.series[0]['data'].push([latestCandle['o'], latestCandle['h'], latestCandle['l'], latestCandle['c']]);
+  //         this.websocketLastTimestamp = latestCandle['t']
+  //       }
+  //       else {
+  //         this.chartOptions.series[0]['data'][-1]['o'] = latestCandle['o'];
+  //         this.chartOptions.series[0]['data'][-1]['h'] = latestCandle['h'];
+  //         this.chartOptions.series[0]['data'][-1]['l'] = latestCandle['l'];
+  //         this.chartOptions.series[0]['data'][-1]['c'] = latestCandle['c'];
+  //       }
+  //     }
+  //     this.updateFlag = true;
+  //   };
+
+  // }
 
 
 }

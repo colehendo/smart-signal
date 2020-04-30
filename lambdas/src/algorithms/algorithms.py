@@ -62,7 +62,7 @@ def calculate(event, context):
         }
 
     # Load the payload into a usable format
-    data = json.loads(event['queryStringParameters']['vals'])
+    data = json.loads(event['queryStringParameters']['data'])
 
     if not data:
         return {

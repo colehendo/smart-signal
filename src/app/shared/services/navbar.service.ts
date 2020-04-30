@@ -10,18 +10,19 @@ export class NavbarService {
 
   constructor() {
     if (localStorage.getItem('authCode')) {
+      this.addItem('Home', 'home');
       this.addItem('Algorithms', 'algorithms');
-      this.addItem('Account', 'account' );
-      this.addItem('Assets', 'assets' );
-      this.addItem('About', 'about' );
-      this.addItem('News', 'news' );
-      this.addItem('Logout', 'logout' );
+      this.addItem('Account', 'account');
+      this.addItem('Assets', 'assets');
+      this.addItem('News', 'news');
+      this.addItem('About', 'about');
+      this.addItem('Logout', 'logout');
       this.isLoggedIn.next(true);
     }
     else {
       console.log('here')
-      this.addItem('Login', 'login' );
-      this.addItem('Sign Up', 'signup' );
+      this.addItem('Login', 'login');
+      this.addItem('Sign Up', 'signup');
       this.isLoggedIn.next(false);
     }
   }
@@ -47,11 +48,12 @@ export class NavbarService {
       this.addItem('Sign Up', 'signup');
     }
     else {
+      this.addItem('Home', 'home');
       this.addItem('Algorithms', 'algorithms');
       this.addItem('Account', 'account');
       this.addItem('Assets', 'assets');
-      this.addItem('About', 'about');
       this.addItem('News', 'news');
+      this.addItem('About', 'about');
       this.addItem('Logout', 'logout');
     }
   }

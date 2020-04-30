@@ -38,54 +38,54 @@ export class AboutComponent implements OnInit {
 
   public coins: any = [
     {
-      'name': 'Bitcoin',
-      'symbol': 'BTC',
-      'price': 0
+      name: 'Bitcoin',
+      symbol: 'BTC',
+      price: 0
     },
     {
-      'name': 'Ethereum',
-      'symbol': 'ETH',
-      'price': 0
+      name: 'Ethereum',
+      symbol: 'ETH',
+      price: 0
     },
     {
-      'name': 'Litecoin',
-      'symbol': 'LTC',
-      'price': 0
+      name: 'Litecoin',
+      symbol: 'LTC',
+      price: 0
     },
     {
-      'name': 'XRP',
-      'symbol': 'XRP',
-      'price': 0
+      name: 'XRP',
+      symbol: 'XRP',
+      price: 0
     },
     {
-      'name': 'Bitcoin Cash',
-      'symbol': 'BCH',
-      'price': 0
+      name: 'Bitcoin Cash',
+      symbol: 'BCH',
+      price: 0
     },
     {
-      'name': 'EOS',
-      'symbol': 'EOS',
-      'price': 0
+      name: 'EOS',
+      symbol: 'EOS',
+      price: 0
     },
     {
-      'name': 'Tezos',
-      'symbol': 'XTZ',
-      'price': 0
+      name: 'Tezos',
+      symbol: 'XTZ',
+      price: 0
     },
     {
-      'name': 'Bitcoin SV',
-      'symbol': 'BSV',
-      'price': 0
+      name: 'Bitcoin SV',
+      symbol: 'BSV',
+      price: 0
     },
     {
-      'name': 'Chainlink',
-      'symbol': 'LINK',
-      'price': 0
+      name: 'Chainlink',
+      symbol: 'LINK',
+      price: 0
     },
     {
-      'name': 'Dash',
-      'symbol': 'DASH',
-      'price': 0
+      name: 'Dash',
+      symbol: 'DASH',
+      price: 0
     },
   ]
 
