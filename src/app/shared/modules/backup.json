@@ -1,0 +1,811 @@
+[
+    {
+        "name": "Accumulation/Distribution Index",
+        "indicator": "adi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "On-Balance Volume",
+        "indicator": "obv",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Chaikin Money Flow",
+        "indicator": "cmf",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Force Index",
+        "indicator": "fi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Ease of Movement",
+        "indicator": "emv",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Volume-price Trend",
+        "indicator": "vpt",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Negative Volume Index",
+        "indicator": "nvi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Average True Range",
+        "indicator": "atr",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Bollinger Bands",
+        "indicator": "bb",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Keltner Channel",
+        "indicator": "kc",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Donchian Channel",
+        "indicator": "dc",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Moving Average Convergence Divergence",
+        "indicator": "macd",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Average Directional Movement Index",
+        "indicator": "adx",
+        "month": {
+            "params": {
+              "strong": 25,
+              "weak": 40
+            }
+        },
+        "week": {
+            "params": {
+              "strong": 25,
+              "weak": 40
+            }
+        },
+        "day": {
+            "params": {
+              "strong": 25,
+              "weak": 45
+            }
+        },
+        "four_hour": {
+            "params": {
+              "strong": 25,
+              "weak": 50
+            }
+        },
+        "hour": {
+            "params": {
+              "strong": 25,
+              "weak": 50
+            }
+        },
+        "fifteen_minute": {
+            "params": {
+              "strong": 25,
+              "weak": 50
+            }
+        },
+        "minute": {
+            "params": {
+              "strong": 25,
+              "weak": 50
+            }
+        }
+    },
+    {
+        "name": "Vortex Indicator",
+        "indicator": "vi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Mass Index",
+        "indicator": "mi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Commodity Channel Index",
+        "indicator": "cci",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Detrended Price Oscillator",
+        "indicator": "dpo",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "KST Oscillator",
+        "indicator": "kst",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Ichimoku Kinkō Hyō",
+        "indicator": "ichimoku",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Parabolic Stop And Reverse",
+        "indicator": "psar",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Money Flow Index",
+        "indicator": "mfi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Relative Strength Index",
+        "indicator": "rsi",
+        "month": {
+            "params": {
+                "sell": 65,
+                "buy": 35
+            }
+        },
+        "week": {
+            "params": {
+                "sell": 75,
+                "buy": 35
+            }
+        },
+        "day": {
+            "params": {
+                "sell": 80,
+                "buy": 20
+            }
+        },
+        "four_hour": {
+            "params": {
+                "sell": 80,
+                "buy": 20
+            }
+        },
+        "hour": {
+            "params": {
+                "sell": 80,
+                "buy": 20
+            }
+        },
+        "fifteen_minute": {
+            "params": {
+                "sell": 85,
+                "buy": 15
+            }
+        },
+        "minute": {
+            "params": {
+                "sell": 90,
+                "buy": 10
+            }
+        }
+    },
+    {
+        "name": "True Strength Index",
+        "indicator": "tsi",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Ultimate Oscillator",
+        "indicator": "uo",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Stochastic Oscillator",
+        "indicator": "sr",
+        "month": {
+            "params": {
+              "sell": 70,
+              "buy": 30
+            }
+        },
+        "week": {
+            "params": {
+              "sell": 80,
+              "buy": 20
+            }
+        },
+        "day": {
+            "params": {
+              "sell": 80,
+              "buy": 20
+            }
+        },
+        "four_hour": {
+            "params": {
+              "sell": 80,
+              "buy": 20
+            }
+        },
+        "hour": {
+            "params": {
+              "sell": 80,
+              "buy": 20
+            }
+        },
+        "fifteen_minute": {
+            "params": {
+              "sell": 80,
+              "buy": 20
+            }
+        },
+        "minute": {
+            "params": {
+              "sell": 90,
+              "buy": 10
+            }
+        }
+    },
+    {
+        "name": "Williams %R",
+        "indicator": "wr",
+        "month": {
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
+        },
+        "week": {
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
+        },
+        "day": {
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
+        },
+        "four_hour": {
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
+        },
+        "hour": {
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
+        },
+        "fifteen_minute": {
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
+        },
+        "minute": {
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
+        }
+    },
+    {
+        "name": "Awesome Oscillator",
+        "indicator": "ao",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Kaufman's Adaptive Moving Average",
+        "indicator": "kama",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    },
+    {
+        "name": "Rate of Change",
+        "indicator": "roc",
+        "month": {
+            "params": {}
+        },
+        "week": {
+            "params": {}
+        },
+        "day": {
+            "params": {}
+        },
+        "four_hour": {
+            "params": {}
+        },
+        "hour": {
+            "params": {}
+        },
+        "fifteen_minute": {
+            "params": {}
+        },
+        "minute": {
+            "params": {}
+        }
+    }
+]
