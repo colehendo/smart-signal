@@ -293,8 +293,8 @@ export class AlgorithmsComponent implements OnInit {
           balance: combo[1][combo[1].length - 1]['bal'],
           roi: combo[1][combo[1].length - 1]['avg_roi']
         });
-        this.combinationResults.sort((a, b) => a.roi + b.roi);
       });
+      this.combinationResults.sort((a, b) => a.roi + b.roi);
     });
     this.combinationSent = true;
     algorithm.splice(-2, 2);
