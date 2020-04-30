@@ -81,6 +81,7 @@ def handler(event, context):
     del data[-1]
     timeframes = data[-1]
     del data[-1]
+    print(data)
 
     global month_candles
     global week_candles
@@ -210,6 +211,7 @@ def run_combinations(combination):
     # fifteen_minute_indicators = []
     # minute_indicators = []
     for item in combination:
+        print('item: ', item)
         # if item['timeframe'] == 'month': month_indicators.append(item)
         # elif item['timeframe'] == 'week': week_indicators.append(item)
         # elif item['timeframe'] == 'day': day_indicators.append(item)
