@@ -1,4 +1,5 @@
 import ta
+from decimal import Decimal
 
 # Stochastic Oscillator
 #sr_sig correlates to the %K line on tradingview
