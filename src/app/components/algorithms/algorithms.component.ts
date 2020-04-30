@@ -25,7 +25,7 @@ export class AlgorithmsComponent implements OnInit {
   model: any;
   public catageories = [];
 
-  constructor(private apiService: ApiService, private appRef: ApplicationRef) { }
+  constructor(private apiService: ApiService) { }
 
   public algorithmDisplayData = algorithmData;
   public combo_params = new HttpParams().set('timeframes', '');
@@ -117,8 +117,6 @@ export class AlgorithmsComponent implements OnInit {
     _.forEach(this.algorithmDisplayData, (item) => {
       this.catageories.push(item.name);
     })
-
-
 
     let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
     this.apiService.getSingleTable(graph_params).subscribe(data => {
@@ -255,7 +253,6 @@ export class AlgorithmsComponent implements OnInit {
     console.log(`params: ${this.payload}`)
     this.combinationResults.length = 0;
     this.combinationResults = [];
-    this.appRef.tick();
     console.log(this.combinationResults)
     let test = [];
 
