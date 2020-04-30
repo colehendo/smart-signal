@@ -23,8 +23,8 @@ def run(params, candles, timeframe):
 
         # when the mass index is over 27 we are very likely to see a reversal in the trend
         # or we are topping out basically
-        elif curr_mi > 27 and current_psar > curr_price and last_signal != 'sell':
-            if next_mi <= 26.5:
+        elif curr_mi > 25and current_psar > curr_price:
+            if next_mi <= 24.5:
                 trend = "down"
                 last_signal = "sell"
                 signals.append({
@@ -37,8 +37,8 @@ def run(params, candles, timeframe):
                 })
             # when the mass index is over 27 we are very likely to see a reversal in the trend
             # or we are bottoming out
-        elif curr_mi > 27 and current_psar < curr_price and last_signal != 'buy':
-            if next_mi <= 26.5:
+        elif curr_mi > 25 and current_psar < curr_price:
+            if next_mi <= 24.5:
                 trend = "up"
                 last_signal = "buy"
                 signals.append({
