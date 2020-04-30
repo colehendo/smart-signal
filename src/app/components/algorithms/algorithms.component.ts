@@ -193,7 +193,7 @@ export class AlgorithmsComponent implements OnInit {
     this.tableData.splice(this.tableData.indexOf(this.tableData.find((item) => {
       return ((item.algorithm === algorithm.algorithm) && (item.timeframe === algorithm.timeframe));
     })), 1);
-    
+
     if (this.payload.length === 0) {
       this.algSelected = false;
     }

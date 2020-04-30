@@ -37,10 +37,32 @@ def run(params, candles, timeframe):
             'str': 100
             })
 
-
+    print("printing MACD signals")
+    pct_change = 0
+    bal = 1000
     for i in range(len(signals)):
+        if i+1 == len(signals)-1:
+            break
         print(signals[i])
+        curr_price = signals[i]['price']
+        next_price = signals[i+1]['price']
+        if signals[i]['sig'] == 'buy' and signals[i+1]['sig'] == 'sell':
+            print("curr price: ", curr_price)
+            print("next price: ", next_price)
+            diff =  ((next_price - curr_price) / curr_price)
+            print("diff: ", diff)
+            bal = bal + (bal * diff)
+            print("bal: ", bal)
+            pct_change = pct_change + diff
+            print("pct_change: ", pct_change)
 
+
+    myroi = round((((bal - 1000) / 1000) * 100), 2)
+    print("Total roi is: ", myroi, "%")
+    gain = round((bal - 1000), 2)
+    print("Total gain is: $", gain)
+    print("Balance is: $", bal)
+    print("Total pct change is: ", round((pct_change), 2))
     return signals
     # macd = macd.macd()
     # print('macd: ', macd)

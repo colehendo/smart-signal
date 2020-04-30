@@ -371,31 +371,6 @@
         }
     },
     {
-        "name": "Trix",
-        "indicator": "trix",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        }
-    },
-    {
         "name": "Mass Index",
         "indicator": "mi",
         "month": {
@@ -581,20 +556,20 @@
         },
         "week": {
             "params": {
-                "sell": 70,
-                "buy": 30
+                "sell": 75,
+                "buy": 35
             }
         },
         "day": {
             "params": {
-                "sell": 75,
-                "buy": 25
+                "sell": 80,
+                "buy": 20
             }
         },
         "four_hour": {
             "params": {
-                "sell": 75,
-                "buy": 25
+                "sell": 80,
+                "buy": 20
             }
         },
         "hour": {
@@ -683,32 +658,32 @@
         },
         "day": {
             "params": {
-              "sell": 85,
-              "buy": 15
+              "sell": 80,
+              "buy": 20
             }
         },
         "four_hour": {
             "params": {
-              "sell": 90,
-              "buy": 10
+              "sell": 80,
+              "buy": 20
             }
         },
         "hour": {
             "params": {
-              "sell": 90,
-              "buy": 10
+              "sell": 80,
+              "buy": 20
             }
         },
         "fifteen_minute": {
             "params": {
-              "sell": 95,
-              "buy": 5
+              "sell": 80,
+              "buy": 20
             }
         },
         "minute": {
             "params": {
-              "sell": 95,
-              "buy": 5
+              "sell": 90,
+              "buy": 10
             }
         }
     },
@@ -716,25 +691,46 @@
         "name": "Williams %R",
         "indicator": "wr",
         "month": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "week": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "day": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "four_hour": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "hour": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "fifteen_minute": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         },
         "minute": {
-            "params": {}
+            "params": {
+              "buy": -20,
+              "sell": -80
+            }
         }
     },
     {
@@ -790,81 +786,6 @@
     {
         "name": "Rate of Change",
         "indicator": "roc",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        }
-    },
-    {
-        "name": "Daily Return",
-        "indicator": "dr",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        }
-    },
-    {
-        "name": "Daily Log Return",
-        "indicator": "dlr",
-        "month": {
-            "params": {}
-        },
-        "week": {
-            "params": {}
-        },
-        "day": {
-            "params": {}
-        },
-        "four_hour": {
-            "params": {}
-        },
-        "hour": {
-            "params": {}
-        },
-        "fifteen_minute": {
-            "params": {}
-        },
-        "minute": {
-            "params": {}
-        }
-    },
-    {
-        "name": "Cumulative Return",
-        "indicator": "cr",
         "month": {
             "params": {}
         },

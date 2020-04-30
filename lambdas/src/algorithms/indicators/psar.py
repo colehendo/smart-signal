@@ -7,7 +7,7 @@ def run(params, candles, timeframe):
     print('Parabolic Stop And Reverse')
     psar = all_psar.psar()
     # print('psar: ', psar)
-    psar_signals = []
+    signals = []
     trend = "flat"
     last_signal = "hold"
     ##make sure to account for last signal
@@ -17,7 +17,7 @@ def run(params, candles, timeframe):
         if trend == "up" and current_psar > curr_price and last_signal != 'sell':
             #print("appending a sell")
             last_signal = 'sell'
-            psar_signals.append({
+            signals.append({
             'indicator': 'psar',
             'sig': 'sell',
             'price': float(candles['c'][i]),
@@ -29,7 +29,7 @@ def run(params, candles, timeframe):
         elif trend == "down" and current_psar < curr_price and last_signal != 'buy':
             #print("appending a buy")
             last_signal = 'buy'
-            psar_signals.append({
+            signals.append({
             'indicator': 'psar',
             'sig': 'buy',
             'price': float(candles['c'][i]),
@@ -46,8 +46,32 @@ def run(params, candles, timeframe):
             else:
                 trend = "flat"
 
-    print("printing psar signals")
-    for i in range(0, len(psar_signals)):
-        print(psar_signals[i])
+    print("printing PSAR signals")
+    pct_change = 0
+    bal = 1000
+    for i in range(len(signals)):
+        if i+1 == len(signals)-1:
+            break
+        print(signals[i])
+        curr_price = signals[i]['price']
+        next_price = signals[i+1]['price']
+        if signals[i]['sig'] == 'buy' and signals[i+1]['sig'] == 'sell':
+            print("curr price: ", curr_price)
+            print("next price: ", next_price)
+            diff =  ((next_price - curr_price) / curr_price)
+            print("diff: ", diff)
+            bal = bal + (bal * diff)
+            print("bal: ", bal)
+            pct_change = pct_change + diff
+            print("pct_change: ", pct_change)
 
-    return psar_signals
+
+    myroi = round((((bal - 1000) / 1000) * 100), 2)
+    print("Total roi is: ", myroi, "%")
+    gain = round((bal - 1000), 2)
+    print("Total gain is: $", gain)
+    print("Balance is: $", bal)
+    print("Total pct change is: ", round((pct_change), 2))
+    return signals
+
+    return signals
