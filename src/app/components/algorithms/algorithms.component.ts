@@ -317,4 +317,6 @@ export class AlgorithmsComponent implements OnInit {
     );
   }
 
+  
+
 }

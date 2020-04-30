@@ -7,8 +7,10 @@
         [Highcharts]="Highcharts"
         [options]="chartOptions"
         [(update)]="updateFlag"
+        (load)="saveInstance($event.context)"
         style="width: 100%; height: 400px; display: block;"
     ></highcharts-chart>
+
 
     <!-- <label for="typeahead-focus">Search for news:</label>
     <input
