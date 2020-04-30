@@ -13,13 +13,13 @@
     <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7" [ngClass]="{'collapse': !isMenuCollapse}"  (click)="isMenuCollapse = !isMenuCollapse" style="float:right;">
         <ul class="navbar-nav ml-auto flex-nowrap">
           <li class="nav-item" *ngFor="let link of links">
-            <button  [routerLink]="link.path" routerLinkActive="active" class="btn btn-success" type="button">{{ link.text }}</button>
+            <button (click)="(reroute(link.path))" routerLinkActive="active" class="btn btn-success" type="button">{{ link.text }}</button>
         </li>
 
         <!-- The code below will put a logout button in the navbar once you are logged in -->
-        <li class="nav-item" *ngIf="isLoggedIn">
+        <!-- <li class="nav-item" *ngIf="isLoggedIn">
           <button class="btn btn-success" routerLink="logout" (click)="logout()">Logout</button>
-        </li>
+        </li> -->
 
           
         </ul>

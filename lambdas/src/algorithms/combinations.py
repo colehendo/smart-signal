@@ -133,8 +133,8 @@ def handler(event, context):
     print('processes 2: ', processes)
     print('parent 2: ', parent_connections)
 
-    processes.clear()
-    parent_connection.clear()
+    # processes.clear()
+    # parent_connection.clear()
 
     print('results: ', combo_results)
 
@@ -204,6 +204,7 @@ def calculate_combinations(data, count, connection):
     if len(results) > 20:
         results = results[:20]
     connection.send([results])
+    connection.close()
 
 
 def run_combinations(combination):
