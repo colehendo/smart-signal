@@ -15,8 +15,8 @@
         <img [src]="images[1]" alt="Random second slide" >
       </div>
       <div class="carousel-caption">
-        <h3>Second slide label</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <h3>Inside Scoop</h3>
+        <p>What professionals are predicting about the future of cryptos</p>
       </div>
     </ng-template>
     <ng-template ngbSlide>
@@ -45,38 +45,38 @@
 <button  class="btn btn-success" type="button">Search</button>
 </div>
 <div class="container" style="margin-top:5%;">
-  <div class="row">
+  <div class="row" style="color:black">
     <div class="col">
       <div class="header">
-      <h1>News from social media</h1>
+        <h1>Social Media</h1>
+        </div>
+      <div class="card">
+        <ngx-tweet tweetId="1255554561139408902" style="height:300px !important;"></ngx-tweet>
+        <div class="testinout">
+        <div class="card-body">
+          <h5 class="card-title">Trump speaks on Corona</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go to post</a>
+        </div>
+        </div>
       </div>
-    <div class="card">
-      <ngx-tweet tweetId="1255544680617517056" style="height:300px !important;"></ngx-tweet>
-  <div class="testinout">
-  <div class="card-body">
-    <!-- <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a> -->
-  </div>
-  </div>
-</div>
     </div>
     <div class="col">
       <div class="header">
       <h1>Articles</h1>
       </div>
       <div class="card">
-      <img class="card-img-top" src="https://i.cdn.turner.com/money/infographic/technology/what-is-bitcoin/images/bitcoin-top.gif" alt="Card image cap">
-      <div class="testinout">
-      <div class="card-body testinout">
-        <h5 class="card-title testinout">What is bitcoin?</h5>
-        <p class="card-text testinout">CNN</p>
-        <a href="https://www.ccn.com/wp-content/uploads/2020/04/bitcoin-768x496.jpg" class="btn btn-primary">Go to article</a>
+        <img class="card-img-top" src="https://www.ccn.com/wp-content/uploads/2020/04/bitcoin-768x496.jpg" alt="Card image cap">
+        <div class="testinout">
+        <div class="card-body">
+          <h5 class="card-title">And the Best-Performing Asset of 2020 Is… Bitcoin</h5>
+          <p class="card-text">BCCN</p>
+          <a href="https://www.bloomberg.com/news/articles/2019-10-01/tether-not-bitcoin-likely-the-world-s-most-used-cryptocurrency" class="btn btn-success">Go to article</a>
+        </div>
+        </div>
       </div>
-    </div>
+</div>
   </div>
-    </div>
-  </div><!--First row ends here-->
   <div class="row" style="color:black">
     <div class="col">
       <div class="card">
@@ -97,40 +97,41 @@
         <div class="card-body">
           <h5 class="card-title">Bitcoin isn't the most used cryptocurrency</h5>
           <p class="card-text">Bloomberg news</p>
-          <a href="https://www.bloomberg.com/news/articles/2019-10-01/tether-not-bitcoin-likely-the-world-s-most-used-cryptocurrency" class="btn btn-primary">Go to article</a>
+          <a href="https://www.bloomberg.com/news/articles/2019-10-01/tether-not-bitcoin-likely-the-world-s-most-used-cryptocurrency" class="btn btn-success">Go to article</a>
         </div>
         </div>
       </div>
 </div>
 
   </div>
-
-  <div class="row" style="color:black">
+  <div class="row">
     <div class="col">
-      <div class="card">
-        <ngx-tweet tweetId="1255554561139408902" style="height:300px !important;"></ngx-tweet>
-        <div class="testinout">
-        <div class="card-body">
-          <h5 class="card-title">Trump speaks on Corona</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go to post</a>
-        </div>
-        </div>
-      </div>
+    <div class="card">
+      <ngx-tweet tweetId="1255544680617517056" style="height:300px !important;"></ngx-tweet>
+  <div class="testinout">
+  <div class="card-body">
+    <!-- <h5 class="card-title">Card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a> -->
+  </div>
+  </div>
+</div>
     </div>
     <div class="col">
       <div class="card">
-        <img class="card-img-top" src="https://www.ccn.com/wp-content/uploads/2020/04/bitcoin-768x496.jpg" alt="Card image cap">
-        <div class="testinout">
-        <div class="card-body">
-          <h5 class="card-title">And the Best-Performing Asset of 2020 Is… Bitcoin</h5>
-          <p class="card-text">BCCN</p>
-          <a href="https://www.bloomberg.com/news/articles/2019-10-01/tether-not-bitcoin-likely-the-world-s-most-used-cryptocurrency" class="btn btn-primary">Go to article</a>
-        </div>
-        </div>
+      <img class="card-img-top" src="https://i.cdn.turner.com/money/infographic/technology/what-is-bitcoin/images/bitcoin-wallet.png" alt="Card image cap">
+      <div class="testinout">
+      <div class="card-body testinout">
+        <h5 class="card-title testinout">What is bitcoin?</h5>
+        <p class="card-text testinout">CNN</p>
+        <a href="https://www.ccn.com/wp-content/uploads/2020/04/bitcoin-768x496.jpg" class="btn btn-success">Go to article</a>
       </div>
-</div>
-
+    </div>
   </div>
+    </div>
+  </div><!--First row ends here-->
+  
+
+  
   </div>
 
