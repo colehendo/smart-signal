@@ -15,7 +15,8 @@
       id="typeahead-focus"
       type="text"
       class="form-control"
-      [(ngModel)]="current_alg"
+      #test
+      (keyup)="current_algorithm(test)"
       [ngbTypeahead]="search"
       (focus)="focus$.next($any($event).target.value); test($any($event).target.value)"
       (click)="click$.next($any($event).target.value); test($any($event).target.value)"

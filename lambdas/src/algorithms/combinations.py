@@ -102,7 +102,7 @@ def handler(event, context):
     parent_connections = []
     print('data: ', data)
     print('processes: ', processes)
-    print('parent: ', parent_connection)
+    print('parent: ', parent_connections)
 
     for i in range(len(data)):
         parent_connection, child_connection = Pipe()
@@ -131,7 +131,7 @@ def handler(event, context):
 
     print('data 2: ', data)
     print('processes 2: ', processes)
-    print('parent 2: ', parent_connection)
+    print('parent 2: ', parent_connections)
 
     processes.clear()
     parent_connection.clear()
