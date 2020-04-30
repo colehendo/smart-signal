@@ -100,16 +100,19 @@ def handler(event, context):
 
     processes = []
     parent_connections = []
-    print('data: ', data)
-    print('processes: ', processes)
-    print('parent: ', parent_connections)
+
+    for i in range(len(data)):
+        parent_connection, child_connection = Pipe()
+        processes.append(Process(target=calculate_combinations, args=(data, (i + 1), child_connection)))
+        parent_connections.append(parent_connection)
+        processes[-1].start()
 
     bottom_roi = 0
     global combo_results
 
-    for i in range(len(data)):
-        results = calculate_combinations(data, i + 1)
-        for result in results:
+    for parent_connection in parent_connections:
+        child_result = parent_connection.recv()[0]
+        for result in child_result:
             if len(combo_results) < 20:
                 combo_results.append(result)
             else:
@@ -118,34 +121,13 @@ def handler(event, context):
                     combo_results.sort(key = lambda data: data[1][-1]['avg_roi'], reverse = True)
                     del combo_results[-1]
                     bottom_roi = combo_results[-1][1][-1]['avg_roi']
-        # parent_connection, child_connection = Pipe()
-        # processes.append(Process(target=calculate_combinations, args=(data, (i + 1), child_connection)))
-        # parent_connections.append(parent_connection)
-        # print('process: ', processes[-1])
-        # print('process len: ', len(processes))
-        # processes[-1].start()
 
-    # for parent_connection in parent_connections:
-    #     print('heres a connection')
-    #     child_result = parent_connection.recv()[0]
-    #     for result in child_result:
-    #         if len(combo_results) < 20:
-    #             combo_results.append(result)
-    #         else:
-    #             if result[1][-1]['avg_roi'] > bottom_roi:
-    #                 combo_results.append(result)
-    #                 combo_results.sort(key = lambda data: data[1][-1]['avg_roi'], reverse = True)
-    #                 del combo_results[-1]
-    #                 bottom_roi = combo_results[-1][1][-1]['avg_roi']
+    for j in processes:
+        j.join()
 
-    # for j in processes:
-    #     j.join()
 
-    # processes.clear()
-    # parent_connection.clear()
-
-    print('results: ', combo_results)
-
+    processes.clear()
+    parent_connection.clear()
 
     return {
         "statusCode": 200,
@@ -181,8 +163,7 @@ def get_data(table, ttl, gap, datapoints):
             return []
 
 
-# def calculate_combinations(data, count, connection):
-def calculate_combinations(data, count):
+def calculate_combinations(data, count, connection):
     combos = list(combinations(data, count))
     results = []
     processes = []
@@ -212,10 +193,8 @@ def calculate_combinations(data, count):
     results.sort(key = lambda data: data[1][-1]['avg_roi'], reverse = True)
     if len(results) > 20:
         results = results[:20]
-    
-    return results
-    # connection.send([results])
-    # connection.close()
+    connection.send([results])
+    connection.close()
 
 
 def run_combinations(combination):

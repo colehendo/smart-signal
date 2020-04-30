@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
-import { switchMap, isEmpty } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
 import { ApiService } from '../../core/http/api.service';
 import  *  as  data  from  '../../shared/modules/indicators.json';
@@ -9,10 +9,6 @@ const algorithmData: any =  (data  as  any).default;
 
 import * as Highcharts from 'highcharts/highstock';
 import HighchartsMore from 'highcharts/highcharts-more';
-
-import {NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
-import {Observable, Subject, merge} from 'rxjs';
-import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 
 HighchartsMore(Highcharts);
 
@@ -32,42 +28,83 @@ export class AlgorithmsComponent implements OnInit {
   public graph_params = new HttpParams().set('data', '');
 
   public chartOptions: Highcharts.Options = {
-    rangeSelector: {
-      selected: 0
+    chart: {
+      zoomType: 'x',
+      panKey: 'shift',
+      scrollablePlotArea: {
+          minWidth: 600
+      }
     },
     title: {
-        text: `Bitcoin / U.S. Dollar: Day Candles`
+        text: `Bitcoin / U.S. Dollar: Day Datapoints`
     },
-    tooltip: {
-        style: {
-            width: 200
-        },
-        valueDecimals: 4,
-        shared: true
+    // credits: {
+    //     enabled: false
+    // },
+    
+    xAxis: {
+        type: 'datetime',
     },
     yAxis: {
+        startOnTick: true,
+        endOnTick: false,
+        maxPadding: 0.35,
         title: {
             text: 'Price (USD)'
+        },
+        labels: {
+            format: '${value}'
         }
     },
-    xAxis: {
-      type: 'datetime'
+    tooltip: {
+        headerFormat: '${point.y}<br>',
+        shared: true
     },
-    series: [{
-        name: 'Prices',
+
+    // legend: {
+    //     enabled: false
+    // },
+    plotOptions: {
+      area: {
+          lineColor: '#00D080',
+          fillColor: {
+              linearGradient: {
+                  x1: 0,
+                  y1: 0,
+                  x2: 0,
+                  y2: 2
+              },
+              stops: [
+                  [0, '#00D080'],
+                  [1, 'rgb(76, 76, 75 )']
+              ]
+          },
+          marker: {
+              radius: 2
+          },
+          lineWidth: 1,
+          states: {
+              hover: {
+                  lineWidth: 1
+              }
+          },
+          threshold: null
+      }
+  },
+    series: [
+      {
         data: [],
-        type: 'line',
-        id: 'dataseries',
-    },
-    // the event marker flags
-    {
-        name: 'Signals',
-        type: 'flags',
-        data: [],
-        onSeries: 'dataseries',
-        shape: 'circlepin',
-        width: 20
-    }]
+        type: 'area',
+        id: 'prices'
+      },
+        {
+          type: 'flags',
+          data: [],
+          onSeries: 'prices',
+          shape: 'circlepin',
+          width: 16
+      }
+    ]
   };
 
   public Highcharts: typeof Highcharts = Highcharts;
@@ -116,6 +153,8 @@ export class AlgorithmsComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.algorithmDisplayData.sort((a, b) => a.indicator.localeCompare(b.indicator))
+
     let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
     this.apiService.getSingleTable(graph_params).subscribe(data => {
       this.updateFlag = false;
@@ -127,12 +166,8 @@ export class AlgorithmsComponent implements OnInit {
       this.updateFlag = true;
     });
   }
-  test(event){
-    console.log(event);
-  }
 
   setAlgorithm(algorithm) {
-    console.log(algorithm.name)
     this.algorithmDropDownText = algorithm.name;
     this.selectedAlgorithm = algorithm;
     this.algSelectedFromDropDown = true;
@@ -161,7 +196,6 @@ export class AlgorithmsComponent implements OnInit {
       timeframe: timeframe.value,
       params: params
     });
-    console.log(this.payload)
 
     this.algorithmDropDownText = 'Select Algorithm';
     this.algSelected = true;
@@ -210,8 +244,8 @@ export class AlgorithmsComponent implements OnInit {
 
   runAlgorithms(algorithm: any, all_timeframes: any) {
     this.updateFlag = false;
-    this.chartOptions.series[0]['data'] = []
-    this.chartOptions.series[1]['data'] = []
+    this.chartOptions.series[0]['data'] = [];
+    this.chartOptions.series[1]['data'] = [];
     this.updateFlag = true;
 
     this.graph_params = new HttpParams().set('timeframes', JSON.stringify(all_timeframes));
@@ -226,20 +260,24 @@ export class AlgorithmsComponent implements OnInit {
         this.chartOptions.series[0]['data'] = newData;
         return this.apiService.algorithms(this.alg_params)
       })).subscribe(data => {
-        let newData = [];
+        console.log(`alg data: ${data}`)
+        let flags = []
+
         _.forEach(data, (item) => {
-          if (!!item.sig) {
-            newData.push({
+          if (item.sig) {
+            flags.push({
               x: new Date(item.time),
-              title: item.sig.toUpperCase(),
-              text: `Amount: $${item.amt.toFixed(2)}`
-            });
+              title: item.sig,
+              text: `Sell $${item.amt.toFixed(2)}`,
+            })
           }
         });
         _.forEach(this.timeframeOptions, (timeframe) => {
           if (all_timeframes.includes(timeframe.value)) {
-            this.chartOptions.title.text = `Bitcoin / U.S. Dollar: ${timeframe.name}`;
-            this.chartOptions.series[1]['data'] = newData;
+            console.log('found it')
+            this.chartOptions.title.text = `Bitcoin / U.S. Dollar: ${timeframe.name} Datapoints`;
+            this.chartOptions.series[1]['data'] = flags;
+            console.log(this.chartOptions.annotations)
             this.updateFlag = true;
             return false;
           }
@@ -249,18 +287,10 @@ export class AlgorithmsComponent implements OnInit {
   }
 
   runCombinations(algorithm: any) {
-    console.log(algorithm)
-    console.log(`params: ${this.payload}`)
-    this.combinationResults.length = 0;
     this.combinationResults = [];
-    console.log(this.combinationResults)
-    let test = [];
 
     this.combo_params = new HttpParams().set('data', JSON.stringify(algorithm));
-    console.log(this.combo_params)
     this.apiService.combinations(this.combo_params).subscribe(item => {
-      console.log('combo data:')
-      console.log(item);
       _.forEach(item, (combo) => {
         let combinationString = '';
         _.forEach(combo[0], (algorithm) => {
@@ -275,26 +305,14 @@ export class AlgorithmsComponent implements OnInit {
           });
         });
 
-        console.log(`pushing for ${combo}`)
-        test.push({
+        this.combinationResults.push({
           name: combinationString,
           balance: combo[1][combo[1].length - 1]['bal'],
           roi: combo[1][combo[1].length - 1]['avg_roi']
         });
-        console.log(this.combinationResults)
       });
-      item = [];
-      item.length = 0;
-      console.log(test)
     });
     this.combinationSent = true;
     algorithm.splice(-2, 2);
   }
-
-  current_alg:string;
-  get_current_alg(){
-   let current_alg= this.current_alg;
-   console.log("Added algorithm ",current_alg)
-  }
-
 }
