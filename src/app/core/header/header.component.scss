@@ -33,9 +33,20 @@ button{
     margin-left:2px;
     margin-right:2px;
     margin-bottom:1px;
+    width:100px;
 }
 .ss{
     display: inline-block;
     white-space: nowrap;
     color:white !important;
+}
+nav{
+    width:100%;
+}
+ul{
+    position:absolute;
+    right:0;
+    left:auto;
+    // width:100%;
+    z-index: 1;
 }

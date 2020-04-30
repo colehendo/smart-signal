@@ -1,18 +1,34 @@
-<nav class="navbar navbar-expand-lg navbar-dark nav-style">
-  <div class="d-flex flex-grow-1">
-      <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
-      <a routerLink="/home" class="ss">smartsignal</a>
-      <div class="w-100 text-right">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7" (click)="isMenuCollapse = !isMenuCollapse">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-      </div>
-  </div>
-  <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7" [ngClass]="{'collapse': !isMenuCollapse}"  (click)="isMenuCollapse = !isMenuCollapse" >
-      <ul class="navbar-nav ml-auto flex-nowrap">
-        <li class="nav-item" *ngFor="let link of links">
-          <button (click)="reroute(link.path)" routerLinkActive="active" class="btn btn-success" type="button">{{ link.text }}</button>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark nav-style">
+    <div class="d-flex flex-grow-1">
+        <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
+        <a routerLink="/home" class="ss">smartsignal</a>
+        <div class="w-100 text-right">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7" (click)="isMenuCollapse = !isMenuCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+    <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7" [ngClass]="{'collapse': !isMenuCollapse}"  (click)="isMenuCollapse = !isMenuCollapse" style="float:right;">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <li class="nav-item" *ngFor="let link of links">
+            <button  [routerLink]="link.path" routerLinkActive="active" class="btn btn-success" type="button">{{ link.text }}</button>
         </li>
-      </ul>
-  </div>
+
+        <!-- The code below will put a logout button in the navbar once you are logged in -->
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <button class="btn btn-success" routerLink="logout" (click)="logout()">Logout</button>
+        </li>
+
+          
+        </ul>
+    </div>
 </nav>
+</body>
+
+
+
+
+
+

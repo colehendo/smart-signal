@@ -1,4 +1,4 @@
-import { Component, OnInit, ApplicationRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 import { switchMap, isEmpty } from 'rxjs/operators';
@@ -9,6 +9,11 @@ const algorithmData: any =  (data  as  any).default;
 
 import * as Highcharts from 'highcharts/highstock';
 import HighchartsMore from 'highcharts/highcharts-more';
+
+import {NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
+import {Observable, Subject, merge} from 'rxjs';
+import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
+
 HighchartsMore(Highcharts);
 
 @Component({
@@ -17,8 +22,10 @@ HighchartsMore(Highcharts);
   styleUrls: ['./algorithms.component.scss']
 })
 export class AlgorithmsComponent implements OnInit {
+  model: any;
+  public catageories = [];
 
-  constructor(private apiService: ApiService, private appRef: ApplicationRef) { }
+  constructor(private apiService: ApiService) { }
 
   public algorithmDisplayData = algorithmData;
   public combo_params = new HttpParams().set('timeframes', '');
@@ -107,6 +114,10 @@ export class AlgorithmsComponent implements OnInit {
   ];
 
   ngOnInit() {
+    _.forEach(this.algorithmDisplayData, (item) => {
+      this.catageories.push(item.name);
+    })
+
     let graph_params = new HttpParams().set('table', JSON.stringify(['day']));
     this.apiService.getSingleTable(graph_params).subscribe(data => {
       this.updateFlag = false;
@@ -117,6 +128,9 @@ export class AlgorithmsComponent implements OnInit {
       this.chartOptions.series[0]['data'] = newData;
       this.updateFlag = true;
     });
+  }
+  test(event){
+    console.log(event);
   }
 
   setAlgorithm(algorithm) {
@@ -239,7 +253,6 @@ export class AlgorithmsComponent implements OnInit {
     console.log(`params: ${this.payload}`)
     this.combinationResults.length = 0;
     this.combinationResults = [];
-    this.appRef.tick();
     console.log(this.combinationResults)
     let test = [];
 
@@ -276,6 +289,28 @@ export class AlgorithmsComponent implements OnInit {
     });
     this.combinationSent = true;
     algorithm.splice(-2, 2);
+  }
+
+  current_alg:string;
+  get_current_alg(){
+   let current_alg= this.current_alg;
+   console.log("Added algorithm ",current_alg)
+  }
+
+  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
+
+  search = (text$: Observable<string>) => {
+    console.log(`model: ${this.model}`)
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? this.catageories
+        : this.catageories.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+    );
   }
 
 }
