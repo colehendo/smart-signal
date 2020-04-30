@@ -29,7 +29,7 @@ export class AboutComponent implements OnInit {
       }
     },
     title: {
-        text: `Bitcoin / U.S. Dollar: Day Datapoints`
+        text: `Bitcoin (USD)`
     },
     // credits: {
     //     enabled: false
@@ -50,8 +50,8 @@ export class AboutComponent implements OnInit {
         }
     },
     tooltip: {
-        // headerFormat: 'BTC Price: ${point.y}<br>',
-        shared: true
+      pointFormat: 'Price: ${point.y}',
+      shared: true
     },
 
     // legend: {

@@ -22,7 +22,7 @@
             <div ngbDropdown class="d-inline-block">
                 <button class="btn btn-success" id="dropdownBasic1" ngbDropdownToggle>{{ algorithmDropDownText }}</button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button *ngFor="let algorithm of algorithmDisplayData" ngbDropdownItem (click)="setAlgorithm(algorithm)" class="btn btn-success">{{ algorithm.name }}</button>
+                    <button *ngFor="let algorithm of algorithmDisplayData" ngbDropdownItem (click)="setAlgorithm(algorithm)" class="btn btn-success">{{ algorithm.name }} ({{ algorithm.indicator | uppercase }})</button>
                 </div>
             </div>
             <div ngbDropdown class="d-inline-block">
