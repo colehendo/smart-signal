@@ -58,7 +58,8 @@ h1{
 .card{
     margin:1px;
     position:relative;
-    height:auto;
+    height:500px;
+    width:557px;
 }
 // ngb-carousel{
 //     height:50% !important;
@@ -93,4 +94,14 @@ h1{
 
 ::ng-deep #twitter-widget-0{
     height:300px !important;
+}
+.row{
+    margin-bottom:10px;
+}
+.card{
+    color: black !important;
+    background-color:white !important;
+    width:90% !important;
+	margin-right:auto;
+	margin-left:auto;
 }
