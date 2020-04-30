@@ -27,6 +27,8 @@ export class HeaderComponent implements OnInit {
 
   links: Array<{ text: string, path: string }>;
 
+  public isMenuCollapse = false;
+
   constructor(
     private router: Router,
     private navbarService: NavbarService

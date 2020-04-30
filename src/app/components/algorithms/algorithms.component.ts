@@ -243,7 +243,6 @@ export class AlgorithmsComponent implements OnInit {
         this.chartOptions.series[0]['data'] = newData;
         return this.apiService.algorithms(this.alg_params)
       })).subscribe(data => {
-        console.log(`alg data: ${data}`)
         let flags = []
 
         _.forEach(data, (item) => {
@@ -257,10 +256,8 @@ export class AlgorithmsComponent implements OnInit {
         });
         _.forEach(this.timeframeOptions, (timeframe) => {
           if (all_timeframes.includes(timeframe.value)) {
-            console.log('found it')
             this.chartOptions.title.text = `Bitcoin (USD): ${timeframe.name} Datapoints`;
             this.chartOptions.series[1]['data'] = flags;
-            console.log(this.chartOptions.annotations)
             this.updateFlag = true;
             return false;
           }
