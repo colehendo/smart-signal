@@ -36,6 +36,9 @@ resources:
     TriggerPopulate:
       Value:
         Ref: TriggerPopulate
+    TestPopulate:
+      Value:
+        Ref: TestPopulate
     # TriggerAlgorithms:
     #   Value:
     #     Ref: TriggerAlgorithms
@@ -142,6 +145,16 @@ stepFunctions:
             Default: Done
           Done:
             Type: Pass
+            End: true
+    testPopulateFunc:
+      name: TestPopulate
+      definition:
+        Comment: "Invoke populate lambda every 14 minutes"
+        StartAt: Run
+        States:
+          Run:
+            Type: Task
+            Resource: arn:aws:lambda:us-east-1:095630622700:function:smart-signal-prod-test-btc-populate
             End: true
 
     # triggerAlgorithmsFunc:
