@@ -209,6 +209,13 @@ export class AlgorithmsComponent implements OnInit {
     }
   }
 
+  findMaxProfit(time_gap: number) {
+    const max_profit_params = new HttpParams().set('time_gap', JSON.stringify(time_gap));
+    this.apiService.maxProfit(max_profit_params).subscribe(data => {
+      console.log(data)
+    })
+  }
+
   algoritmHandler(algorithm: any, type: string) {
     (isNaN(this.balance) || !this.balance) ? this.balance = 100000 : this.balance = parseInt(this.balance, 10);
 

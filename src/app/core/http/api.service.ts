@@ -28,6 +28,10 @@ export class ApiService {
     return this.http.get<object>(`${this.baseUrl}/combinations`, {params: params});
   }
 
+  maxProfit(params: HttpParams): Observable<any> {
+    return this.http.get<object>(`${this.baseUrl}/find-max-profit`, {params: params});
+  }
+
   getPrice(param: string): Observable<any> {
     return this.http.get<object>(`https://api.coinbase.com/v2/prices/${param}-USD/spot`);
   }
