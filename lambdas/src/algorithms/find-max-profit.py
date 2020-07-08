@@ -31,7 +31,7 @@ def find_max_profit(event, context):
 
     try:
         # Scan the table for all price data
-        pages = paginator.paginate(TableName='TODO_MAKE_TABLE')
+        pages = paginator.paginate(TableName='BTC_day_static')
     except Exception as _e:
         print('Exception with price table:')
         print(str(_e))
