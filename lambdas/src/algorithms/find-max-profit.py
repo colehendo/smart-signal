@@ -54,6 +54,8 @@ def find_max_profit(event, context):
         # record profit from respective buys and sells
         # profit should be recorded through metric like ROI, although a more accurate one, or set of metrics, probably exist
 
+    return prices
+
     # run through prices again most recent to most historical, using the same strategy as above, but backwards for buys & sells
     # compare back to front profit to front to back
 

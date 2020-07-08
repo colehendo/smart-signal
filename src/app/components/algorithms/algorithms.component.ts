@@ -36,7 +36,8 @@ export class AlgorithmsComponent implements OnInit {
       }
     },
     title: {
-        text: `Bitcoin (USD): Day Datapoints`
+        text: ``
+        // text: `Bitcoin (USD): Day Datapoints`
     },
     xAxis: {
         type: 'datetime',
@@ -74,7 +75,8 @@ export class AlgorithmsComponent implements OnInit {
   },
     series: [
       {
-        name: 'BTC Price (USD)',
+        name: 'BTC Day Cancles (USD)',
+        color: '#00D080',
         data: [],
         type: 'area',
         id: 'prices'
@@ -213,6 +215,20 @@ export class AlgorithmsComponent implements OnInit {
     const max_profit_params = new HttpParams().set('time_gap', JSON.stringify(time_gap));
     this.apiService.maxProfit(max_profit_params).subscribe(data => {
       console.log(data)
+      let flags = []
+
+        _.forEach(data, (item) => {
+          console.log(item)
+          // if (item.sig) {
+          //   flags.push({
+          //     x: new Date(item.time * 1000),
+          //     title: item.sig,
+          //     text: `Transaction: $${item.amt.toFixed(2)}`,
+          //   })
+          // }
+        });
+        // this.chartOptions.series[1]['data'] = flags;
+        // this.updateFlag = true;
     })
   }
 

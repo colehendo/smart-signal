@@ -1,7 +1,11 @@
 <div class="header">
-    <h3>Run a selection of algorithms on Bitcoin prices</h3>
+    <!-- <h3>Run a selection of algorithms on Bitcoin prices</h3> -->
+    <h3>Run a selection of algorithms or individual functions on Bitcoin Day candles</h3>
 </div>
 <div class="jumbotron">
+    <div class="function-buttons">
+        <button class="btn btn-success" (click)="findMaxProfit(7)">Find Max Profit</button>
+    </div>
     <br>
     <highcharts-chart
         [Highcharts]="Highcharts"
