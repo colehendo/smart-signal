@@ -41,8 +41,43 @@ def find_max_profit(event, context):
             for price in page['Items']:
                 prices.append(price)
 
-    for price in prices:
-        print('filler to rid errors')
+    n = len(prices)
+
+    if n == 1:
+        return [],[]
+    
+    i = 0
+    buy_signals = []
+    sell_signals = []
+
+    while(i<(n-1)):
+        #Find local minima
+        while((i<(n-1))) and (prices[i+1]<=prices[i]):
+            i+=1
+
+        #If we reached the end, break
+        #as no further solution possible
+        if(i== n-1):
+            break
+
+        buy = i
+        buy_signals.append(buy)
+        i+=1
+
+        #Find local maxima
+
+        while((i<n) and (prices[i]>=prices[i-1])):
+            i +=1
+
+        #Store index of maxima
+        sell = i-1
+        sell_signals.append(sell)
+
+
+        print("Buy on day: ", buy, "\t", "Sell on day:", sell)
+
+    # for price in prices:
+    #     print('filler to rid errors')
         # run array of prices front to back
         # keep track of the lowest recorded price, highest recorded price
 
@@ -54,7 +89,9 @@ def find_max_profit(event, context):
         # record profit from respective buys and sells
         # profit should be recorded through metric like ROI, although a more accurate one, or set of metrics, probably exist
 
-    return prices
+    # return prices
+
+    return buy_signals, sell_signals
 
     # run through prices again most recent to most historical, using the same strategy as above, but backwards for buys & sells
     # compare back to front profit to front to back
