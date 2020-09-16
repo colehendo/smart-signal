@@ -3,4 +3,6 @@ simplejson
 boto3
 botocore
 pandas
+numpy
+scipy
 ta

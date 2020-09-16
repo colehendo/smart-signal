@@ -1,173 +1,174 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
-import ReconnectingWebSocket from 'reconnecting-websocket';
+import { Component, OnInit } from "@angular/core";
+import { HttpParams } from "@angular/common/http";
+import ReconnectingWebSocket from "reconnecting-websocket";
 
-import { ApiService } from '../../../core/http/api.service';
+import { ApiService } from "../../../core/http/api.service";
 
-import * as _ from 'lodash';
-import * as Highcharts from 'highcharts/highstock';
-import HighchartsMore from 'highcharts/highcharts-more';
+import * as _ from "lodash";
+import * as Highcharts from "highcharts/highstock";
+import HighchartsMore from "highcharts/highcharts-more";
 HighchartsMore(Highcharts);
 
-
 @Component({
-  selector: 'app-graph',
-  templateUrl: './graph.component.html',
-  styleUrls: ['./graph.component.scss']
+  selector: "app-graph",
+  templateUrl: "./graph.component.html",
+  styleUrls: ["./graph.component.scss"],
 })
-
-
 export class GraphComponent implements OnInit {
-
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   public Highcharts: typeof Highcharts = Highcharts;
 
   public socket;
-  public symbol = 'BTC';
-  public timeframe = 'Day';
+  public symbol = "BTC";
+  public timeframe = "Day";
 
   public chartOptions: Highcharts.Options = {
     chart: {
-      zoomType: 'x'
+      zoomType: "x",
     },
     title: {
-        text: `Bitcoin (USD): Day Datapoints`
+      text: `Bitcoin (USD): Day Datapoints`,
     },
     subtitle: {
-        text: document.ontouchstart === undefined ?
-            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+      text:
+        document.ontouchstart === undefined
+          ? "Click and drag in the plot area to zoom in"
+          : "Pinch the chart to zoom in",
     },
     xAxis: {
-        type: 'datetime'
+      type: "datetime",
     },
     yAxis: {
-        labels: {
-            format: '${value}'
-        },
-        title: {
-            text: 'Price (USD)'
-        }
+      labels: {
+        format: "${value}",
+      },
+      title: {
+        text: "Price (USD)",
+      },
     },
     tooltip: {
-      pointFormat: 'Price: ${point.y}<br>',
-      shared: true
+      pointFormat: "Price: ${point.y}<br>",
+      shared: true,
     },
     legend: {
-        enabled: false
+      enabled: false,
     },
     plotOptions: {
       area: {
-        lineColor: '#00D080',
-        fillOpacity: 0, 
+        lineColor: "#00D080",
+        fillOpacity: 0,
         marker: {
-            radius: 3
+          radius: 3,
         },
         lineWidth: 3,
         states: {
-            hover: {
-                lineWidth: 2
-            }
+          hover: {
+            lineWidth: 2,
+          },
         },
-        threshold: null
-      }
+        threshold: null,
+      },
     },
     annotations: [],
-    series: [{
-        type: 'area',
+    series: [
+      {
+        type: "area",
         data: [],
-    }]
+      },
+    ],
   };
-
 
   public timeframes = [
     {
-      'timeframe': 'Minute',
-      'buttonName': '1Min',
-      'value': 'minute',
-      'table': 'BTC_minute',
-      'ttl': 86400,
-      'gap': 60,
-      'datapoints': 1440
+      timeframe: "Minute",
+      buttonName: "1Min",
+      value: "minute",
+      table: "BTC_minute",
+      ttl: 86400,
+      gap: 60,
+      datapoints: 1440,
     },
     {
-      'timeframe': '15 Minute',
-      'buttonName': '15Min',
-      'value': 'fifteen_minute',
-      'table': 'BTC_fifteen_minute',
-      'ttl': 604800,
-      'gap': 900,
-      'datapoints': 672
+      timeframe: "15 Minute",
+      buttonName: "15Min",
+      value: "fifteen_minute",
+      table: "BTC_fifteen_minute",
+      ttl: 604800,
+      gap: 900,
+      datapoints: 672,
     },
     {
-      'timeframe': 'Hour',
-      'buttonName': '1H',
-      'value': 'hour',
-      'table': 'BTC_hour',
-      'ttl': 2628000,
-      'gap': 3600,
-      'datapoints': 730
+      timeframe: "Hour",
+      buttonName: "1H",
+      value: "hour",
+      table: "BTC_hour",
+      ttl: 2628000,
+      gap: 3600,
+      datapoints: 730,
     },
     {
-      'timeframe': '4 Hour',
-      'buttonName': '4H',
-      'value': 'four_hour',
-      'table': 'BTC_four_hour',
-      'ttl': 15768000,
-      'gap': 14400,
-      'datapoints': 1095
+      timeframe: "4 Hour",
+      buttonName: "4H",
+      value: "four_hour",
+      table: "BTC_four_hour",
+      ttl: 15768000,
+      gap: 14400,
+      datapoints: 1095,
     },
     {
-      'timeframe': 'Day',
-      'buttonName': '1D',
-      'value': 'day',
-      'table': 'BTC_day',
-      'ttl': 157680000,
-      'gap': 86400,
-      'datapoints': 1825
+      timeframe: "Day",
+      buttonName: "1D",
+      value: "day",
+      table: "BTC_day",
+      ttl: 157680000,
+      gap: 86400,
+      datapoints: 1825,
     },
     {
-      'timeframe': 'Week',
-      'buttonName': '7D',
-      'value': 'week',
-      'table': 'BTC_week',
-      'ttl': 0,
-      'gap': 604800,
-      'datapoints': 0
+      timeframe: "Week",
+      buttonName: "7D",
+      value: "week",
+      table: "BTC_week",
+      ttl: 0,
+      gap: 604800,
+      datapoints: 0,
     },
     {
-      'timeframe': 'Month',
-      'buttonName': '1Mo',
-      'value': 'month',
-      'table': 'BTC_month',
-      'ttl': 0,
-      'gap': 2628000,
-      'datapoints': 0
+      timeframe: "Month",
+      buttonName: "1Mo",
+      value: "month",
+      table: "BTC_month",
+      ttl: 0,
+      gap: 2628000,
+      datapoints: 0,
     },
-  ]
+  ];
 
   public candles: any;
   public updateFlag: boolean = false;
   public newWebsocket: boolean = true;
   public websocketLastTimestamp = 0;
 
-
   ngOnInit() {
     // this.socket = new ReconnectingWebSocket("wss://rix9fti73l.execute-api.us-east-1.amazonaws.com/prod");
-    this.setGraph('day', 'Day');
+    this.setGraph("day", "Day");
   }
 
   setGraph(timeframe, displayName) {
-    console.log(timeframe)
-    let graph_params = new HttpParams().set('table', JSON.stringify([timeframe]));
-    this.apiService.getSingleTable(graph_params).subscribe(data => {
-      console.log(data)
+    console.log(timeframe);
+    let graph_params = new HttpParams().set(
+      "table",
+      JSON.stringify([timeframe])
+    );
+    this.apiService.getSingleTable(graph_params).subscribe((data) => {
+      console.log(data);
       this.updateFlag = false;
       let newData = [];
-      _.forEach(data[0]['tf_data'], (item) => {
+      _.forEach(data[0]["tf_data"], (item) => {
         newData.push([item.t * 1000, item.c]);
       });
-      this.chartOptions.series[0]['data'] = newData;
+      this.chartOptions.series[0]["data"] = newData;
       this.chartOptions.title.text = `Bitcoin (USD): ${displayName} Datapoints`;
       this.updateFlag = true;
     });
@@ -247,6 +248,4 @@ export class GraphComponent implements OnInit {
   //   };
 
   // }
-
-
 }

@@ -29,6 +29,7 @@ export class ApiService {
   }
 
   maxProfit(params: HttpParams): Observable<any> {
+    console.log('getting the thing')
     return this.http.get<object>(`${this.baseUrl}/find-max-profit`, {params: params});
   }
 
