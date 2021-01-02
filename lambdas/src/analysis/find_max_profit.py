@@ -55,8 +55,4 @@ def find_max_profit(event, context):
     extremes = pd.concat([all_min, all_max])
     extremes.sort_values(by="t", inplace=True)
 
-    return {
-        "statusCode": 200,
-        "body": extremes.to_json(orient="records"),
-        "headers": {"Access-Control-Allow-Origin": "*"},
-    }
+    return extremes
