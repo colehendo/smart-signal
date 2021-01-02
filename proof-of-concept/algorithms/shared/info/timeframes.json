@@ -1,0 +1,5 @@
+{
+  "minute": {"time-gap": 1440},
+  "hour": {"time-gap": 168},
+  "day": {"time-gap": 30}
+}
