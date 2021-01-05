@@ -16,6 +16,16 @@ def get_argument_choices(
     return sorted(symbol_options), sorted(timeframe_options)
 
 
+def string_to_bool(value):
+    if isinstance(value, bool):
+        return value
+    if value.lower() in ("yes", "true", "t", "y", "1"):
+        return True
+    elif value.lower() in ("no", "false", "f", "n", "0"):
+        return False
+    raise argparse.ArgumentTypeError("Boolean value expected for --display_data/-dd")
+
+
 def parse_arguments(all_assets: [dict], asset_types: [str], timeframes: [dict]):
     symbol_options, timeframe_options = get_argument_choices(
         all_assets=all_assets, asset_types=asset_types, timeframes=timeframes
@@ -52,13 +62,13 @@ def parse_arguments(all_assets: [dict], asset_types: [str], timeframes: [dict]):
         default=True,
         dest="display_data",
         help="BOOL. Whether to display the data in a line graph or not. Default is True.",
-        type=bool,
+        type=string_to_bool,
     )
     return parser.parse_args()
 
 
 def get_asset_type(all_assets: [dict], asset_types: [str], symbol: str) -> str:
-    key_list = list(all_assets.keys())
+    key_list = tuple(all_assets.keys())
     for key in key_list:
         if symbol in all_assets[key]:
             return key
@@ -70,7 +80,7 @@ def main():
     info_class = Info()
     assets = info_class.get_asset_data()
     timeframes = info_class.get_timeframe_data()
-    asset_types = list(assets.keys())
+    asset_types = tuple(assets.keys())
 
     args = parse_arguments(
         all_assets=assets, asset_types=asset_types, timeframes=timeframes
