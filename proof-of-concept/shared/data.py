@@ -6,29 +6,19 @@ import matplotlib.pyplot as plt
 
 
 class Info:
-    def __init__(self):
-        self._dirname = os.path.dirname(__file__)
-        self._assets_relpath = "info/assets.json"
-        self._timeframes_relpath = "info/timeframes.json"
-
-    def get_asset_data(self):
-        filename = os.path.join(self._dirname, self._assets_relpath)
-        with open(filename) as a:
-            return json.load(a)
-
-    def get_timeframe_data(self):
-        filename = os.path.join(self._dirname, self._timeframes_relpath)
-        with open(filename) as tf:
-            return json.load(tf)
+    def get_data(self, data_name: str):
+        dirname = os.path.dirname(__file__)
+        file_relpath = f"info/{data_name}.json"
+        filename = os.path.join(dirname, file_relpath)
+        with open(filename) as f:
+            return json.load(f)
 
 
 class Pandas:
-    def __init__(self):
-        self._dirname = os.path.dirname(__file__)
-
     def csv_to_pandas(self, asset_type, symbol, timeframe):
+        dirname = os.path.dirname(__file__)
         csv_relpath = f"candles/{asset_type}/{symbol}_{timeframe}.csv"
-        csv_filename = os.path.join(self._dirname, csv_relpath)
+        csv_filename = os.path.join(dirname, csv_relpath)
 
         return pd.read_csv(csv_filename)
 

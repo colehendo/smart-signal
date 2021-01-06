@@ -7,17 +7,17 @@ from shared.data import Pandas
 
 class FindMaxProfit:
     def max_profit(self, asset_type: str, symbol: str, timeframe: str, time_gap: int):
-        df = Pandas().csv_to_pandas(
+        prices = Pandas().csv_to_pandas(
             asset_type=asset_type, symbol=symbol, timeframe=timeframe
         )
 
-        all_min = df.iloc[
-            argrelextrema(df.close.values, np.greater_equal, order=int(time_gap / 2))[0]
+        all_min = prices.iloc[
+            argrelextrema(prices.close.values, np.greater_equal, order=int(time_gap / 2))[0]
         ][["unix"]]
         all_min["sig"] = "sell"
 
-        all_max = df.iloc[
-            argrelextrema(df.close.values, np.less_equal, order=int(time_gap / 2))[0]
+        all_max = prices.iloc[
+            argrelextrema(prices.close.values, np.less_equal, order=int(time_gap / 2))[0]
         ][["unix"]]
         all_max["sig"] = "buy"
 

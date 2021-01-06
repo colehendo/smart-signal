@@ -78,8 +78,8 @@ def get_asset_type(all_assets: [dict], asset_types: [str], symbol: str) -> str:
 
 def main():
     info_class = Info()
-    assets = info_class.get_asset_data()
-    timeframes = info_class.get_timeframe_data()
+    assets = info_class.get_data(data_name="assets")
+    timeframes = info_class.get_data(data_name="timeframes")
     asset_types = tuple(assets.keys())
 
     args = parse_arguments(
