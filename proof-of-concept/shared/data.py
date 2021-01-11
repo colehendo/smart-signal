@@ -32,8 +32,8 @@ class Visuals:
         merged_df = pd.merge(left=prices, right=transactions, how="outer", on="unix")
         plt.plot(merged_df.unix, merged_df.close)
 
-        transactions_with_prices = merged_df[merged_df["sig"].notna()]
+        transactions_with_prices = merged_df[merged_df["signal"].notna()]
         for index, row in transactions_with_prices.iterrows():
-            plt.annotate(row.sig, (row.unix, row.close))
+            plt.annotate(row.signal, (row.unix, row.close))
 
         plt.show(block=True)
