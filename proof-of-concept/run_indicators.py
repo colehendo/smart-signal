@@ -47,7 +47,7 @@ class RunIndicators:
                 indicator_params=indicator_info["params"],
             )
 
-        
+
         indicators = tuple(indicator_info.keys())
         indicator_combinations = [
             combination
