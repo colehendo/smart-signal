@@ -13,13 +13,13 @@ class RunIndicators:
         symbol: str,
         timeframe: str,
         indicator_name: str,
-        indicator_params: dict,
+        indicator_params: dict = None,
     ):
         prices = Pandas().csv_to_pandas(
             asset_type=asset_type, symbol=symbol, timeframe=timeframe
         )
 
-        return import_module("proof-of-concept.indicators." + indicator_name).run(
+        return import_module("indicators." + indicator_name).run(
             params=indicator_params, candles=prices, timeframe=timeframe
         )
 
@@ -47,14 +47,13 @@ class RunIndicators:
                 indicator_params=indicator_info["params"],
             )
 
-
         indicators = tuple(indicator_info.keys())
         indicator_combinations = [
             combination
             for i in range(len(indicators))
             for combination in tuple(combinations(indicators, i + 1))
         ]
-        
+
         reduced_combinations = []
         for combination in indicator_combinations:
             results_to_combine = [
@@ -66,9 +65,13 @@ class RunIndicators:
             # Not sure this is the right way to do this...
             combined_results = pd.concat(results_to_combine)
 
-            reduced_combinations.append({
-                "indicators": combination,
-                "results": self.reduce_indicator_results(combined_results=combined_results)
-            })
+            reduced_combinations.append(
+                {
+                    "indicators": combination,
+                    "results": self.reduce_indicator_results(
+                        combined_results=combined_results
+                    ),
+                }
+            )
 
         return combined_results

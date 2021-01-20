@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 import os
 
 from find_max_profit import FindMaxProfit
+from run_indicators import RunIndicators
 from shared.data import Info, Visuals
 
 
@@ -95,16 +96,20 @@ def main():
         all_assets=assets, asset_types=asset_types, symbol=symbol
     )
 
-    max_profit = FindMaxProfit().max_profit(
-        asset_type=asset_type, symbol=symbol, timeframe=timeframe, time_gap=time_gap
+    transactions = RunIndicators().run_single_indicator(
+        asset_type=asset_type, symbol=symbol, timeframe=timeframe, indicator_name="macd"
     )
+
+    # transactions = FindMaxProfit().max_profit(
+    #     asset_type=asset_type, symbol=symbol, timeframe=timeframe, time_gap=time_gap
+    # )
 
     if args.display_data:
         Visuals().plot(
             asset_type=asset_type,
             symbol=symbol,
             timeframe=timeframe,
-            transactions=max_profit,
+            transactions=transactions,
         )
 
 
