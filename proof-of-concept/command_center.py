@@ -4,6 +4,7 @@ import os
 from find_max_profit import FindMaxProfit
 from run_indicators import RunIndicators
 from shared.data import Info, Visuals
+from shared.utils import string_to_bool
 
 
 def get_argument_choices(
@@ -15,16 +16,6 @@ def get_argument_choices(
     ]
 
     return sorted(symbol_options), sorted(timeframe_options)
-
-
-def string_to_bool(value):
-    if isinstance(value, bool):
-        return value
-    if value.lower() in ("yes", "true", "t", "y", "1"):
-        return True
-    elif value.lower() in ("no", "false", "f", "n", "0"):
-        return False
-    raise argparse.ArgumentTypeError("Boolean value expected for --display_data/-dd")
 
 
 def parse_arguments(all_assets: [dict], asset_types: [str], timeframes: [dict]):
@@ -56,7 +47,6 @@ def parse_arguments(all_assets: [dict], asset_types: [str], timeframes: [dict]):
         help="INT. Max number of candles to hold a position for the max profit algorithm.",
         type=int,
     )
-
     parser.add_argument(
         "--display_data",
         "-dd",
@@ -97,7 +87,7 @@ def main():
     )
 
     transactions = RunIndicators().run_single_indicator(
-        asset_type=asset_type, symbol=symbol, timeframe=timeframe, indicator_name="macd"
+        asset_type=asset_type, symbol=symbol, timeframe=timeframe, indicator_name="roc"
     )
 
     # transactions = FindMaxProfit().max_profit(

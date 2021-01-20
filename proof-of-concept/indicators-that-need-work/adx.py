@@ -1,4 +1,5 @@
 import ta
+import pandas as pd
 
 # Average Directional Movement Index
 # a little off, general trend is right tho
