@@ -86,8 +86,15 @@ def main():
         all_assets=assets, asset_types=asset_types, symbol=symbol
     )
 
-    transactions = RunIndicators().run_single_indicator(
-        asset_type=asset_type, symbol=symbol, timeframe=timeframe, indicator_name="roc"
+    # transactions = RunIndicators().run_single_indicator(
+    #     asset_type=asset_type, symbol=symbol, timeframe=timeframe, indicator_name="roc"
+    # )
+
+    transactions = RunIndicators().run_indicator_combinations(
+        asset_type=asset_type,
+        symbol=symbol,
+        timeframe=timeframe,
+        indicators={"all"},
     )
 
     # transactions = FindMaxProfit().max_profit(

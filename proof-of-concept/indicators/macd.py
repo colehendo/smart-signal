@@ -28,7 +28,8 @@ def run(candles, timeframe, params=None):
         if curr_macd < 0 and next_macd > 0 and last_signal != "buy":
             last_signal = "buy"
             signals = signals.append(
-                {"unix": row["unix"], "signal": last_signal}, ignore_index=True
+                {"unix": row["unix"], "signal": last_signal, "indicator": "macd"},
+                ignore_index=True,
             )
             continue
 
@@ -36,7 +37,8 @@ def run(candles, timeframe, params=None):
         if curr_macd > 0 and next_macd < 0 and last_signal != "sell":
             last_signal = "sell"
             signals = signals.append(
-                {"unix": row["unix"], "signal": last_signal}, ignore_index=True
+                {"unix": row["unix"], "signal": last_signal, "indicator": "macd"},
+                ignore_index=True,
             )
             continue
 

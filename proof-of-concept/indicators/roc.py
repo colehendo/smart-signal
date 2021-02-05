@@ -22,7 +22,8 @@ def run(params, candles, timeframe):
         if curr_roc > 0 and prev_roc < 0 and last_signal != "buy":
             last_signal = "buy"
             signals = signals.append(
-                {"unix": row["unix"], "signal": last_signal}, ignore_index=True
+                {"unix": row["unix"], "signal": last_signal, "indicator": "roc"},
+                ignore_index=True,
             )
             continue
 
@@ -30,7 +31,8 @@ def run(params, candles, timeframe):
         if curr_roc < 0 and prev_roc > 0 and last_signal != "sell":
             last_signal = "sell"
             signals = signals.append(
-                {"unix": row["unix"], "signal": last_signal}, ignore_index=True
+                {"unix": row["unix"], "signal": last_signal, "indicator": "roc"},
+                ignore_index=True,
             )
 
     return signals[signals["signal"].notna()]

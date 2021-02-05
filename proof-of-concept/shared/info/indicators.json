@@ -1,0 +1,20 @@
+{
+  "ao": {
+    "params": {}
+  },
+  "macd": {
+    "params":  {}
+  },
+  "roc": {
+    "params":  {}
+  },
+  "rsi": {
+    "params":  {}
+  },
+  "sr": {
+    "params":  {}
+  },
+  "wr": {
+    "params":  {}
+  }
+}
