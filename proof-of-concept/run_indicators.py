@@ -1,17 +1,11 @@
 import pandas as pd
-from scipy.signal import argrelextrema
 from importlib import import_module
 from itertools import combinations
 
 from shared.data import Info, Pandas
 
-from functools import reduce
-from datetime import datetime
-from pprint import pprint
-
 
 def reduce_indicator_results(combined_results: pd.DataFrame, indicators: dict):
-    print(f"starting this for {indicators}")
     last_signal = ""
     signals = pd.DataFrame(columns=["unix", "signal"])
 
@@ -101,8 +95,5 @@ class RunIndicators:
             del results["indicator"]
 
             reduced_combinations.append({"indicators": combination, "results": results})
-
-        for combo in reduced_combinations:
-            pprint(combo)
 
         return reduced_combinations

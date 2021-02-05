@@ -1,10 +1,11 @@
-from argparse import ArgumentParser
-import os
+import pandas as pd
+from argparse import ArgumentParser, Namespace
 
-from find_max_profit import FindMaxProfit
-from run_indicators import RunIndicators
+from data_handler import DataHandler
 from shared.data import Info, Visuals
 from shared.utils import string_to_bool
+
+from pprint import pprint
 
 
 def get_argument_choices(
@@ -41,9 +42,16 @@ def parse_arguments(all_assets: [dict], asset_types: [str], timeframes: [dict]):
         required=True,
     )
     parser.add_argument(
-        "--time_gap",
+        "--transaction_gap",
         "-tg",
-        dest="time_gap",
+        dest="transaction_gap",
+        help="INT. Max number of candles to hold a position for the max profit algorithm.",
+        type=int,
+    )
+    parser.add_argument(
+        "--second_gap",
+        "-sg",
+        dest="second_gap",
         help="INT. Max number of candles to hold a position for the max profit algorithm.",
         type=int,
     )
@@ -67,6 +75,18 @@ def get_asset_type(all_assets: [dict], asset_types: [str], symbol: str) -> str:
     raise ValueError(f"{symbol} does not belong to an asset type")
 
 
+def set_timeframe_data(timeframe: dict, args: Namespace) -> (int, int, int):
+    transaction_gap = args.transaction_gap
+    second_gap = args.second_gap
+
+    if not transaction_gap:
+        transaction_gap = timeframe["transaction-gap"]
+    if not second_gap:
+        second_gap = timeframe["second-gap"]
+
+    return transaction_gap, second_gap, timeframe["max-profit-window"]
+
+
 def main():
     info_class = Info()
     assets = info_class.get_data(data_name="assets")
@@ -78,36 +98,37 @@ def main():
     )
     symbol = args.symbol
     timeframe = args.timeframe
-    time_gap = args.time_gap
-    if not time_gap:
-        time_gap = int(timeframes[timeframe].get("time-gap"))
+
+    transaction_gap, second_gap, max_profit_window = set_timeframe_data(
+        timeframe=timeframes[timeframe], args=args
+    )
 
     asset_type = get_asset_type(
         all_assets=assets, asset_types=asset_types, symbol=symbol
     )
 
-    # transactions = RunIndicators().run_single_indicator(
-    #     asset_type=asset_type, symbol=symbol, timeframe=timeframe, indicator_name="roc"
-    # )
-
-    transactions = RunIndicators().run_indicator_combinations(
+    optimal_transactions_with_indicators = DataHandler().compare_max_to_indicators(
         asset_type=asset_type,
         symbol=symbol,
-        timeframe=timeframe,
         indicators={"all"},
+        timeframe=timeframe,
+        transaction_gap=transaction_gap,
+        second_gap=second_gap,
+        max_profit_window=max_profit_window,
     )
 
-    # transactions = FindMaxProfit().max_profit(
-    #     asset_type=asset_type, symbol=symbol, timeframe=timeframe, time_gap=time_gap
-    # )
+    with pd.option_context(
+        "display.max_rows", None, "display.max_columns", None
+    ):  # more options can be specified also
+        print(optimal_transactions_with_indicators)
 
-    if args.display_data:
-        Visuals().plot(
-            asset_type=asset_type,
-            symbol=symbol,
-            timeframe=timeframe,
-            transactions=transactions,
-        )
+    # if args.display_data:
+    #     Visuals().plot(
+    #         asset_type=asset_type,
+    #         symbol=symbol,
+    #         timeframe=timeframe,
+    #         transactions=transactions,
+    #     )
 
 
 if __name__ == "__main__":
