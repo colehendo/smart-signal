@@ -1,0 +1,5 @@
+{
+  "minute": {"transaction-gap": 1440, "second-gap": 60, "max-profit-window": 10},
+  "hour": {"transaction-gap": 168, "second-gap": 3600, "max-profit-window": 3},
+  "day": {"transaction-gap": 30, "second-gap": 86400, "max-profit-window": 1}
+}

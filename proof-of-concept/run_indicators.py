@@ -1,6 +1,7 @@
 import pandas as pd
 from importlib import import_module
 from itertools import combinations
+from pandas import DataFrame
 
 from shared.data import Info, Pandas
 
@@ -23,15 +24,17 @@ def reduce_indicator_results(combined_results: pd.DataFrame, indicators: dict):
 class RunIndicators:
     @staticmethod
     def run_single_indicator(
-        asset_type: str,
-        symbol: str,
         timeframe: str,
         indicator_name: str,
+        asset_type: str = None,
+        symbol: str = None,
         indicator_params: dict = None,
+        prices: DataFrame = None,
     ):
-        prices = Pandas().csv_to_pandas(
-            asset_type=asset_type, symbol=symbol, timeframe=timeframe
-        )
+        if prices.empty:
+            prices = Pandas().csv_to_pandas(
+                asset_type=asset_type, symbol=symbol, timeframe=timeframe
+            )
 
         return (
             import_module("indicators." + indicator_name)

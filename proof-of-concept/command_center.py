@@ -1,11 +1,17 @@
 import pandas as pd
 from argparse import ArgumentParser, Namespace
+from logging import getLogger, Formatter, StreamHandler, DEBUG, INFO
+from io import StringIO
 
+from brownian_motion import BrownianMotion
 from data_handler import DataHandler
+from run_indicators import RunIndicators
 from shared.data import Info, Visuals
 from shared.utils import string_to_bool
 
 from pprint import pprint
+
+logger = getLogger(__name__)
 
 
 def get_argument_choices(
@@ -66,6 +72,16 @@ def parse_arguments(all_assets: [dict], asset_types: [str], timeframes: [dict]):
     return parser.parse_args()
 
 
+def initialize_logger(output: StringIO):
+    logger.setLevel(DEBUG)
+    logger.addHandler(hdlr=StreamHandler())
+
+    output_handler = StreamHandler(stream=output)
+    output_handler.setLevel(INFO)
+    output_handler.setFormatter(Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+    logger.addHandler(hdlr=output_handler)
+
+
 def get_asset_type(all_assets: [dict], asset_types: [str], symbol: str) -> str:
     key_list = tuple(all_assets.keys())
     for key in key_list:
@@ -88,6 +104,11 @@ def set_timeframe_data(timeframe: dict, args: Namespace) -> (int, int, int):
 
 
 def main():
+    output = StringIO()
+    initialize_logger(output=output)
+
+    logger.info("hello!")
+
     info_class = Info()
     assets = info_class.get_data(data_name="assets")
     timeframes = info_class.get_data(data_name="timeframes")
@@ -122,6 +143,10 @@ def main():
     ):  # more options can be specified also
         print(optimal_transactions_with_indicators)
 
+    logger.info("goodbye!")
+
+    print(output.getvalue())
+
     # if args.display_data:
     #     Visuals().plot(
     #         asset_type=asset_type,
@@ -131,5 +156,34 @@ def main():
     #     )
 
 
+def second_main():
+    indicator_info = Info().get_data(data_name="indicators")
+
+    runs = 1
+    delta = 20
+    # Total time.
+    t = 10.0
+    # Number of steps.
+    n = 500
+    # Time step size
+    dt = t / n
+    # Number of realizations to generate.
+    m = 20
+
+    bm = BrownianMotion()
+    ri = RunIndicators()
+
+    for i in range(runs):
+        out = bm.brownian(time_step=dt, delta=delta, steps=n, total_lines=m)
+        # pprint(out)
+        print(type(out))
+
+        result = ri.run_single_indicator(
+            timeframe="day", indicator_name="rsi", prices=out
+        )
+        pprint(result)
+
+
 if __name__ == "__main__":
-    main()
+    second_main()
+    # main()
