@@ -13,11 +13,12 @@ Run `ng generate component component-name` to generate a new component. You can 
 ## Build
 Run `ng build --prod` to build the project.
 Run `aws s3 sync --delete dist/smart-signal s3://smart-signal` to update the files in S3.
-Run `ssh -i ./smart-signal-ec2.pem ec2-user@54.196.101.72` to SSH into the EC2 instance.
+Run `ssh -i ./smart-signal-ec2.pem ec2-user@<INSTANCE IP>` to SSH into the EC2 instance.
 Run `sudo su` to take root permissions.
 Run `cd /var/www/html` to go to the file folder.
 Run `aws s3 sync --delete s3://smart-signal/ ./` to update the files in EC2.
 Run `exit` then `logout` to return to terminal.
+(these steps were taken to minimize AWS cost, especially considering this was for a project and not a production workload)
 
 ## File Organization
 
