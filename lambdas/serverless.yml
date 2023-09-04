@@ -25,20 +25,20 @@ package:
 
 plugins:
   - serverless-python-requirements
-  # - serverless-step-functions
+  - serverless-step-functions
 
 custom:
   pythonRequirements:
     dockerizePip: true
 
-# resources:
-#   Outputs:
-#     TriggerPopulate:
-#       Value:
-#         Ref: TriggerPopulate
-    # TriggerAlgorithms:
-    #   Value:
-    #     Ref: TriggerAlgorithms
+resources:
+  Outputs:
+    TriggerPopulate:
+      Value:
+        Ref: TriggerPopulate
+    TriggerAlgorithms:
+      Value:
+        Ref: TriggerAlgorithms
 
 functions:
   connectWebsocket:
@@ -54,15 +54,15 @@ functions:
      - websocket:
         route: getWebsocketPrices
 
-  # btc-populate:
-  #   handler: src/populate/btc-populate.populate
-  #   timeout: 15
-  #   environment:
-  #     statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
+  btc-populate:
+    handler: src/populate/btc-populate.populate
+    timeout: 15
+    environment:
+      statemachine_arn: ${self:resources.Outputs.TriggerPopulate.Value}
 
-  # test-btc-populate:
-  #   handler: src/populate/test-btc-populate.populate
-  #   timeout: 870
+  test-btc-populate:
+    handler: src/populate/test-btc-populate.populate
+    timeout: 870
 
   getData:
     handler: src/api/get-data.get_data
@@ -131,60 +131,60 @@ functions:
           cors:
             origin: "*"
 
-# stepFunctions:
-#   stateMachines:
-#     triggerPopulateFunc:
-#       name: TriggerPopulate
-#       definition:
-#         Comment: "Invoke populate lambda every second"
-#         StartAt: ConfigureCount
-#         States:
-#           ConfigureCount:
-#             Type: Pass
-#             Result:
-#               index: 0
-#             ResultPath: "$.iterator"
-#             Next: Iterator
-#           Iterator:
-#             Type: Task
-#             Resource: arn:aws:lambda:us-east-1:095630622700:function:smart-signal-prod-btc-populate
-#             ResultPath: "$.iterator"
-#             Next: IsCountReached
-#           IsCountReached:
-#             Type: Choice
-#             Choices:
-#             - Variable: "$.iterator.index"
-#               NumericLessThan: 60
-#               Next: Iterator
-#             Default: Done
-#           Done:
-#             Type: Pass
-#             End: true
+stepFunctions:
+  stateMachines:
+    triggerPopulateFunc:
+      name: TriggerPopulate
+      definition:
+        Comment: "Invoke populate lambda every second"
+        StartAt: ConfigureCount
+        States:
+          ConfigureCount:
+            Type: Pass
+            Result:
+              index: 0
+            ResultPath: "$.iterator"
+            Next: Iterator
+          Iterator:
+            Type: Task
+            Resource: arn:aws:lambda:us-east-1:095630622700:function:smart-signal-prod-btc-populate
+            ResultPath: "$.iterator"
+            Next: IsCountReached
+          IsCountReached:
+            Type: Choice
+            Choices:
+            - Variable: "$.iterator.index"
+              NumericLessThan: 60
+              Next: Iterator
+            Default: Done
+          Done:
+            Type: Pass
+            End: true
 
-    # triggerAlgorithmsFunc:
-    #   name: TriggerAlgorithms
-    #   definition:
-    #     Comment: "Invoke algorithm lambda every second"
-    #     StartAt: ConfigureCount
-    #     States:
-    #       ConfigureCount:
-    #         Type: Pass
-    #         Result:
-    #           index: 0
-    #         ResultPath: "$.iterator"
-    #         Next: Iterator
-    #       Iterator:
-    #         Type: Task
-    #         Resource: arn:aws:lambda:us-east-1:095630622700:function:smart-signal-prod-algorithms
-    #         ResultPath: "$.iterator"
-    #         Next: IsCountReached
-    #       IsCountReached:
-    #         Type: Choice
-    #         Choices:
-    #         - Variable: "$.iterator.index"
-    #           NumericLessThan: 60
-    #           Next: Iterator
-    #         Default: Done
-    #       Done:
-    #         Type: Pass
-    #         End: true
+    triggerAlgorithmsFunc:
+      name: TriggerAlgorithms
+      definition:
+        Comment: "Invoke algorithm lambda every second"
+        StartAt: ConfigureCount
+        States:
+          ConfigureCount:
+            Type: Pass
+            Result:
+              index: 0
+            ResultPath: "$.iterator"
+            Next: Iterator
+          Iterator:
+            Type: Task
+            Resource: arn:aws:lambda:us-east-1:095630622700:function:smart-signal-prod-algorithms
+            ResultPath: "$.iterator"
+            Next: IsCountReached
+          IsCountReached:
+            Type: Choice
+            Choices:
+            - Variable: "$.iterator.index"
+              NumericLessThan: 60
+              Next: Iterator
+            Default: Done
+          Done:
+            Type: Pass
+            End: true

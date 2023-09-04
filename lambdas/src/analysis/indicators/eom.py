@@ -1,7 +1,6 @@
 import ta
 
 # Ease of Movement
-# drop this hoe
 def run(params, candles, timeframe):
     eom = ta.volume.ease_of_movement(high = candles["h"], low = candles["l"], volume = candles["v"], n = 14, fillna = False)
     print('Ease of Movement')

@@ -12,31 +12,29 @@ def run(params, candles, timeframe):
     for i in range(1, len(roc)):
         curr_roc = roc.iloc[i]
         next_roc = roc.iloc[i+1]
+
+        base_transaction = {
+            'indicator': 'roc',
+            'price': float(candles['c'][i]),
+            'time': int(candles['t'][i]),
+            'tf': timeframe,
+            'str': 100
+        }
+
         # to avoid out of bounds
         if i+1 == len(roc) - 1:
             break
+
         #if we go from negative to positive indicates bullish trend so buy
         elif curr_roc > 0 and next_roc < 0 and last_signal != "buy":
             last_signal = "buy"
-            signals.append({
-            'indicator': 'roc',
-            'sig': 'buy',
-            'price': float(candles['c'][i]),
-            'time': int(candles['t'][i]),
-            'tf': timeframe,
-            'str': 100
-            })
+            base_transaction["sig"] = last_signal
+            signals.append(base_transaction)
         #if we our roc is positive and goes to negative then indicates bearish trend so sell
         elif curr_roc < 0 and next_roc > 0 and last_signal != "sell":
             last_signal = "sell"
-            signals.append({
-            'indicator': 'roc',
-            'sig': 'sell',
-            'price': float(candles['c'][i]),
-            'time': int(candles['t'][i]),
-            'tf': timeframe,
-            'str': 100
-            })
+            base_transaction["sig"] = last_signal
+            signals.append(base_transaction)
 
     print("printing Rate of Change signals")
     pct_change = 0

@@ -1,15 +1,12 @@
 import ta
 
 # Mass Index, we are using psar to get trend
-# good
 def run(params, candles, timeframe):
     all_psar = ta.trend.PSARIndicator(high = candles["h"], low = candles["l"], close = candles["c"], step = 0.02, max_step = 0.2, fillna = False)
     psar = all_psar.psar()
     mi = ta.trend.mass_index(high = candles["h"], low = candles["l"], n = 10, n2 = 10, fillna = False)
     print('Mass Index: ', mi)
     signals = []
-    trend = "flat"
-    last_signal = "hold"
 
     for i in range(len(mi)):
         curr_mi = mi.iloc[i]
@@ -77,6 +74,4 @@ def run(params, candles, timeframe):
     print("Total gain is: $", gain)
     print("Balance is: $", bal)
     print("Total pct change is: ", round((pct_change), 2))
-    return signals
-
     return signals

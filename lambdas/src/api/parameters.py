@@ -19,17 +19,3 @@ class CheckSharedParameters:
             return "Could not find handler associated with requested actions.", []
 
         return None, handler[0]
-
-        
-
-# class CheckAnalysisParameters:
-#     def __init__(self, region_name: str = "us-east-1", table_name: str = None):
-#         config = Config(retries=dict(max_attempts=25))
-#         self._dynamodb = boto3.resource(
-#             "dynamodb", region_name=region_name, config=config
-#         )
-#         self._table_name = table_name
-#         self._table = self._dynamodb.Table(table_name) if table_name else None
-
-#     def put_item(self, item):
-#         return self._table.put_item(Item=item)

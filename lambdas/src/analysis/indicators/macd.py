@@ -64,9 +64,3 @@ def run(params, candles, timeframe):
     print("Balance is: $", bal)
     print("Total pct change is: ", round((pct_change), 2))
     return signals
-    # macd = macd.macd()
-    # print('macd: ', macd)
-    # macd_diff = macd.macd_diff()
-    # print('macd diff: ', macd_diff)
-    # macd_signal = macd.macd_signal()
-    # print('macd_signal: ', macd_signal)

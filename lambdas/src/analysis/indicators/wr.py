@@ -11,27 +11,21 @@ def run(params, candles, timeframe):
     signals = []
     for i in range(0, len(all_wr)):
         curr_wr = all_wr.iloc[i]
-        # if (curr_wr > -100) and (curr_wr < 0):
+        base_transaction = {
+            'indicator': 'wr',
+            'price': float(candles['c'][i]),
+            'time': int(candles['t'][i]),
+            'tf': timeframe,
+            'str': 100
+        }
         if (curr_wr > params['buy'] and last_signal != 'buy'):
             last_signal = 'buy'
-            signals.append({
-                'indicator': 'wr',
-                'sig': 'buy',
-                'price': float(candles['c'][i]),
-                'time': int(candles['t'][i]),
-                'tf': timeframe,
-                'str': 100
-            })
+            base_transaction["sig"] = last_signal
+            signals.append(base_transaction)
         elif (curr_wr < params['sell'] and last_signal != 'sell'):
             last_signal = 'sell'
-            signals.append({
-                'indicator': 'wr',
-                'sig': 'sell',
-                'price': float(candles['c'][i]),
-                'time': int(candles['t'][i]),
-                'tf': timeframe,
-                'str': 100
-            })
+            base_transaction["sig"] = last_signal
+            signals.append(base_transaction)
 
     print("printing WR% signals")
     pct_change = 0

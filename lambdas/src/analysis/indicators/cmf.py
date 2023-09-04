@@ -2,7 +2,6 @@ import ta
 
 # Chaikin Money Flow
 # similar to MACD exccept also uses volume.
-# uhh its kinda close but definitely a good bit off..leave it for now
 def run(params, candles, timeframe):
     cmf = ta.volume.chaikin_money_flow(high = candles["h"], low = candles["l"], close = candles["c"], volume = candles["v"], n = 20, fillna = False)
     print('Chaikin Money Flow')

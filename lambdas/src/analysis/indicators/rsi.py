@@ -25,55 +25,47 @@ def run(params, candles, timeframe):
 
         if (current_rsi < 100) and (current_rsi > 0):
 
+            base_transaction = {
+                'price': float(candles['c'][i]),
+                'time': int(candles['t'][i]),
+                'tf': timeframe
+            }
+
             if (current_rsi < params['buy']):
                 if last_signal != 'buy': #general case we dont want duplicate buy signals
                     last_signal = 'buy'
-                    signals.append({
-                        'indicator': 'rsi',
-                        'sig': 'buy',
-                        'price': float(candles['c'][i]),
-                        'time': int(candles['t'][i]),
-                        'tf': timeframe,
-                        'str': round(Decimal((100 - current_rsi - 10) / 100), 10)
-                    })
+                    base_transaction["indicator"] = "rsi"
+                    base_transaction["sig"] = last_signal
+                    base_transaction["str"] = round(Decimal((100 - current_rsi - 10) / 100), 10)
+                    signals.append(base_transaction)
+
                 elif last_signal == 'buy':
                     # if our current price is less than the current bottom,
                     # but we have a higher rsi (rsi double bottom signal)
                     if curr_price < bottom and current_rsi > rsi_total.iloc[bottom_index]:
                         last_signal = 'buy'
-                        signals.append({
-                            'indicator': 'rsi_div',
-                            'sig': 'buy',
-                            'price': float(candles['c'][i]),
-                            'time': int(candles['t'][i]),
-                            'tf': timeframe,
-                            'str': round(Decimal((100 - current_rsi - 10) / 100), 10)
-                        })
+                        base_transaction["indicator"] = "rsi_div"
+                        base_transaction["sig"] = last_signal
+                        base_transaction["str"] = round(Decimal((100 - current_rsi - 10) / 100), 10)
+                        signals.append(base_transaction)
 
             elif (current_rsi > params['sell']):
                 if last_signal != 'sell':
                     last_signal = 'sell'
-                    signals.append({
-                        'indicator': 'rsi',
-                        'sig': 'sell',
-                        'price': float(candles['c'][i]),
-                        'time': int(candles['t'][i]),
-                        'tf': timeframe,
-                        'str': round(Decimal((current_rsi - 10) / 100), 10)
-                    })
+                    base_transaction["indicator"] = "rsi"
+                    base_transaction["sig"] = last_signal
+                    base_transaction["str"] = round(Decimal((current_rsi - 10) / 100), 10)
+                    signals.append(base_transaction)
+
                 elif last_signal == 'sell':
                     # if our current price is higher than the current top,
                     # but we have a lower rsi (rsi double top signal)
                     if curr_price > top and current_rsi < rsi_total.iloc[top_index]:
                         last_signal = 'sell'
-                        signals.append({
-                            'indicator': 'rsi_div',
-                            'sig': 'sell',
-                            'price': float(candles['c'][i]),
-                            'time': int(candles['t'][i]),
-                            'tf': timeframe,
-                            'str': round(Decimal((100 - current_rsi - 10) / 100), 10)
-                        })
+                        base_transaction["indicator"] = "rsi_div"
+                        base_transaction["sig"] = last_signal
+                        base_transaction["str"] = round(Decimal((100 - current_rsi - 10) / 100), 10)
+                        signals.append(base_transaction)
 
     print("printing RSI signals")
     pct_change = 0
@@ -101,6 +93,4 @@ def run(params, candles, timeframe):
     print("Total gain is: $", gain)
     print("Balance is: $", bal)
     print("Total pct change is: ", round((pct_change), 2))
-    return signals
-
     return signals

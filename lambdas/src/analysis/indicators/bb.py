@@ -1,7 +1,6 @@
 import ta
 
 # Bollinger Bands
-# Pretty accurate
 def run(params, candles, timeframe):
     bb = ta.volatility.BollingerBands(close = candles["c"], n=20, ndev=2)
     all_adx = ta.trend.ADXIndicator(high = candles["h"], low = candles["l"], close = candles["c"], n = 14, fillna = False)
@@ -29,7 +28,7 @@ def run(params, candles, timeframe):
         #   this indicator works well in ranging markets
         if curr_adx < 27:
             if curr_pos < curr_neg:
-                if closeEnough(curr_price, curr_lband) == True and last_signal != "buy":
+                if close_enough(curr_price, curr_lband) == True and last_signal != "buy":
                     last_signal = "buy"
                     signals.append({
                     'indicator': 'bb',
@@ -40,7 +39,7 @@ def run(params, candles, timeframe):
                     'str': 100
                     })
             elif curr_pos > curr_neg:
-                if (closeEnough(curr_price, curr_hband)) == True and last_signal != "sell":
+                if (close_enough(curr_price, curr_hband)) == True and last_signal != "sell":
                     last_signal = "sell"
                     signals.append({
                     'indicator': 'bb',
@@ -79,8 +78,8 @@ def run(params, candles, timeframe):
     print("Total pct change is: ", round((pct_change), 2))
     return signals
 
-def closeEnough(curr_price, band_price):
-    num = 0.02*band_price
+def close_enough(curr_price, band_price):
+    num = 0.02 * band_price
     diff = abs(band_price - curr_price)
     if num - diff > 0:
         return True
